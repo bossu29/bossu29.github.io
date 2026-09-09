@@ -61,7 +61,7 @@
             min-height: 100vh;
             display: flex;
             align-items: center;
-            justify-content: flex-start; /* ขยับกรอบไปทางซ้าย */
+            justify-content: flex-start;
             pointer-events: none;
             perspective: 1000px;
         }
@@ -76,7 +76,7 @@
             border-radius: 20px;
             padding: 2.5rem;
             width: 100%;
-            max-width: 620px; /* จำกัดความกว้างให้อยู่ทางซ้ายอย่างสวยงาม */
+            max-width: 620px;
             box-shadow: 0 0 40px rgba(135, 232, 203, 0.2),
                         inset 0 0 30px rgba(172, 169, 222, 0.15);
             position: relative;
@@ -574,21 +574,21 @@
                 <p style="color: var(--primary-purple); font-size: 0.95rem;">สนใจร่วมงาน สอบถามข้อมูล หรือดูผลงานเพิ่มเติม สามารถติดต่อดิฉันได้ผ่านช่องทางด้านล่างนี้เลยค่ะ:</p>
                 
                 <div class="contact-list">
-                    <a href="mailto:sasithorn.contact@email.com" class="contact-item">
+                    <a href="mailto:sengraksa2005@gmail.com" class="contact-item">
                         <div class="contact-icon">📧</div>
                         <div class="contact-text">
                             <h4>Email Address</h4>
-                            <p>sasithorn.contact@gmail.com</p>
+                            <p>sengraksa2005@gmail.com</p>
                         </div>
                     </a>
 
-                    <a href="#" class="contact-item">
-                        <div class="contact-icon">🎨</div>
+                    <div class="contact-item">
+                        <div class="contact-icon">💬</div>
                         <div class="contact-text">
-                            <h4>ArtStation / Portfolio</h4>
-                            <p>artstation.com/bossu29</p>
+                            <h4>Discord</h4>
+                            <p>bossu_u</p>
                         </div>
-                    </a>
+                    </div>
 
                     <a href="#" class="contact-item">
                         <div class="contact-icon">🌐</div>
@@ -723,7 +723,6 @@
             flatShading: true
         });
 
-        // ขยายขนาด D20 ให้เด่นชัดยิ่งขึ้นที่ขวากลาง
         const d20Geo = new THREE.IcosahedronGeometry(1.15, 0);
         const d20Mesh = new THREE.Mesh(d20Geo, d20Material);
         
@@ -809,7 +808,7 @@
         const pMesh = new THREE.Points(pGeo, pMat);
         scene.add(pMesh);
 
-        // --- POSITIONING (วาง D20 ตรงกลางฝั่งขวา) ---
+        // --- POSITIONING ---
         function updatePositions() {
             const aspect = window.innerWidth / window.innerHeight;
             const vFOV = THREE.MathUtils.degToRad(camera.fov);
@@ -817,10 +816,8 @@
             const width = height * aspect;
 
             if (window.innerWidth > 992) {
-                // วางไว้ที่กึ่งกลางฝั่งขวาสำหรับหน้าจอเดสก์ท็อป
                 d20Group.position.set(width / 4 + 0.5, 0, 0);
             } else {
-                // วางไว้มุมบนขวาสำหรับหน้าจอมือถือ/แท็บเล็ต
                 d20Group.position.set(width / 2 - 1.2, height / 2 - 1.2, 0);
             }
         }
