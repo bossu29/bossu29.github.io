@@ -23,7 +23,7 @@
             --accent-red: #ff4757;
             --dark-purple: #120e24;
             --text-color: #f0f4f8;
-            --glass-bg: rgba(15, 12, 28, 0.75);
+            --glass-bg: rgba(15, 12, 28, 0.78);
             --border-glow: rgba(135, 232, 203, 0.5);
         }
 
@@ -51,29 +51,29 @@
             z-index: 1;
         }
 
-        .container {
+        /* Layout Grid System: ขยับการ์ดไปซ้าย */
+        .page-wrapper {
             position: relative;
             z-index: 2;
-            max-width: 950px;
-            margin: 0 auto;
-            padding: 3rem 1.5rem;
+            width: 100%;
             min-height: 100vh;
             display: flex;
-            flex-direction: column;
-            justify-content: center;
+            align-items: center;
+            padding: 2.5rem 5%;
             pointer-events: none;
             perspective: 1000px;
         }
 
-        /* 3D Tilt Card */
         .dnd-card {
             pointer-events: auto;
+            width: 100%;
+            max-width: 620px; /* จำกัดความกว้างเพื่อไม่ให้บังเต๋าฝั่งขวา */
             background: var(--glass-bg);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
             border: 2px solid var(--primary-cyan);
             border-radius: 20px;
-            padding: 2.8rem;
+            padding: 2.5rem;
             box-shadow: 0 0 40px rgba(135, 232, 203, 0.2),
                         inset 0 0 30px rgba(172, 169, 222, 0.15);
             position: relative;
@@ -104,9 +104,55 @@
             box-shadow: 0 0 15px var(--primary-cyan);
         }
 
-        .badge-container {
+        /* Navigation Bar สำหรับสลับหน้าต่าง */
+        .nav-menu {
             display: flex;
             gap: 10px;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border-glow);
+            padding-bottom: 0.8rem;
+        }
+
+        .nav-btn {
+            background: transparent;
+            border: 1px solid transparent;
+            color: var(--primary-purple);
+            padding: 6px 16px;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Cinzel', 'Prompt', serif;
+        }
+
+        .nav-btn:hover {
+            color: var(--primary-cyan);
+            border-color: rgba(135, 232, 203, 0.3);
+            background: rgba(135, 232, 203, 0.05);
+        }
+
+        .nav-btn.active {
+            background: var(--primary-cyan);
+            color: var(--bg-color);
+            border-color: var(--primary-cyan);
+            box-shadow: 0 0 15px var(--primary-cyan);
+            font-weight: 600;
+        }
+
+        /* Content Sections */
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .badge-container {
+            display: flex;
+            gap: 8px;
             flex-wrap: wrap;
             margin-bottom: 1rem;
         }
@@ -114,17 +160,16 @@
         .class-badge {
             background: linear-gradient(135deg, var(--dark-purple), #2a1f4d);
             color: var(--primary-cyan);
-            padding: 4px 14px;
+            padding: 4px 12px;
             border-radius: 20px;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             letter-spacing: 1px;
             border: 1px solid rgba(135, 232, 203, 0.4);
-            box-shadow: 0 0 10px rgba(135, 232, 203, 0.15);
         }
 
         .brand-title {
             font-family: 'Cinzel', 'Prompt', serif;
-            font-size: 2.4rem;
+            font-size: 2.2rem;
             font-weight: 900;
             letter-spacing: 3px;
             background: linear-gradient(135deg, #ffffff 10%, var(--primary-cyan) 50%, var(--primary-purple) 90%);
@@ -138,83 +183,79 @@
             border: 0;
             height: 2px;
             background: linear-gradient(90deg, var(--primary-cyan), var(--primary-purple), transparent);
-            margin: 0.8rem 0 1.5rem 0;
+            margin: 0.8rem 0 1.2rem 0;
         }
 
         h1 {
             font-family: 'Cinzel', 'Prompt', serif;
-            font-size: 2.8rem;
+            font-size: 2.4rem;
             font-weight: 800;
             color: #ffffff;
-            text-shadow: 0 0 15px rgba(135, 232, 203, 0.5), 0 0 25px rgba(172, 169, 222, 0.4);
-            margin-bottom: 0.3rem;
+            text-shadow: 0 0 15px rgba(135, 232, 203, 0.5);
+            margin-bottom: 0.2rem;
         }
 
         .subtitle {
-            font-size: 1.15rem;
+            font-size: 1.05rem;
             color: var(--primary-purple);
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
             font-weight: 300;
         }
 
         .info-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.2rem;
+            margin-bottom: 1.5rem;
         }
 
         .info-box {
             background: rgba(18, 14, 36, 0.6);
             border: 1px solid rgba(172, 169, 222, 0.25);
             border-left: 4px solid var(--primary-cyan);
-            padding: 1.2rem;
+            padding: 1rem;
             border-radius: 6px 14px 14px 6px;
             transition: all 0.3s ease;
         }
 
         .info-box:hover {
-            transform: translateY(-4px);
+            transform: translateY(-3px);
             border-color: var(--primary-cyan);
-            box-shadow: 0 8px 20px rgba(135, 232, 203, 0.15);
         }
 
         .info-box h3 {
-            font-size: 1.05rem;
+            font-size: 1rem;
             color: var(--primary-cyan);
-            margin-bottom: 0.5rem;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            margin-bottom: 0.4rem;
             font-family: 'Cinzel', 'Prompt', serif;
         }
 
         .info-box p {
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             color: #e0ddf5;
-            line-height: 1.6;
+            line-height: 1.5;
         }
 
         /* RPG Stats Progress Bar */
         .stats-section {
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
         }
 
         .stat-bar-container {
-            margin-bottom: 0.8rem;
+            margin-bottom: 0.7rem;
         }
 
         .stat-header {
             display: flex;
             justify-content: space-between;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             color: var(--primary-purple);
-            margin-bottom: 0.3rem;
+            margin-bottom: 0.2rem;
         }
 
         .stat-bar-bg {
             width: 100%;
-            height: 8px;
+            height: 7px;
             background: rgba(255, 255, 255, 0.08);
             border-radius: 4px;
             overflow: hidden;
@@ -227,50 +268,106 @@
             border-radius: 4px;
             box-shadow: 0 0 10px var(--primary-cyan);
             width: 0%;
-            transition: width 1.5s cubic-bezier(0.1, 0.5, 0.1, 1);
+            transition: width 1.2s cubic-bezier(0.1, 0.5, 0.1, 1);
         }
 
         .section-title {
             font-family: 'Cinzel', 'Prompt', serif;
-            font-size: 1.4rem;
+            font-size: 1.25rem;
             color: var(--primary-cyan);
-            margin-top: 1rem;
-            margin-bottom: 1rem;
+            margin-top: 0.8rem;
+            margin-bottom: 0.8rem;
             border-bottom: 1px solid var(--border-glow);
-            padding-bottom: 0.4rem;
+            padding-bottom: 0.3rem;
         }
 
         .skills-container {
             display: flex;
             flex-wrap: wrap;
-            gap: 12px;
+            gap: 10px;
         }
 
         .skill-tag {
             background: rgba(172, 169, 222, 0.12);
             border: 1px solid var(--primary-purple);
             color: #fff;
-            padding: 8px 16px;
+            padding: 6px 14px;
             border-radius: 8px;
-            font-size: 0.95rem;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            cursor: pointer;
+            font-size: 0.88rem;
+            transition: all 0.3s ease;
         }
 
         .skill-tag:hover {
             background: var(--primary-cyan);
             color: var(--bg-color);
             border-color: var(--primary-cyan);
-            box-shadow: 0 0 20px var(--primary-cyan);
-            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 0 15px var(--primary-cyan);
+            transform: translateY(-2px);
+        }
+
+        /* About & Contact Card Details */
+        .about-text {
+            font-size: 0.95rem;
+            line-height: 1.7;
+            color: #e0ddf5;
+            margin-bottom: 1.2rem;
+        }
+
+        .about-highlight {
+            color: var(--primary-cyan);
             font-weight: 600;
         }
 
-        /* Overlay Popups */
+        .contact-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 1rem;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: rgba(18, 14, 36, 0.6);
+            border: 1px solid rgba(172, 169, 222, 0.2);
+            padding: 12px 18px;
+            border-radius: 12px;
+            color: #fff;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .contact-item:hover {
+            border-color: var(--primary-cyan);
+            background: rgba(135, 232, 203, 0.1);
+            transform: translateX(5px);
+            box-shadow: 0 0 15px rgba(135, 232, 203, 0.2);
+        }
+
+        .contact-icon {
+            font-size: 1.3rem;
+            color: var(--primary-cyan);
+        }
+
+        .contact-info label {
+            display: block;
+            font-size: 0.75rem;
+            color: var(--primary-purple);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .contact-info span {
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        /* Popups & Overlays */
         .dice-result-popup {
             position: fixed;
-            top: 40%;
-            left: 50%;
+            top: 45%;
+            left: 72%; /* แสดงเลขตรงกลางขวาเหนือเต๋า */
             transform: translate(-50%, -50%) scale(0);
             font-family: 'Cinzel', serif;
             font-size: 5rem;
@@ -290,7 +387,7 @@
 
         .nat20-banner {
             position: fixed;
-            top: 20%;
+            top: 15%;
             left: 50%;
             transform: translate(-50%, -50%) scale(0);
             background: linear-gradient(135deg, #ffd700, #87e8cb);
@@ -298,7 +395,7 @@
             padding: 1rem 3.5rem;
             border-radius: 50px;
             font-family: 'Cinzel', serif;
-            font-size: 2.2rem;
+            font-size: 2rem;
             font-weight: 900;
             box-shadow: 0 0 50px #ffd700;
             transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -348,11 +445,22 @@
             box-shadow: 0 0 15px var(--primary-cyan);
         }
 
-        @media (max-width: 768px) {
-            h1 { font-size: 2.2rem; }
-            .brand-title { font-size: 1.8rem; }
-            .dnd-card { padding: 1.8rem 1.2rem; }
-            .container { padding: 1rem; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 900px) {
+            .page-wrapper {
+                justify-content: center;
+                padding: 1.5rem 1rem;
+            }
+            .dnd-card {
+                max-width: 100%;
+            }
+            .dice-result-popup {
+                left: 50%;
+            }
         }
     </style>
 </head>
@@ -366,73 +474,154 @@
     <div class="nat20-banner" id="nat20-banner">✨ CRITICAL SUCCESS! ✨</div>
 
     <div class="interactive-hint">
-        🎲 คลิกทอยลูกเต๋า D20 | 🔥 คลิกแคมป์ไฟเพื่อเปิด/ดับไฟ
+        🎲 คลิกทอยลูกเต๋า D20 ด้านขวา เพื่อสุ่มโชค!
     </div>
 
-    <div class="container">
+    <div class="page-wrapper">
         <div class="dnd-card" id="card">
             
-            <div class="badge-container">
-                <span class="class-badge">LVL 4 ARTIST & DESIGNER</span>
-                <span class="class-badge">GAME & ANIMATION</span>
-                <span class="class-badge">MINECRAFT MODDER</span>
+            <!-- Navigation Menu -->
+            <nav class="nav-menu">
+                <button class="nav-btn active" onclick="switchTab('main')">⚔️ หน้าหลัก</button>
+                <button class="nav-btn" onclick="switchTab('about')">📜 เกี่ยวกับ</button>
+                <button class="nav-btn" onclick="switchTab('contact')">📬 ติดต่อ</button>
+            </nav>
+
+            <!-- 1. MAIN TAB (หน้าหลัก) -->
+            <div id="tab-main" class="tab-content active">
+                <div class="badge-container">
+                    <span class="class-badge">LVL 4 ARTIST & DESIGNER</span>
+                    <span class="class-badge">GAME & ANIMATION</span>
+                    <span class="class-badge">MINECRAFT MODDER</span>
+                </div>
+
+                <div class="brand-title">bossu29</div>
+                <hr class="divider-line">
+
+                <h1>ศศิธร เซ้งรักษา</h1>
+                <div class="subtitle">Sasithorn Sengraksa | 3D & Digital Artist Portfolio</div>
+
+                <div class="info-grid">
+                    <div class="info-box">
+                        <h3>📜 การศึกษา (Education)</h3>
+                        <p><strong>มทร.รัตนโกสินทร์ ศาลายา</strong></p>
+                        <p>คณะสถาปัตยกรรมศาสตร์ และการออกแบบ</p>
+                        <p>สาขาเกมและอนิเมชั่น (ชั้นปีที่ 4)</p>
+                    </div>
+                    
+                    <div class="info-box">
+                        <h3>🎨 ความเชี่ยวชาญ (Focus Area)</h3>
+                        <p>ออกแบบตัวละคร (Character Design), วาดภาพประกอบ (Illustration), 3D Assets & Modding</p>
+                    </div>
+                </div>
+
+                <div class="section-title">📊 สเตตัสและความชำนาญ (Stats)</div>
+                <div class="stats-section">
+                    <div class="stat-bar-container">
+                        <div class="stat-header"><span>Character Design & Concept Art</span><span>98%</span></div>
+                        <div class="stat-bar-bg"><div class="stat-bar-fill" data-width="98%"></div></div>
+                    </div>
+                    <div class="stat-bar-container">
+                        <div class="stat-header"><span>Digital Illustration</span><span>92%</span></div>
+                        <div class="stat-bar-bg"><div class="stat-bar-fill" data-width="92%"></div></div>
+                    </div>
+                    <div class="stat-bar-container">
+                        <div class="stat-header"><span>3D Modeling & Assets (Blender / Unity)</span><span>88%</span></div>
+                        <div class="stat-bar-bg"><div class="stat-bar-fill" data-width="88%"></div></div>
+                    </div>
+                    <div class="stat-bar-container">
+                        <div class="stat-header"><span>Minecraft World Building & Figura Modding</span><span>95%</span></div>
+                        <div class="stat-bar-bg"><div class="stat-bar-fill" data-width="95%"></div></div>
+                    </div>
+                </div>
             </div>
 
-            <div class="brand-title">bossu29</div>
-            <hr class="divider-line">
+            <!-- 2. ABOUT TAB (เกี่ยวกับ) -->
+            <div id="tab-about" class="tab-content">
+                <div class="brand-title">ABOUT ME</div>
+                <hr class="divider-line">
 
-            <h1>ศศิธร เซ้งรักษา</h1>
-            <div class="subtitle">Sasithorn Sengraksa | 3D & Digital Artist Portfolio</div>
+                <p class="about-text">
+                    สวัสดีครับ! ผม <span class="about-highlight">ศศิธร เซ้งรักษา (bossu29)</span> นศ. ชั้นปีที่ 4 สาขาเกมและอนิเมชั่น ผู้หลงใหลในโลกของ 3D Art, การออกแบบตัวละคร และระบบเกม RPG / Fantasy 🏰
+                </p>
+                <p class="about-text">
+                    ผมชอบถ่ายทอดจินตนาการผ่านงานวาดและโมเดล 3 มิติ ไม่ว่าจะเป็นแนว <span class="about-highlight">Cyberpunk, Fantasy หรือ D&D World</span> รวมไปถึงการม็อดเกม Custom อวตารและแอนิเมชันผ่าน <span class="about-highlight">Minecraft Figura Modding</span>
+                </p>
 
-            <div class="info-grid">
-                <div class="info-box">
-                    <h3>📜 การศึกษา (Education)</h3>
-                    <p><strong>มหาวิทยาลัยเทคโนโลยีราชมงคลรัตนโกสินทร์ ศาลายา</strong></p>
-                    <p>คณะสถาปัตยกรรมศาสตร์ และการออกแบบ</p>
-                    <p>สาขาเกมและอนิเมชั่น (ชั้นปีที่ 4)</p>
-                </div>
-                
-                <div class="info-box">
-                    <h3>🎨 สไตล์งานวาด (Art Focus)</h3>
-                    <p>เชี่ยวชาญ<strong>การออกแบบตัวละคร (Character Design)</strong> วาดภาพประกอบ (Illustration) งานปั้น 3D และการสร้าง Mod Custom ใน Minecraft</p>
+                <div class="section-title">🛠️ เครื่องมือที่ใช้ (Tools & Software)</div>
+                <div class="skills-container">
+                    <div class="skill-tag">🎨 Clip Studio Paint / Photoshop</div>
+                    <div class="skill-tag">🧊 Blender 3D</div>
+                    <div class="skill-tag">🕹️ Unity Engine</div>
+                    <div class="skill-tag">🦊 Figura API (Minecraft)</div>
+                    <div class="skill-tag">📐 Blockbench</div>
                 </div>
             </div>
 
-            <div class="section-title">📊 สเตตัสและความชำนาญ (Character Stats)</div>
-            <div class="stats-section">
-                <div class="stat-bar-container">
-                    <div class="stat-header"><span>Character Design & Concepts</span><span>98%</span></div>
-                    <div class="stat-bar-bg"><div class="stat-bar-fill" data-width="98%"></div></div>
-                </div>
-                <div class="stat-bar-container">
-                    <div class="stat-header"><span>Digital Illustration</span><span>92%</span></div>
-                    <div class="stat-bar-bg"><div class="stat-bar-fill" data-width="92%"></div></div>
-                </div>
-                <div class="stat-bar-container">
-                    <div class="stat-header"><span>3D Modeling & Assets (Blender / Unity)</span><span>88%</span></div>
-                    <div class="stat-bar-bg"><div class="stat-bar-fill" data-width="88%"></div></div>
-                </div>
-                <div class="stat-bar-container">
-                    <div class="stat-header"><span>Minecraft World Building & Figura Modding</span><span>95%</span></div>
-                    <div class="stat-bar-bg"><div class="stat-bar-fill" data-width="95%"></div></div>
-                </div>
-            </div>
+            <!-- 3. CONTACT TAB (ติดต่อ) -->
+            <div id="tab-contact" class="tab-content">
+                <div class="brand-title">GET IN TOUCH</div>
+                <hr class="divider-line">
 
-            <div class="section-title">⚔️ สกิลความสามารถ (Abilities & Skills)</div>
-            <div class="skills-container">
-                <div class="skill-tag">🖌️ Digital Art</div>
-                <div class="skill-tag">👤 Character Design</div>
-                <div class="skill-tag">🖼️ Illustration</div>
-                <div class="skill-tag">🏰 Minecraft World Building</div>
-                <div class="skill-tag">🦊 Minecraft Figura Modding</div>
-                <div class="skill-tag">🕹️ 3D & Game Art</div>
+                <p class="about-text">ยินดีรับงาน Freelance, Contract งานออกแบบตัวละคร, 3D Assets และงานทำ Mod มายคราฟครับ สามารถติดต่อได้ผ่านช่องทางด้านล่างนี้ได้เลยครับ ✨</p>
+
+                <div class="contact-list">
+                    <a href="mailto:sasithorn.seng@gmail.com" class="contact-item">
+                        <span class="contact-icon">✉️</span>
+                        <div class="contact-info">
+                            <label>Email</label>
+                            <span>sasithorn.seng@gmail.com</span>
+                        </div>
+                    </a>
+
+                    <a href="#" class="contact-item" onclick="return false;">
+                        <span class="contact-icon">💬</span>
+                        <div class="contact-info">
+                            <label>Discord</label>
+                            <span>bossu29#0000</span>
+                        </div>
+                    </a>
+
+                    <a href="#" class="contact-item" onclick="return false;">
+                        <span class="contact-icon">🎨</span>
+                        <div class="contact-info">
+                            <label>ArtStation / Portfolio</label>
+                            <span>artstation.com/bossu29</span>
+                        </div>
+                    </a>
+
+                    <a href="#" class="contact-item" onclick="return false;">
+                        <span class="contact-icon">🌐</span>
+                        <div class="contact-info">
+                            <label>Location</label>
+                            <span>นครปฐม / กรุงเทพฯ, ประเทศไทย</span>
+                        </div>
+                    </a>
+                </div>
             </div>
 
         </div>
     </div>
 
     <script>
-        // --- 0. SYNTHESIZED SOUND EFFECTS (Web Audio API) ---
+        // --- 0. TAB SWITCHING SYSTEM ---
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
+
+            document.getElementById(`tab-${tabName}`).classList.add('active');
+            event.currentTarget.classList.add('active');
+
+            // Trigger Stat bar animation if switching to main tab
+            if(tabName === 'main') {
+                document.querySelectorAll('.stat-bar-fill').forEach(bar => {
+                    bar.style.width = '0%';
+                    setTimeout(() => bar.style.width = bar.getAttribute('data-width'), 50);
+                });
+            }
+        }
+
+        // --- 1. SYNTHESIZED SOUND EFFECTS (Web Audio API) ---
         let soundEnabled = true;
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
@@ -473,7 +662,7 @@
             });
         }
 
-        // --- 1. THREE.JS SCENE SETUP ---
+        // --- 2. THREE.JS SCENE SETUP ---
         const scene = new THREE.Scene();
         scene.fog = new THREE.FogExp2(0x080612, 0.03);
 
@@ -487,19 +676,19 @@
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
         renderer.setSize(window.innerWidth, window.innerHeight);
 
-        // --- 2. LIGHTING ---
-        const ambientLight = new THREE.AmbientLight(0x1a152b, 2);
+        // --- 3. LIGHTING ---
+        const ambientLight = new THREE.AmbientLight(0x1a152b, 2.2);
         scene.add(ambientLight);
 
-        const cyanLight = new THREE.PointLight(0x87e8cb, 3, 25);
-        cyanLight.position.set(5, 4, 3);
+        const cyanLight = new THREE.PointLight(0x87e8cb, 3.5, 25);
+        cyanLight.position.set(6, 4, 3);
         scene.add(cyanLight);
 
-        const purpleLight = new THREE.PointLight(0xaca9de, 3, 25);
-        purpleLight.position.set(-5, -4, 3);
+        const purpleLight = new THREE.PointLight(0xaca9de, 3.5, 25);
+        purpleLight.position.set(-6, -4, 3);
         scene.add(purpleLight);
 
-        // --- 3. D20 DICE & TEXTURE SYSTEM ---
+        // --- 4. D20 DICE & TEXTURE SYSTEM ---
         const d20Textures = {};
         function getOrCreateNumberTexture(number) {
             if (d20Textures[number]) return d20Textures[number];
@@ -534,7 +723,8 @@
             flatShading: true
         });
 
-        const d20Geo = new THREE.IcosahedronGeometry(0.9, 0);
+        // ปรับขนาด D20 ให้ใหญ่เด่นขึ้นตรงกลางขวา (1.15)
+        const d20Geo = new THREE.IcosahedronGeometry(1.15, 0);
         const d20Mesh = new THREE.Mesh(d20Geo, d20Material);
         
         const d20Wire = new THREE.Mesh(
@@ -544,7 +734,7 @@
         d20Wire.scale.setScalar(1.02);
 
         const d20Hitbox = new THREE.Mesh(
-            new THREE.SphereGeometry(1.2, 8, 8),
+            new THREE.SphereGeometry(1.4, 8, 8),
             new THREE.MeshBasicMaterial({ visible: false })
         );
 
@@ -553,50 +743,6 @@
         d20Group.add(d20Wire);
         d20Group.add(d20Hitbox);
         scene.add(d20Group);
-
-        // --- 4. ADVANCED CAMPFIRE WITH SMOKE & SPARKS ---
-        const campfireGroup = new THREE.Group();
-        const logMat = new THREE.MeshStandardMaterial({ color: 0x3d2314, roughness: 0.9 });
-        for(let i = 0; i < 4; i++) {
-            const logGeo = new THREE.CylinderGeometry(0.08, 0.08, 0.75, 8);
-            const log = new THREE.Mesh(logGeo, logMat);
-            log.rotation.z = Math.PI / 2;
-            log.rotation.y = (i * Math.PI) / 4;
-            log.position.y = 0.04;
-            campfireGroup.add(log);
-        }
-
-        const fireLight = new THREE.PointLight(0xff6600, 4.5, 10);
-        fireLight.position.set(0, 0.3, 0);
-        campfireGroup.add(fireLight);
-
-        // Sparks Particles
-        const sparkCount = 40;
-        const sparkGeo = new THREE.BufferGeometry();
-        const sparkPos = new Float32Array(sparkCount * 3);
-        for(let i = 0; i < sparkCount * 3; i += 3) {
-            sparkPos[i] = (Math.random() - 0.5) * 0.3;
-            sparkPos[i+1] = Math.random() * 0.6;
-            sparkPos[i+2] = (Math.random() - 0.5) * 0.3;
-        }
-        sparkGeo.setAttribute('position', new THREE.BufferAttribute(sparkPos, 3));
-        const sparkMat = new THREE.PointsMaterial({
-            color: 0xffcc00,
-            size: 0.07,
-            transparent: true,
-            opacity: 0.9
-        });
-        const sparkParticles = new THREE.Points(sparkGeo, sparkMat);
-        campfireGroup.add(sparkParticles);
-
-        const campfireHitbox = new THREE.Mesh(
-            new THREE.SphereGeometry(0.8, 8, 8),
-            new THREE.MeshBasicMaterial({ visible: false })
-        );
-        campfireGroup.add(campfireHitbox);
-
-        scene.add(campfireGroup);
-        let isFireOn = true;
 
         // --- 5. FIREWORKS BURST FOR NAT 20 ---
         const fwCount = 300;
@@ -611,7 +757,7 @@
 
             const theta = Math.random() * Math.PI * 2;
             const phi = Math.random() * Math.PI;
-            const speed = 0.1 + Math.random() * 0.15;
+            const speed = 0.12 + Math.random() * 0.18;
 
             fwVel.push({
                 x: speed * Math.sin(phi) * Math.cos(theta),
@@ -643,16 +789,16 @@
             fireworks.geometry.attributes.position.needsUpdate = true;
         }
 
-        // --- 6. FLOATING DUST PARTICLES & RINGS ---
+        // --- 6. FLOATING DUST PARTICLES & MAGIC RINGS ---
         const bgGroup = new THREE.Group();
-        const ringGeo = new THREE.TorusGeometry(2.5, 0.015, 16, 100);
+        const ringGeo = new THREE.TorusGeometry(3.0, 0.015, 16, 100);
         const ringMat = new THREE.MeshBasicMaterial({ color: 0x87e8cb, wireframe: true });
         const ring = new THREE.Mesh(ringGeo, ringMat);
         ring.rotation.x = Math.PI / 3;
         bgGroup.add(ring);
         scene.add(bgGroup);
 
-        const pCount = 600;
+        const pCount = 650;
         const pPos = new Float32Array(pCount * 3);
         for(let i = 0; i < pCount * 3; i++) {
             pPos[i] = (Math.random() - 0.5) * 18;
@@ -663,19 +809,24 @@
         const pMesh = new THREE.Points(pGeo, pMat);
         scene.add(pMesh);
 
-        // --- 7. RESPONSIVE POSITIONING ---
+        // --- 7. POSITIONING & RESPONSIVE (วาง D20 ตรงกลางฝั่งขวา) ---
         function updatePositions() {
             const aspect = window.innerWidth / window.innerHeight;
             const vFOV = THREE.MathUtils.degToRad(camera.fov);
             const height = 2 * Math.tan(vFOV / 2) * camera.position.z;
             const width = height * aspect;
 
-            d20Group.position.set(width / 2 - 1.2, height / 2 - 1.2, 0);
-            campfireGroup.position.set(-width / 2 + 1.3, -height / 2 + 1.1, 0);
+            if (window.innerWidth > 900) {
+                // วาง D20 ฝั่งขวาตรงกลาง
+                d20Group.position.set(width / 4 + 0.5, 0, 0);
+            } else {
+                // สำหรับมือถือ วางมุมขวาบน
+                d20Group.position.set(width / 2 - 1.0, height / 2 - 1.2, 0);
+            }
         }
         updatePositions();
 
-        // --- 8. DICE ROLL & INTERACTION LOGIC ---
+        // --- 8. DICE ROLL LOGIC & INTERACTION ---
         const raycaster = new THREE.Raycaster();
         const mouse = new THREE.Vector2();
         let isRolling = false;
@@ -710,14 +861,12 @@
             
             isRolling = true;
             let finalValue = Math.floor(Math.random() * 20) + 1;
-            let counter = 0;
 
             const rollInterval = setInterval(() => {
                 let tempVal = Math.floor(Math.random() * 20) + 1;
                 d20Material.map = getOrCreateNumberTexture(tempVal);
                 d20Material.needsUpdate = true;
                 playRollSound();
-                counter++;
             }, 60);
 
             // GSAP 3D Spin Animation
@@ -743,30 +892,23 @@
 
             raycaster.setFromCamera(mouse, camera);
             const intersectsD20 = raycaster.intersectObjects([d20Mesh, d20Wire, d20Hitbox]);
-            const intersectsCampfire = raycaster.intersectObjects(campfireGroup.children);
 
             if (intersectsD20.length > 0) rollDice();
-            if (intersectsCampfire.length > 0) {
-                isFireOn = !isFireOn;
-                fireLight.intensity = isFireOn ? 4.5 : 0;
-                sparkMat.opacity = isFireOn ? 0.9 : 0;
-            }
         });
 
-        // Mouse Hover Feedback & Card 3D Tilt Effect
+        // Mouse Hover & Card 3D Tilt Effect
         const card = document.getElementById('card');
         window.addEventListener('pointermove', (e) => {
             mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
             mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
 
-            // Hover Pointer
             raycaster.setFromCamera(mouse, camera);
-            const intersects = raycaster.intersectObjects([d20Mesh, d20Wire, d20Hitbox, ...campfireGroup.children]);
+            const intersects = raycaster.intersectObjects([d20Mesh, d20Wire, d20Hitbox]);
             document.body.style.cursor = intersects.length > 0 ? 'pointer' : 'default';
 
-            // 3D Card Tilt Effect
-            const rx = (e.clientY / window.innerHeight - 0.5) * -12;
-            const ry = (e.clientX / window.innerWidth - 0.5) * 12;
+            // 3D Card Tilt
+            const rx = (e.clientY / window.innerHeight - 0.5) * -10;
+            const ry = (e.clientX / window.innerWidth - 0.5) * 10;
             card.style.transform = `rotateX(${rx}deg) rotateY(${ry}deg)`;
         });
 
@@ -777,21 +919,10 @@
             requestAnimationFrame(animate);
             const elapsedTime = clock.getElapsedTime();
 
-            // D20 Idle Movement
+            // D20 Rotation Animation
             if (!isRolling) {
                 d20Group.rotation.x = Math.sin(elapsedTime * 0.5) * 0.2;
                 d20Group.rotation.y = elapsedTime * 0.4;
-            }
-
-            // Campfire Spark Animation
-            if (isFireOn) {
-                fireLight.intensity = 4 + Math.sin(elapsedTime * 15) * 0.8;
-                const pos = sparkParticles.geometry.attributes.position.array;
-                for (let i = 1; i < sparkCount * 3; i += 3) {
-                    pos[i] += 0.009;
-                    if (pos[i] > 0.6) pos[i] = 0;
-                }
-                sparkParticles.geometry.attributes.position.needsUpdate = true;
             }
 
             // Fireworks Animation
