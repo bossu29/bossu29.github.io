@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>3D Portfolio | นางสาว ศศิธร เซ้งรักษา (bossu29)</title>
+    <title>Sasithorn S. | Soft D&D Minimal Portfolio</title>
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800;900&family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600&family=Prompt:wght@300;400;500;600&display=swap" rel="stylesheet">
 
     <!-- Three.js & GSAP -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -16,28 +16,29 @@
 
     <style>
         :root {
-            --bg-color: #080612;
-            --primary-cyan: #87e8cb;
-            --primary-purple: #aca9de;
-            --accent-gold: #ffd700;
-            --accent-red: #ff4757;
-            --dark-purple: #120e24;
-            --text-color: #f0f4f8;
-            --glass-bg: rgba(15, 12, 28, 0.88);
-            --border-glow: rgba(135, 232, 203, 0.5);
+            --bg-base: #0f0d18;
+            --glass-bg: rgba(25, 21, 38, 0.55);
+            --glass-border: rgba(235, 215, 190, 0.18);
+            --accent-gold: #f3e5c8;
+            --accent-soft-cyan: #b8e3de;
+            --accent-rose: #e8b8c8;
+            --accent-glow: rgba(243, 229, 200, 0.4);
+            --text-main: #f5f3f7;
+            --text-sub: #b3acc3;
+            --card-radius: 28px;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Prompt', sans-serif;
+            font-family: 'Plus Jakarta Sans', 'Prompt', sans-serif;
             user-select: none;
         }
 
         body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
+            background-color: var(--bg-base);
+            color: var(--text-main);
             overflow-x: hidden;
             min-height: 100vh;
         }
@@ -55,361 +56,320 @@
             position: relative;
             z-index: 2;
             width: 100%;
-            max-width: 1300px;
+            max-width: 1350px;
             margin: 0 auto;
-            padding: 2.5rem 2rem;
+            padding: 3rem 2rem;
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: flex-start;
             pointer-events: none;
-            perspective: 1500px;
+            perspective: 1200px;
         }
 
-        /* 3D Book / Card Container */
+        /* 3D Minimal Soft Glass Card */
         .dnd-card {
             pointer-events: auto;
             background: var(--glass-bg);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 2px solid var(--primary-cyan);
-            border-radius: 20px;
-            padding: 2.5rem;
+            backdrop-filter: blur(24px) saturate(140%);
+            -webkit-backdrop-filter: blur(24px) saturate(140%);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--card-radius);
+            padding: 3rem 2.5rem;
             width: 100%;
-            max-width: 620px;
-            box-shadow: 0 0 40px rgba(135, 232, 203, 0.2),
-                        inset 0 0 30px rgba(172, 169, 222, 0.15);
+            max-width: 600px;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.15);
             position: relative;
-            transition: transform 0.1s ease-out, box-shadow 0.3s ease;
+            transition: transform 0.2s cubic-bezier(0.2, 0, 0.2, 1), box-shadow 0.4s ease;
             transform-style: preserve-3d;
         }
 
         .dnd-card:hover {
-            box-shadow: 0 0 60px rgba(135, 232, 203, 0.35),
-                        inset 0 0 40px rgba(172, 169, 222, 0.25);
+            box-shadow: 0 35px 70px rgba(0, 0, 0, 0.5),
+                        0 0 40px rgba(243, 229, 200, 0.12),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.25);
         }
 
-        .dnd-card::before {
-            content: '✦ D&D LEGENDARY SHEET ✦';
-            position: absolute;
-            top: -14px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: var(--dark-purple);
-            color: var(--primary-cyan);
-            border: 1px solid var(--primary-cyan);
-            padding: 4px 20px;
-            border-radius: 20px;
+        .card-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(243, 229, 200, 0.08);
+            border: 1px solid rgba(243, 229, 200, 0.2);
+            color: var(--accent-gold);
+            padding: 6px 16px;
+            border-radius: 30px;
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-tag::before {
+            content: '✦';
             font-size: 0.8rem;
-            letter-spacing: 3px;
-            font-family: 'Cinzel', serif;
-            font-weight: 800;
-            box-shadow: 0 0 15px var(--primary-cyan);
-            z-index: 10;
+            color: var(--accent-gold);
         }
 
         /* TAB NAVIGATION */
         .tab-nav {
             display: flex;
-            gap: 10px;
-            margin-bottom: 1.5rem;
-            border-bottom: 1px solid rgba(135, 232, 203, 0.3);
-            padding-bottom: 0.8rem;
-            position: relative;
-            z-index: 10;
+            gap: 8px;
+            margin-bottom: 2rem;
+            background: rgba(15, 13, 24, 0.4);
+            padding: 6px;
+            border-radius: 18px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
         .tab-btn {
-            background: rgba(172, 169, 222, 0.1);
-            border: 1px solid var(--primary-purple);
-            color: var(--primary-purple);
-            padding: 8px 18px;
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: var(--text-sub);
+            padding: 10px 16px;
             border-radius: 12px;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             font-weight: 500;
             cursor: pointer;
-            transition: all 0.3s ease;
-            font-family: 'Cinzel', 'Prompt', serif;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            font-family: 'Plus Jakarta Sans', 'Prompt', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
         }
 
-        .tab-btn.active, .tab-btn:hover {
-            background: var(--primary-cyan);
-            color: var(--bg-color);
-            border-color: var(--primary-cyan);
-            box-shadow: 0 0 15px var(--primary-cyan);
-            font-weight: 600;
+        .tab-btn.active {
+            background: rgba(243, 229, 200, 0.12);
+            color: var(--accent-gold);
+            border: 1px solid rgba(243, 229, 200, 0.25);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
         }
 
-        /* 3D BOOK FLIP SYSTEM */
-        .pages-wrapper {
-            position: relative;
-            min-height: 480px;
-            perspective: 1200px;
-            transform-style: preserve-3d;
+        .tab-btn:hover:not(.active) {
+            color: var(--text-main);
+            background: rgba(255, 255, 255, 0.04);
         }
 
+        /* TAB CONTENTS */
         .tab-content {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            opacity: 0;
-            visibility: hidden;
-            transform-origin: left center;
-            transform: rotateY(-90deg);
-            backface-visibility: hidden;
-            transition: none;
-            z-index: 1;
+            display: none;
+            animation: softFadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .tab-content.active {
-            opacity: 1;
-            visibility: visible;
-            transform: rotateY(0deg);
-            z-index: 5;
-        }
-
-        /* Page Shadow Overlay during Flip */
-        .page-shadow {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0) 100%);
-            pointer-events: none;
-            opacity: 0;
-            z-index: 6;
-            border-radius: 12px;
-            transition: opacity 0.3s ease;
-        }
-
-        .badge-container {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-            margin-bottom: 0.8rem;
-        }
-
-        .class-badge {
-            background: linear-gradient(135deg, var(--dark-purple), #2a1f4d);
-            color: var(--primary-cyan);
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            letter-spacing: 1px;
-            border: 1px solid rgba(135, 232, 203, 0.4);
-            box-shadow: 0 0 10px rgba(135, 232, 203, 0.15);
+            display: block;
         }
 
         .brand-title {
-            font-family: 'Cinzel', 'Prompt', serif;
-            font-size: 2.2rem;
-            font-weight: 900;
-            letter-spacing: 2px;
-            background: linear-gradient(135deg, #ffffff 10%, var(--primary-cyan) 50%, var(--primary-purple) 90%);
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 3rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            background: linear-gradient(135deg, #ffffff 30%, var(--accent-gold) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 0 12px rgba(135, 232, 203, 0.6));
+            line-height: 1.1;
+            margin-bottom: 0.3rem;
+        }
+
+        .subtitle-th {
+            font-size: 1.15rem;
+            color: var(--text-main);
+            font-weight: 500;
             margin-bottom: 0.2rem;
         }
 
-        .divider-line {
-            border: 0;
-            height: 2px;
-            background: linear-gradient(90deg, var(--primary-cyan), var(--primary-purple), transparent);
-            margin: 0.8rem 0 1.2rem 0;
-        }
-
-        h1 {
-            font-family: 'Cinzel', 'Prompt', serif;
-            font-size: 2.4rem;
-            font-weight: 800;
-            color: #ffffff;
-            text-shadow: 0 0 15px rgba(135, 232, 203, 0.5), 0 0 25px rgba(172, 169, 222, 0.4);
-            margin-bottom: 0.2rem;
-        }
-
-        .subtitle {
-            font-size: 1.05rem;
-            color: var(--primary-purple);
-            margin-bottom: 1.5rem;
+        .subtitle-en {
+            font-size: 0.85rem;
+            color: var(--text-sub);
+            margin-bottom: 1.8rem;
             font-weight: 300;
+            letter-spacing: 0.5px;
         }
 
         .info-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 1.2rem;
-            margin-bottom: 1.5rem;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.8rem;
         }
 
         .info-box {
-            background: rgba(18, 14, 36, 0.6);
-            border: 1px solid rgba(172, 169, 222, 0.25);
-            border-left: 4px solid var(--primary-cyan);
-            padding: 1rem;
-            border-radius: 6px 12px 12px 6px;
+            background: rgba(255, 255, 255, 0.025);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            padding: 1.2rem;
+            border-radius: 18px;
             transition: all 0.3s ease;
         }
 
         .info-box:hover {
-            transform: translateY(-3px);
-            border-color: var(--primary-cyan);
-            box-shadow: 0 5px 15px rgba(135, 232, 203, 0.15);
+            background: rgba(243, 229, 200, 0.04);
+            border-color: rgba(243, 229, 200, 0.2);
+            transform: translateY(-2px);
         }
 
         .info-box h3 {
-            font-size: 1rem;
-            color: var(--primary-cyan);
+            font-size: 0.8rem;
+            color: var(--accent-gold);
             margin-bottom: 0.4rem;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-family: 'Cinzel', 'Prompt', serif;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 700;
         }
 
         .info-box p {
-            font-size: 0.9rem;
-            color: #e0ddf5;
-            line-height: 1.5;
+            font-size: 0.85rem;
+            color: var(--text-sub);
+            line-height: 1.6;
         }
 
-        /* Stats Bar */
-        .stats-section {
-            margin-bottom: 1.5rem;
+        .info-box p strong {
+            color: var(--text-main);
+            font-weight: 500;
+        }
+
+        /* Stats Section */
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 1.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .section-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.2rem;
+            color: var(--accent-gold);
+            letter-spacing: 1px;
         }
 
         .stat-bar-container {
-            margin-bottom: 0.7rem;
+            margin-bottom: 0.9rem;
         }
 
         .stat-header {
             display: flex;
             justify-content: space-between;
-            font-size: 0.85rem;
-            color: var(--primary-purple);
-            margin-bottom: 0.2rem;
+            font-size: 0.8rem;
+            color: var(--text-sub);
+            margin-bottom: 0.4rem;
         }
 
         .stat-bar-bg {
             width: 100%;
-            height: 7px;
-            background: rgba(255, 255, 255, 0.08);
-            border-radius: 4px;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.06);
+            border-radius: 10px;
             overflow: hidden;
-            border: 1px solid rgba(135, 232, 203, 0.2);
         }
 
         .stat-bar-fill {
             height: 100%;
-            background: linear-gradient(90deg, var(--primary-purple), var(--primary-cyan));
-            border-radius: 4px;
-            box-shadow: 0 0 10px var(--primary-cyan);
+            background: linear-gradient(90deg, var(--accent-soft-cyan), var(--accent-gold));
+            border-radius: 10px;
             width: 0%;
-            transition: width 1.2s cubic-bezier(0.1, 0.5, 0.1, 1);
-        }
-
-        .section-title {
-            font-family: 'Cinzel', 'Prompt', serif;
-            font-size: 1.25rem;
-            color: var(--primary-cyan);
-            margin-top: 0.8rem;
-            margin-bottom: 0.8rem;
-            border-bottom: 1px solid var(--border-glow);
-            padding-bottom: 0.3rem;
+            transition: width 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 0 10px rgba(243, 229, 200, 0.3);
         }
 
         .skills-container {
             display: flex;
             flex-wrap: wrap;
-            gap: 10px;
+            gap: 8px;
+            margin-top: 0.8rem;
         }
 
         .skill-tag {
-            background: rgba(172, 169, 222, 0.12);
-            border: 1px solid var(--primary-purple);
-            color: #fff;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: var(--text-main);
             padding: 6px 14px;
-            border-radius: 8px;
-            font-size: 0.85rem;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border-radius: 12px;
+            font-size: 0.8rem;
+            transition: all 0.3s ease;
             cursor: pointer;
         }
 
         .skill-tag:hover {
-            background: var(--primary-cyan);
-            color: var(--bg-color);
-            border-color: var(--primary-cyan);
-            box-shadow: 0 0 15px var(--primary-cyan);
-            transform: translateY(-2px) scale(1.03);
-            font-weight: 600;
+            background: rgba(243, 229, 200, 0.12);
+            border-color: var(--accent-gold);
+            color: var(--accent-gold);
+            transform: translateY(-2px);
         }
 
-        /* Contact Items Style */
+        /* Contact Items */
         .contact-list {
             display: flex;
             flex-direction: column;
-            gap: 1rem;
-            margin-top: 1rem;
+            gap: 0.9rem;
+            margin-top: 1.2rem;
         }
 
         .contact-item {
             display: flex;
             align-items: center;
-            gap: 15px;
-            background: rgba(18, 14, 36, 0.6);
-            border: 1px solid rgba(135, 232, 203, 0.3);
-            padding: 1rem 1.2rem;
-            border-radius: 12px;
+            gap: 16px;
+            background: rgba(255, 255, 255, 0.025);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            padding: 1.1rem 1.4rem;
+            border-radius: 18px;
             text-decoration: none;
-            color: var(--text-color);
+            color: var(--text-main);
             transition: all 0.3s ease;
         }
 
         .contact-item:hover {
-            background: rgba(135, 232, 203, 0.15);
-            border-color: var(--primary-cyan);
-            transform: translateX(8px);
-            box-shadow: 0 0 15px rgba(135, 232, 203, 0.2);
+            background: rgba(243, 229, 200, 0.06);
+            border-color: rgba(243, 229, 200, 0.25);
+            transform: translateX(6px);
         }
 
         .contact-icon {
-            font-size: 1.5rem;
-            background: var(--dark-purple);
-            width: 45px;
-            height: 45px;
+            font-size: 1.2rem;
+            background: rgba(243, 229, 200, 0.08);
+            width: 42px;
+            height: 42px;
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 50%;
-            border: 1px solid var(--primary-cyan);
-            color: var(--primary-cyan);
+            border-radius: 12px;
+            color: var(--accent-gold);
+            border: 1px solid rgba(243, 229, 200, 0.15);
         }
 
         .contact-text h4 {
-            font-size: 0.95rem;
-            color: var(--primary-cyan);
+            font-size: 0.8rem;
+            color: var(--accent-gold);
+            font-weight: 500;
             margin-bottom: 2px;
+            font-family: 'Cormorant Garamond', serif;
+            letter-spacing: 1px;
+            text-transform: uppercase;
         }
 
         .contact-text p {
             font-size: 0.85rem;
-            color: var(--primary-purple);
+            color: var(--text-sub);
         }
 
-        /* Overlay Popups & Hints */
+        /* Popups & Overlay Effects */
         .dice-result-popup {
             position: fixed;
             top: 45%;
             right: 25%;
             transform: translate(50%, -50%) scale(0);
-            font-family: 'Cinzel', serif;
-            font-size: 5.5rem;
-            font-weight: 900;
-            color: #fff;
-            text-shadow: 0 0 30px var(--primary-cyan);
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 6rem;
+            font-weight: 700;
+            color: var(--accent-gold);
+            text-shadow: 0 0 40px rgba(243, 229, 200, 0.6);
             pointer-events: none;
             z-index: 99;
             transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s;
@@ -423,74 +383,70 @@
 
         .nat20-banner {
             position: fixed;
-            top: 20%;
+            top: 15%;
             left: 50%;
-            transform: translate(-50%, -50%) scale(0);
-            background: linear-gradient(135deg, #ffd700, #87e8cb);
-            color: #0b0914;
-            padding: 1rem 3.5rem;
-            border-radius: 50px;
-            font-family: 'Cinzel', serif;
-            font-size: 2.2rem;
-            font-weight: 900;
-            box-shadow: 0 0 50px #ffd700;
-            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform: translate(-50%, -50%) scale(0.8);
+            background: rgba(25, 21, 38, 0.85);
+            border: 1px solid var(--accent-gold);
+            color: var(--accent-gold);
+            padding: 0.8rem 2.5rem;
+            border-radius: 40px;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.4rem;
+            letter-spacing: 3px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5), 0 0 30px rgba(243, 229, 200, 0.2);
+            backdrop-filter: blur(12px);
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             z-index: 100;
             pointer-events: none;
+            opacity: 0;
         }
 
         .nat20-banner.active {
             transform: translate(-50%, -50%) scale(1);
+            opacity: 1;
         }
 
         .interactive-hint {
             position: fixed;
-            bottom: 25px;
-            right: 25px;
-            background: rgba(18, 14, 36, 0.85);
-            border: 1px solid var(--primary-cyan);
-            color: var(--primary-cyan);
-            padding: 10px 20px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            box-shadow: 0 0 20px rgba(135, 232, 203, 0.25);
+            bottom: 30px;
+            right: 30px;
+            background: rgba(25, 21, 38, 0.6);
+            border: 1px solid rgba(243, 229, 200, 0.2);
+            color: var(--accent-gold);
+            padding: 8px 18px;
+            border-radius: 30px;
+            font-size: 0.8rem;
             backdrop-filter: blur(10px);
             pointer-events: none;
             z-index: 10;
+            letter-spacing: 0.5px;
         }
 
         .audio-toggle {
             position: fixed;
-            top: 25px;
-            right: 25px;
+            top: 30px;
+            right: 30px;
             z-index: 10;
-            background: var(--glass-bg);
-            border: 1px solid var(--primary-cyan);
-            color: var(--primary-cyan);
+            background: rgba(25, 21, 38, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-sub);
             padding: 8px 16px;
-            border-radius: 20px;
+            border-radius: 30px;
             cursor: pointer;
-            backdrop-filter: blur(8px);
-            font-size: 0.85rem;
+            backdrop-filter: blur(10px);
+            font-size: 0.8rem;
             transition: all 0.3s ease;
         }
 
         .audio-toggle:hover {
-            background: var(--primary-cyan);
-            color: var(--bg-color);
-            box-shadow: 0 0 15px var(--primary-cyan);
+            border-color: var(--accent-gold);
+            color: var(--accent-gold);
         }
 
-        /* Sparkle Magic Particles on Flip */
-        .sparkle {
-            position: absolute;
-            width: 6px;
-            height: 6px;
-            background: var(--primary-cyan);
-            border-radius: 50%;
-            box-shadow: 0 0 10px var(--primary-cyan);
-            pointer-events: none;
-            z-index: 20;
+        @keyframes softFadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         @media (max-width: 992px) {
@@ -512,331 +468,202 @@
 
     <canvas id="webgl-bg"></canvas>
 
-    <button class="audio-toggle" id="audio-toggle">🔊 SFX: ON</button>
+    <button class="audio-toggle" id="audio-toggle">✨ SOUND: ON</button>
 
     <div class="dice-result-popup" id="dice-result">20</div>
-    <div class="nat20-banner" id="nat20-banner">✨ CRITICAL SUCCESS! ✨</div>
+    <div class="nat20-banner" id="nat20-banner">✦ CRITICAL SUCCESS ✦</div>
 
     <div class="interactive-hint">
-        🎲 คลิกทอยลูกเต๋า D20 (ด้านขวา) เพื่อเสี่ยงดวง!
+        🎲 คลิกทอยลูกเต๋า D20 ด้านขวา
     </div>
 
     <div class="container">
         <div class="dnd-card" id="card">
             
+            <div class="card-tag">CHARACTER SHEET</div>
+
             <!-- Tab Navigation Header -->
             <div class="tab-nav">
-                <button class="tab-btn active" onclick="switchTab('home', this)">🛡️ โปรไฟล์ (Profile)</button>
-                <button class="tab-btn" onclick="switchTab('about', this)">📜 เกี่ยวกับ (About)</button>
-                <button class="tab-btn" onclick="switchTab('contact', this)">📬 ติดต่อ (Contact)</button>
+                <button class="tab-btn active" onclick="switchTab('home', this)">🛡️ โปรไฟล์</button>
+                <button class="tab-btn" onclick="switchTab('about', this)">📜 เกี่ยวกับ</button>
+                <button class="tab-btn" onclick="switchTab('contact', this)">📬 ติดต่อ</button>
             </div>
 
-            <!-- PAGES WRAPPER (3D BOOK EFFECT) -->
-            <div class="pages-wrapper">
-                <div class="page-shadow" id="page-shadow"></div>
+            <!-- TAB 1: HOME PROFILE -->
+            <div class="tab-content active" id="tab-home">
+                <div class="brand-title">bossu29</div>
+                <div class="subtitle-th">นางสาว ศศิธร เซ้งรักษา</div>
+                <div class="subtitle-en">Sasithorn Sengraksa | 3D & Digital Character Artist</div>
 
-                <!-- TAB 1: HOME PROFILE -->
-                <div class="tab-content active" id="tab-home">
-                    <div class="badge-container">
-                        <span class="class-badge">LVL 4 ARTIST & DESIGNER</span>
-                        <span class="class-badge">GAME & ANIMATION</span>
-                        <span class="class-badge">MINECRAFT MODDER</span>
+                <div class="info-grid">
+                    <div class="info-box">
+                        <h3>การศึกษา (Education)</h3>
+                        <p><strong>มทร.รัตนโกสินทร์ ศาลายา</strong></p>
+                        <p>คณะสถาปัตยกรรมศาสตร์และการออกแบบ</p>
+                        <p>สาขาเกมและอนิเมชั่น (ปี 4)</p>
                     </div>
-
-                    <div class="brand-title">bossu29</div>
-                    <hr class="divider-line">
-
-                    <h1>นางสาว ศศิธร เซ้งรักษา</h1>
-                    <div class="subtitle">Sasithorn Sengraksa | 3D & Digital Artist Portfolio</div>
-
-                    <div class="info-grid">
-                        <div class="info-box">
-                            <h3>📜 การศึกษา (Education)</h3>
-                            <p><strong>มหาวิทยาลัยเทคโนโลยีราชมงคลรัตนโกสินทร์ ศาลายา</strong></p>
-                            <p>คณะสถาปัตยกรรมศาสตร์ และการออกแบบ</p>
-                            <p>สาขาเกมและอนิเมชั่น (ชั้นปีที่ 4)</p>
-                        </div>
-                        
-                        <div class="info-box">
-                            <h3>🎨 สไตล์งานวาด (Art Focus)</h3>
-                            <p>เชี่ยวชาญ<strong>การออกแบบตัวละคร (Character Design)</strong> วาดภาพประกอบ (Illustration) งานปั้น 3D และการทำ Mod Custom ใน Minecraft</p>
-                        </div>
-                    </div>
-
-                    <div class="section-title">📊 สเตตัสและความชำนาญ (Character Stats)</div>
-                    <div class="stats-section">
-                        <div class="stat-bar-container">
-                            <div class="stat-header"><span>Character Design & Concepts</span><span>98%</span></div>
-                            <div class="stat-bar-bg"><div class="stat-bar-fill" data-width="98%"></div></div>
-                        </div>
-                        <div class="stat-bar-container">
-                            <div class="stat-header"><span>Digital Illustration</span><span>92%</span></div>
-                            <div class="stat-bar-bg"><div class="stat-bar-fill" data-width="92%"></div></div>
-                        </div>
-                        <div class="stat-bar-container">
-                            <div class="stat-header"><span>3D Modeling & Assets (Blender / Unity)</span><span>88%</span></div>
-                            <div class="stat-bar-bg"><div class="stat-bar-fill" data-width="88%"></div></div>
-                        </div>
-                        <div class="stat-bar-container">
-                            <div class="stat-header"><span>Minecraft World Building & Figura Modding</span><span>95%</span></div>
-                            <div class="stat-bar-bg"><div class="stat-bar-fill" data-width="95%"></div></div>
-                        </div>
-                    </div>
-
-                    <div class="section-title">⚔️ สกิลความสามารถ (Abilities & Skills)</div>
-                    <div class="skills-container">
-                        <div class="skill-tag">🖌️ Digital Art</div>
-                        <div class="skill-tag">👤 Character Design</div>
-                        <div class="skill-tag">🖼️ Illustration</div>
-                        <div class="skill-tag">🏰 Minecraft World Building</div>
-                        <div class="skill-tag">🦊 Minecraft Figura Modding</div>
-                        <div class="skill-tag">🕹️ 3D & Game Art</div>
-                    </div>
-                </div>
-
-                <!-- TAB 2: ABOUT -->
-                <div class="tab-content" id="tab-about">
-                    <div class="brand-title">ABOUT ME</div>
-                    <hr class="divider-line">
-                    <div class="info-box" style="margin-bottom: 1.2rem;">
-                        <h3>✨ เกี่ยวกับฉัน (Biography)</h3>
-                        <p>สวัสดีค่ะ! ดิฉัน <strong>นางสาว ศศิธร เซ้งรักษา (bossu29)</strong> เป็นนักศึกษาชั้นปีที่ 4 สาขาเกมและอนิเมชั่น ผู้มีความหลงใหลในงานดิจิทัลอาร์ต การออกแบบตัวละครแฟนตาซีไซไฟ การทำ 3D โมเดลลิ่ง และการปรับแต่งโมดูลเกม อย่างเช่น Minecraft Figura Modding</p>
-                    </div>
-                    <div class="info-box" style="margin-bottom: 1.2rem;">
-                        <h3>🎯 เป้าหมายการทำงาน (Work Goal)</h3>
-                        <p>มุ่งมั่นที่จะสร้างสรรค์ผลงาน Character Design และ Game Asset ระดับคุณภาพ เพื่อเติมเต็มจินตนาการและสร้างประสบการณ์ที่น่าจดจำในอุตสาหกรรมสื่อสร้างสรรค์และเกม</p>
-                    </div>
-                    <div class="section-title">🛠️ เครื่องมือที่เชี่ยวชาญ (Software & Tools)</div>
-                    <div class="skills-container">
-                        <div class="skill-tag">Blender 3D</div>
-                        <div class="skill-tag">Unity Engine</div>
-                        <div class="skill-tag">Clip Studio Paint</div>
-                        <div class="skill-tag">Adobe Photoshop</div>
-                        <div class="skill-tag">Blockbench</div>
-                    </div>
-                </div>
-
-                <!-- TAB 3: CONTACT -->
-                <div class="tab-content" id="tab-contact">
-                    <div class="brand-title">GET IN TOUCH</div>
-                    <hr class="divider-line">
-                    <p style="color: var(--primary-purple); font-size: 0.95rem;">สนใจร่วมงาน สอบถามข้อมูล หรือดูผลงานเพิ่มเติม สามารถติดต่อดิฉันได้ผ่านช่องทางด้านล่างนี้เลยค่ะ:</p>
                     
-                    <div class="contact-list">
-                        <a href="mailto:sengraksa2005@gmail.com" class="contact-item">
-                            <div class="contact-icon">📧</div>
-                            <div class="contact-text">
-                                <h4>Email Address</h4>
-                                <p>sengraksa2005@gmail.com</p>
-                            </div>
-                        </a>
-
-                        <div class="contact-item">
-                            <div class="contact-icon">💬</div>
-                            <div class="contact-text">
-                                <h4>Discord</h4>
-                                <p>bossu_u</p>
-                            </div>
-                        </div>
-
-                        <a href="#" class="contact-item">
-                            <div class="contact-icon">🌐</div>
-                            <div class="contact-text">
-                                <h4>Social Media (Twitter/X)</h4>
-                                <p>@bossu29_art</p>
-                            </div>
-                        </a>
+                    <div class="info-box">
+                        <h3>สายงานที่เชี่ยวชาญ (Specialization)</h3>
+                        <p><strong>Character Design & 3D Modeling</strong></p>
+                        <p>วาดภาพประกอบ แฟนตาซีไซไฟ และ Minecraft Custom Modding</p>
                     </div>
                 </div>
 
+                <div class="section-header">
+                    <div class="section-title">📊 สเตตัสและความสามารถ (Stats & Mastery)</div>
+                </div>
+
+                <div class="stats-section">
+                    <div class="stat-bar-container">
+                        <div class="stat-header"><span>Character Design & Concepts</span><span>98%</span></div>
+                        <div class="stat-bar-bg"><div class="stat-bar-fill" data-width="98%"></div></div>
+                    </div>
+                    <div class="stat-bar-container">
+                        <div class="stat-header"><span>Digital Illustration</span><span>92%</span></div>
+                        <div class="stat-bar-bg"><div class="stat-bar-fill" data-width="92%"></div></div>
+                    </div>
+                    <div class="stat-bar-container">
+                        <div class="stat-header"><span>3D Asset Modeling (Blender / Unity)</span><span>88%</span></div>
+                        <div class="stat-bar-bg"><div class="stat-bar-fill" data-width="88%"></div></div>
+                    </div>
+                    <div class="stat-bar-container">
+                        <div class="stat-header"><span>Minecraft World & Figura Modding</span><span>95%</span></div>
+                        <div class="stat-bar-bg"><div class="stat-bar-fill" data-width="95%"></div></div>
+                    </div>
+                </div>
+
+                <div class="skills-container">
+                    <div class="skill-tag">🎨 Digital Art</div>
+                    <div class="skill-tag">👤 Character Design</div>
+                    <div class="skill-tag">🖼️ Illustration</div>
+                    <div class="skill-tag">🏰 Minecraft World Building</div>
+                    <div class="skill-tag">🦊 Figura Modding</div>
+                    <div class="skill-tag">🕹️ Game Assets</div>
+                </div>
+            </div>
+
+            <!-- TAB 2: ABOUT -->
+            <div class="tab-content" id="tab-about">
+                <div class="brand-title">ABOUT ME</div>
+                <div class="subtitle-en">Biography & Creative Vision</div>
+
+                <div class="info-box" style="margin-bottom: 1rem;">
+                    <h3>ประวัติโดยย่อ (Biography)</h3>
+                    <p>สวัสดีค่ะ! ดิฉัน <strong>ศศิธร เซ้งรักษา (bossu29)</strong> เป็นนักศึกษาชั้นปีที่ 4 สาขาเกมและอนิเมชั่น หลงใหลในการดีไซน์ตัวละครแฟนตาซี งานปั้น 3D โมเดลลิ่ง ตลอดจนการสร้างสรรค์ Mod สกิลและอวตารคัสตอมในเกม Minecraft</p>
+                </div>
+                
+                <div class="info-box" style="margin-bottom: 1rem;">
+                    <h3>เป้าหมาย (Creative Focus)</h3>
+                    <p>มุ่งมั่นที่จะถ่ายทอดเรื่องราวและความคิดสร้างสรรค์ผ่าน Character Design คุณภาพสูง เพื่อเติมเต็มจินตนาการและสร้างประสบการณ์ที่ดีในอุตสาหกรรมสื่อสร้างสรรค์และเกม</p>
+                </div>
+
+                <div class="section-title" style="margin-bottom: 0.6rem;">🛠️ เครื่องมือที่ใช้งาน (Tools & Software)</div>
+                <div class="skills-container">
+                    <div class="skill-tag">Blender 3D</div>
+                    <div class="skill-tag">Unity Engine</div>
+                    <div class="skill-tag">Clip Studio Paint</div>
+                    <div class="skill-tag">Photoshop</div>
+                    <div class="skill-tag">Blockbench</div>
+                </div>
+            </div>
+
+            <!-- TAB 3: CONTACT -->
+            <div class="tab-content" id="tab-contact">
+                <div class="brand-title">GET IN TOUCH</div>
+                <div class="subtitle-en">Contact Channels & Social Media</div>
+                
+                <div class="contact-list">
+                    <a href="mailto:sengraksa2005@gmail.com" class="contact-item">
+                        <div class="contact-icon">📧</div>
+                        <div class="contact-text">
+                            <h4>Email Address</h4>
+                            <p>sengraksa2005@gmail.com</p>
+                        </div>
+                    </a>
+
+                    <div class="contact-item">
+                        <div class="contact-icon">💬</div>
+                        <div class="contact-text">
+                            <h4>Discord</h4>
+                            <p>bossu_u</p>
+                        </div>
+                    </div>
+
+                    <a href="#" class="contact-item">
+                        <div class="contact-icon">🌐</div>
+                        <div class="contact-text">
+                            <h4>Twitter / X</h4>
+                            <p>@bossu29_art</p>
+                        </div>
+                    </a>
+                </div>
             </div>
 
         </div>
     </div>
 
     <script>
-        // --- SYNTHESIZED SOUND EFFECTS ---
+        // --- TAB SWITCHING SYSTEM ---
+        function switchTab(tabName, btnElement) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+
+            btnElement.classList.add('active');
+            document.getElementById(`tab-${tabName}`).classList.add('active');
+
+            if(tabName === 'home') {
+                document.querySelectorAll('.stat-bar-fill').forEach(bar => {
+                    bar.style.width = '0%';
+                    setTimeout(() => bar.style.width = bar.getAttribute('data-width'), 50);
+                });
+            }
+        }
+
+        // --- SOFT MINIMAL SYNTHESIZED SOUNDS ---
         let soundEnabled = true;
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
         document.getElementById('audio-toggle').addEventListener('click', (e) => {
             soundEnabled = !soundEnabled;
-            e.target.innerText = soundEnabled ? '🔊 SFX: ON' : '🔇 SFX: OFF';
+            e.target.innerText = soundEnabled ? '✨ SOUND: ON' : '🔇 SOUND: OFF';
         });
 
-        // Book Page Flip Sound Effect
-        function playPageFlipSound() {
+        function playSoftRollSound() {
             if (!soundEnabled) return;
-            if (audioCtx.state === 'suspended') audioCtx.resume();
-            
-            const bufferSize = audioCtx.sampleRate * 0.15;
-            const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
-            const data = buffer.getChannelData(0);
-            for (let i = 0; i < bufferSize; i++) {
-                data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (bufferSize * 0.3));
-            }
-
-            const noise = audioCtx.createBufferSource();
-            noise.buffer = buffer;
-
-            const filter = audioCtx.createBiquadFilter();
-            filter.type = 'lowpass';
-            filter.frequency.setValueAtTime(800, audioCtx.currentTime);
-            filter.frequency.exponentialRampToValueAtTime(150, audioCtx.currentTime + 0.15);
-
-            const gain = audioCtx.createGain();
-            gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.15);
-
-            noise.connect(filter);
-            filter.connect(gain);
-            gain.connect(audioCtx.destination);
-
-            noise.start();
-        }
-
-        function playRollSound() {
-            if (!soundEnabled) return;
-            if (audioCtx.state === 'suspended') audioCtx.resume();
             const osc = audioCtx.createOscillator();
             const gain = audioCtx.createGain();
-            osc.type = 'triangle';
-            osc.frequency.setValueAtTime(200 + Math.random() * 400, audioCtx.currentTime);
-            osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.08);
-            gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.08);
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(300 + Math.random() * 200, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(150, audioCtx.currentTime + 0.08);
+            gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.08);
             osc.connect(gain);
             gain.connect(audioCtx.destination);
             osc.start();
             osc.stop(audioCtx.currentTime + 0.08);
         }
 
-        function playWinSound() {
+        function playSoftChime() {
             if (!soundEnabled) return;
-            if (audioCtx.state === 'suspended') audioCtx.resume();
             const now = audioCtx.currentTime;
             [523.25, 659.25, 783.99, 1046.50].forEach((freq, i) => {
                 const osc = audioCtx.createOscillator();
                 const gain = audioCtx.createGain();
                 osc.type = 'sine';
-                osc.frequency.setValueAtTime(freq, now + i * 0.1);
-                gain.gain.setValueAtTime(0.2, now + i * 0.1);
-                gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.1 + 0.4);
+                osc.frequency.setValueAtTime(freq, now + i * 0.12);
+                gain.gain.setValueAtTime(0.08, now + i * 0.12);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.12 + 0.6);
                 osc.connect(gain);
                 gain.connect(audioCtx.destination);
-                osc.start(now + i * 0.1);
-                osc.stop(now + i * 0.1 + 0.4);
+                osc.start(now + i * 0.12);
+                osc.stop(now + i * 0.12 + 0.6);
             });
         }
 
-        // --- SPARKLE PARTICLES FOR PAGE FLIP ---
-        function createPageSparkles() {
-            const card = document.getElementById('card');
-            const rect = card.getBoundingClientRect();
-            
-            for(let i = 0; i < 15; i++) {
-                const sparkle = document.createElement('div');
-                sparkle.className = 'sparkle';
-                
-                const startX = rect.left + Math.random() * 50;
-                const startY = rect.top + Math.random() * rect.height;
-                
-                sparkle.style.left = `${startX}px`;
-                sparkle.style.top = `${startY}px`;
-                document.body.appendChild(sparkle);
-
-                gsap.to(sparkle, {
-                    x: (Math.random() - 0.2) * 120,
-                    y: (Math.random() - 0.5) * 100,
-                    opacity: 0,
-                    scale: 0.2,
-                    duration: 0.6 + Math.random() * 0.4,
-                    ease: "power2.out",
-                    onComplete: () => sparkle.remove()
-                });
-            }
-        }
-
-        // --- GSAP 3D BOOK PAGE FLIP ANIMATION ---
-        let isAnimatingTab = false;
-
-        function switchTab(tabName, btnElement) {
-            if (isAnimatingTab) return;
-            const currentActive = document.querySelector('.tab-content.active');
-            const targetContent = document.getElementById(`tab-${tabName}`);
-
-            if (currentActive === targetContent) return;
-
-            isAnimatingTab = true;
-            playPageFlipSound();
-            createPageSparkles();
-
-            // Update Tab Active State
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            btnElement.classList.add('active');
-
-            const shadow = document.getElementById('page-shadow');
-
-            // Determine flip direction
-            const allTabs = Array.from(document.querySelectorAll('.tab-content'));
-            const currentIndex = allTabs.indexOf(currentActive);
-            const targetIndex = allTabs.indexOf(targetContent);
-            const isNext = targetIndex > currentIndex;
-
-            // Prepare GSAP Timeline for 3D Book Flip Effect
-            const tl = gsap.timeline({
-                onComplete: () => {
-                    currentActive.classList.remove('active');
-                    targetContent.classList.add('active');
-                    gsap.set([currentActive, targetContent], { clearProps: "all" });
-                    isAnimatingTab = false;
-
-                    // Trigger Stat Bars inside Home
-                    if(tabName === 'home') {
-                        document.querySelectorAll('.stat-bar-fill').forEach(bar => {
-                            bar.style.width = '0%';
-                            setTimeout(() => bar.style.width = bar.getAttribute('data-width'), 50);
-                        });
-                    }
-                }
-            });
-
-            // Shadow animation during flip
-            tl.to(shadow, { opacity: 0.8, duration: 0.2, ease: "power1.in" }, 0)
-              .to(shadow, { opacity: 0, duration: 0.25, ease: "power1.out" }, 0.25);
-
-            // Current Page Flip Out
-            tl.to(currentActive, {
-                rotateY: isNext ? -90 : 90,
-                scale: 0.96,
-                filter: "brightness(0.6)",
-                duration: 0.25,
-                ease: "power2.in"
-            }, 0);
-
-            // Target Page Flip In
-            gsap.set(targetContent, {
-                display: 'block',
-                visibility: 'visible',
-                opacity: 0,
-                rotateY: isNext ? 90 : -90,
-                scale: 0.96,
-                filter: "brightness(0.5)"
-            });
-
-            tl.to(targetContent, {
-                opacity: 1,
-                rotateY: 0,
-                scale: 1,
-                filter: "brightness(1)",
-                duration: 0.3,
-                ease: "power2.out"
-            }, 0.2);
-        }
-
-        // --- THREE.JS SCENE SETUP ---
+        // --- THREE.JS SOFT SCENE SETUP ---
         const scene = new THREE.Scene();
-        scene.fog = new THREE.FogExp2(0x080612, 0.03);
+        scene.fog = new THREE.FogExp2(0x0f0d18, 0.025);
 
         const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
         camera.position.z = 5;
@@ -848,158 +675,216 @@
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
         renderer.setSize(window.innerWidth, window.innerHeight);
 
-        // --- LIGHTING ---
-        const ambientLight = new THREE.AmbientLight(0x1a152b, 2.2);
+        // --- SOFT LIGHTING ---
+        const ambientLight = new THREE.AmbientLight(0xdad5eb, 1.8);
         scene.add(ambientLight);
 
-        const cyanLight = new THREE.PointLight(0x87e8cb, 3.5, 25);
-        cyanLight.position.set(5, 4, 3);
+        const goldLight = new THREE.PointLight(0xf3e5c8, 3, 20);
+        goldLight.position.set(4, 4, 4);
+        scene.add(goldLight);
+
+        const cyanLight = new THREE.PointLight(0xb8e3de, 2, 20);
+        cyanLight.position.set(-4, -3, 2);
         scene.add(cyanLight);
 
-        const purpleLight = new THREE.PointLight(0xaca9de, 3.5, 25);
-        purpleLight.position.set(-5, -4, 3);
-        scene.add(purpleLight);
+        // --- CRYSTAL D20 DICE ---
+        const d20Textures = {};
+        function getNumberTexture(number) {
+            if (d20Textures[number]) return d20Textures[number];
 
-        // --- D20 DICE CREATION ---
-        const d20Geometry = new THREE.IcosahedronGeometry(1.2, 0);
-        const d20Material = new THREE.MeshStandardMaterial({
-            color: 0x120e24,
-            roughness: 0.2,
-            metalness: 0.8,
-            wireframe: false,
-            flatShading: true
-        });
+            const canvas = document.createElement('canvas');
+            canvas.width = 256;
+            canvas.height = 256;
+            const ctx = canvas.getContext('2d');
 
-        const diceGroup = new THREE.Group();
-        const diceMesh = new THREE.Mesh(d20Geometry, d20Material);
-        diceGroup.add(diceMesh);
+            ctx.fillStyle = '#1e1a2e';
+            ctx.fillRect(0, 0, 256, 256);
 
-        // Add glowing wireframe edges to D20
-        const wireframeGeo = new THREE.WireframeGeometry(d20Geometry);
-        const wireframeMat = new THREE.LineBasicMaterial({ color: 0x87e8cb, linewidth: 2 });
-        const wireframe = new THREE.LineSegments(wireframeGeo, wireframeMat);
-        diceGroup.add(wireframe);
+            ctx.strokeStyle = '#f3e5c8';
+            ctx.lineWidth = 12;
+            ctx.strokeRect(12, 12, 232, 232);
 
-        // Position D20 to the right side
-        diceGroup.position.set(2.8, 0, 0);
-        scene.add(diceGroup);
+            ctx.fillStyle = '#f3e5c8';
+            ctx.font = '600 110px Cormorant Garamond, serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(number.toString(), 128, 130);
 
-        // --- BACKGROUND PARTICLES ---
-        const particleCount = 200;
-        const particleGeo = new THREE.BufferGeometry();
-        const particlePos = new Float32Array(particleCount * 3);
-
-        for (let i = 0; i < particleCount * 3; i += 3) {
-            particlePos[i] = (Math.random() - 0.5) * 20;
-            particlePos[i + 1] = (Math.random() - 0.5) * 20;
-            particlePos[i + 2] = (Math.random() - 0.5) * 15;
+            const texture = new THREE.CanvasTexture(canvas);
+            d20Textures[number] = texture;
+            return texture;
         }
 
-        particleGeo.setAttribute('position', new THREE.BufferAttribute(particlePos, 3));
-        const particleMat = new THREE.PointsMaterial({
-            size: 0.05,
-            color: 0x87e8cb,
+        const d20Geo = new THREE.IcosahedronGeometry(1.2, 0);
+        
+        // Glass Mesh
+        const d20Material = new THREE.MeshPhysicalMaterial({
+            map: getNumberTexture(20),
+            roughness: 0.1,
+            metalness: 0.1,
+            transmission: 0.6,
+            opacity: 0.9,
             transparent: true,
-            opacity: 0.6
+            ior: 1.5,
+            reflectivity: 0.5
         });
-        const particles = new THREE.Points(particleGeo, particleMat);
-        scene.add(particles);
 
-        // --- D20 INTERACTION & ROLLING MECHANIC ---
-        let isRolling = false;
+        const d20Mesh = new THREE.Mesh(d20Geo, d20Material);
+        
+        const d20Wire = new THREE.Mesh(
+            d20Geo,
+            new THREE.MeshBasicMaterial({ color: 0xf3e5c8, wireframe: true, transparent: true, opacity: 0.4 })
+        );
+        d20Wire.scale.setScalar(1.01);
+
+        const d20Hitbox = new THREE.Mesh(
+            new THREE.SphereGeometry(1.4, 8, 8),
+            new THREE.MeshBasicMaterial({ visible: false })
+        );
+
+        const d20Group = new THREE.Group();
+        d20Group.add(d20Mesh);
+        d20Group.add(d20Wire);
+        d20Group.add(d20Hitbox);
+        scene.add(d20Group);
+
+        // --- SOFT MAGIC DUST PARTICLES ---
+        const pCount = 500;
+        const pPos = new Float32Array(pCount * 3);
+        for(let i = 0; i < pCount * 3; i++) {
+            pPos[i] = (Math.random() - 0.5) * 18;
+        }
+        const pGeo = new THREE.BufferGeometry();
+        pGeo.setAttribute('position', new THREE.BufferAttribute(pPos, 3));
+        const pMat = new THREE.PointsMaterial({
+            size: 0.03,
+            color: 0xf3e5c8,
+            transparent: true,
+            opacity: 0.4
+        });
+        const pMesh = new THREE.Points(pGeo, pMat);
+        scene.add(pMesh);
+
+        // --- ELEGANT RING ---
+        const ringGeo = new THREE.TorusGeometry(2.8, 0.008, 16, 100);
+        const ringMat = new THREE.MeshBasicMaterial({ color: 0xf3e5c8, transparent: true, opacity: 0.3 });
+        const ring = new THREE.Mesh(ringGeo, ringMat);
+        ring.rotation.x = Math.PI / 2.5;
+        scene.add(ring);
+
+        // --- POSITIONING ---
+        function updatePositions() {
+            const aspect = window.innerWidth / window.innerHeight;
+            const vFOV = THREE.MathUtils.degToRad(camera.fov);
+            const height = 2 * Math.tan(vFOV / 2) * camera.position.z;
+            const width = height * aspect;
+
+            if (window.innerWidth > 992) {
+                d20Group.position.set(width / 4 + 0.3, 0, 0);
+                ring.position.copy(d20Group.position);
+            } else {
+                d20Group.position.set(width / 2 - 1.2, height / 2 - 1.2, 0);
+                ring.position.copy(d20Group.position);
+            }
+        }
+        updatePositions();
+
+        // --- ROLL INTERACTION ---
         const raycaster = new THREE.Raycaster();
         const mouse = new THREE.Vector2();
+        let isRolling = false;
+
+        function showResultPopup(value) {
+            const popup = document.getElementById('dice-result');
+            const banner = document.getElementById('nat20-banner');
+            popup.innerText = value;
+            
+            if(value === 20) {
+                banner.classList.add('active');
+                playSoftChime();
+                setTimeout(() => banner.classList.remove('active'), 3000);
+            }
+
+            popup.classList.add('active');
+            setTimeout(() => popup.classList.remove('active'), 1200);
+        }
+
+        function rollDice() {
+            if (isRolling) return;
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            
+            isRolling = true;
+            let finalValue = Math.floor(Math.random() * 20) + 1;
+
+            const rollInterval = setInterval(() => {
+                let tempVal = Math.floor(Math.random() * 20) + 1;
+                d20Material.map = getNumberTexture(tempVal);
+                d20Material.needsUpdate = true;
+                playSoftRollSound();
+            }, 70);
+
+            gsap.to(d20Group.rotation, {
+                x: d20Group.rotation.x + Math.PI * 4 + Math.random(),
+                y: d20Group.rotation.y + Math.PI * 4 + Math.random(),
+                duration: 1.2,
+                ease: 'power2.out',
+                onComplete: () => {
+                    clearInterval(rollInterval);
+                    d20Material.map = getNumberTexture(finalValue);
+                    d20Material.needsUpdate = true;
+                    isRolling = false;
+                    showResultPopup(finalValue);
+                }
+            });
+        }
 
         window.addEventListener('pointerdown', (e) => {
             mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
             mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
 
             raycaster.setFromCamera(mouse, camera);
-            const intersects = raycaster.intersectObject(diceMesh);
+            const intersectsD20 = raycaster.intersectObjects([d20Mesh, d20Wire, d20Hitbox]);
 
-            if (intersects.length > 0 && !isRolling) {
-                rollDice();
-            }
+            if (intersectsD20.length > 0) rollDice();
         });
 
-        function rollDice() {
-            isRolling = true;
-            const dicePopup = document.getElementById('dice-result');
-            const banner = document.getElementById('nat20-banner');
-            
-            dicePopup.classList.remove('active');
-            banner.classList.remove('active');
+        // Mouse Hover & Soft Tilt Card
+        const card = document.getElementById('card');
+        window.addEventListener('pointermove', (e) => {
+            mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
+            mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
 
-            const result = Math.floor(Math.random() * 20) + 1;
-            
-            // Roll sound effects during rotation
-            let interval = setInterval(() => {
-                playRollSound();
-            }, 100);
+            raycaster.setFromCamera(mouse, camera);
+            const intersects = raycaster.intersectObjects([d20Mesh, d20Wire, d20Hitbox]);
+            document.body.style.cursor = intersects.length > 0 ? 'pointer' : 'default';
 
-            gsap.to(diceGroup.rotation, {
-                x: diceGroup.rotation.x + Math.PI * 8 + Math.random() * 2,
-                y: diceGroup.rotation.y + Math.PI * 8 + Math.random() * 2,
-                z: diceGroup.rotation.z + Math.PI * 4,
-                duration: 1.5,
-                ease: "power4.out",
-                onComplete: () => {
-                    clearInterval(interval);
-                    isRolling = false;
-                    dicePopup.innerText = result;
-                    dicePopup.classList.add('active');
-
-                    if (result === 20) {
-                        playWinSound();
-                        banner.classList.add('active');
-                    }
-
-                    setTimeout(() => {
-                        dicePopup.classList.remove('active');
-                        if (result === 20) banner.classList.remove('active');
-                    }, 2500);
-                }
-            });
-
-            gsap.to(diceGroup.position, {
-                y: 0.8,
-                duration: 0.3,
-                yoyo: true,
-                repeat: 1,
-                ease: "power2.out"
-            });
-        }
-
-        // --- MOUSE PARALLAX & CARD TILT ---
-        let targetX = 0, targetY = 0;
-        window.addEventListener('mousemove', (e) => {
-            targetX = (e.clientX / window.innerWidth - 0.5) * 0.5;
-            targetY = (e.clientY / window.innerHeight - 0.5) * 0.5;
-
-            // Subtle 3D Card Parallax Tilt
-            const card = document.getElementById('card');
-            const rotX = (e.clientY / window.innerHeight - 0.5) * -12;
-            const rotY = (e.clientX / window.innerWidth - 0.5) * 12;
-            card.style.transform = `rotateX(${rotX}deg) rotateY(${rotY}deg)`;
+            const rx = (e.clientY / window.innerHeight - 0.5) * -6;
+            const ry = (e.clientX / window.innerWidth - 0.5) * 6;
+            card.style.transform = `rotateX(${rx}deg) rotateY(${ry}deg)`;
         });
 
-        // Responsive layout adjustment for Three.js
-        function handleResize() {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
+        // --- ANIMATION LOOP ---
+        const clock = new THREE.Clock();
 
-            if (window.innerWidth <= 992) {
-                diceGroup.position.set(0, -2.5, 0);
-            } else {
-                diceGroup.position.set(2.8, 0, 0);
+        function animate() {
+            requestAnimationFrame(animate);
+            const elapsedTime = clock.getElapsedTime();
+
+            if (!isRolling) {
+                d20Group.rotation.x = Math.sin(elapsedTime * 0.4) * 0.15;
+                d20Group.rotation.y = elapsedTime * 0.25;
             }
-        }
-        window.addEventListener('resize', handleResize);
-        handleResize();
 
-        // Initial Stat Bar trigger on load
-        window.addEventListener('DOMContentLoaded', () => {
+            ring.rotation.z = elapsedTime * 0.08;
+            pMesh.rotation.y = elapsedTime * 0.02;
+
+            renderer.render(scene, camera);
+        }
+
+        animate();
+
+        // Stat Bar Animation
+        window.addEventListener('load', () => {
             setTimeout(() => {
                 document.querySelectorAll('.stat-bar-fill').forEach(bar => {
                     bar.style.width = bar.getAttribute('data-width');
@@ -1007,30 +892,13 @@
             }, 300);
         });
 
-        // --- ANIMATION LOOP ---
-        const clock = new THREE.Clock();
-        function animate() {
-            requestAnimationFrame(animate);
-            const elapsedTime = clock.getElapsedTime();
-
-            // Floating idle movement for D20
-            if (!isRolling) {
-                diceGroup.rotation.x += 0.005;
-                diceGroup.rotation.y += 0.008;
-                diceGroup.position.y += Math.sin(elapsedTime * 2) * 0.002;
-            }
-
-            // Slowly rotate particles
-            particles.rotation.y = elapsedTime * 0.03;
-
-            // Smooth Camera Parallax
-            camera.position.x += (targetX - camera.position.x) * 0.05;
-            camera.position.y += (-targetY - camera.position.y) * 0.05;
-            camera.lookAt(scene.position);
-
-            renderer.render(scene, camera);
-        }
-        animate();
+        // Window Resize
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            updatePositions();
+        });
     </script>
 </body>
 </html>
