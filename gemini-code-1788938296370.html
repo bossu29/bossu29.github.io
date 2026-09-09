@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AR.js 3D Model with Animation</title>
+    <!-- Include A-Frame -->
+    <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
+    <!-- Include AR.js for A-Frame -->
+    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+    <!-- Include A-Frame Extras for Animation support -->
+    <script src="https://cdn.jsdelivr.net/gh/donmccurdy/aframe-extras@v6.1.1/dist/aframe-extras.min.js"></script>
+</head>
+<body style="margin: 0; overflow: hidden;">
+    <!-- Embed AR scene with AR.js settings -->
+    <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false; detectionMode: mono_and_matrix; matrixCodeType: 3x3;">
+        
+        <!-- Asset management -->
+        <a-assets>
+            <a-asset-item id="eponaModel" src="https://sibsansuk.github.io/epona.glb"></a-asset-item>
+        </a-assets>
+
+        <!-- Define Marker using Hiro or Custom Pattern URL -->
+        <a-marker type="pattern" url="https://aitutorialcourse.github.io/tracker.png">
+            <!-- 3D Model with animation-mixer enabled -->
+            <a-entity 
+                gltf-model="#eponaModel" 
+                scale="0.5 0.5 0.5" 
+                position="0 0 0" 
+                rotation="0 0 0"
+                animation-mixer>
+            </a-entity>
+        </a-marker>
+
+        <!-- Camera that tracks the marker -->
+        <a-entity camera></a-entity>
+        
+    </a-scene>
+</body>
+</html>
