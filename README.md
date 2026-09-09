@@ -17,8 +17,8 @@
     <style>
         :root {
             --bg-base: #0f0d18;
-            --glass-bg: rgba(25, 21, 38, 0.6);
-            --glass-border: rgba(235, 215, 190, 0.18);
+            --glass-bg: rgba(25, 21, 38, 0.65);
+            --glass-border: rgba(235, 215, 190, 0.2);
             --accent-gold: #f3e5c8;
             --accent-soft-cyan: #b8e3de;
             --accent-rose: #e8b8c8;
@@ -86,7 +86,7 @@
 
         .dnd-card:hover {
             box-shadow: 0 35px 70px rgba(0, 0, 0, 0.5),
-                        0 0 40px rgba(243, 229, 200, 0.1),
+                        0 0 50px rgba(184, 227, 222, 0.12),
                         inset 0 1px 0 rgba(255, 255, 255, 0.25);
         }
 
@@ -113,13 +113,13 @@
             font-weight: 700;
         }
 
-        /* SPELLBOOK WIDGET (NEW LEFT INTERACTIVE) */
+        /* SPELLBOOK WIDGET */
         .spellbook-trigger {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(243, 229, 200, 0.25);
-            color: var(--accent-gold);
-            padding: 5px 12px;
-            border-radius: 12px;
+            background: rgba(184, 227, 222, 0.08);
+            border: 1px solid rgba(184, 227, 222, 0.3);
+            color: var(--accent-soft-cyan);
+            padding: 6px 14px;
+            border-radius: 14px;
             font-size: 0.78rem;
             cursor: pointer;
             transition: all 0.3s ease;
@@ -129,10 +129,10 @@
         }
 
         .spellbook-trigger:hover {
-            background: rgba(243, 229, 200, 0.15);
-            border-color: var(--accent-gold);
-            transform: scale(1.03);
-            box-shadow: 0 0 12px rgba(243, 229, 200, 0.2);
+            background: var(--accent-soft-cyan);
+            color: var(--bg-base);
+            transform: scale(1.04);
+            box-shadow: 0 0 16px rgba(184, 227, 222, 0.5);
         }
 
         /* TAB NAVIGATION */
@@ -253,7 +253,7 @@
             color: var(--text-main);
         }
 
-        /* Stats Section & SKILL ROLL BUTTON (NEW) */
+        /* Stats Section & SKILL ROLL BUTTON */
         .section-header {
             display: flex;
             align-items: center;
@@ -273,7 +273,7 @@
             background: rgba(184, 227, 222, 0.1);
             border: 1px solid var(--accent-soft-cyan);
             color: var(--accent-soft-cyan);
-            padding: 4px 12px;
+            padding: 5px 14px;
             border-radius: 20px;
             font-size: 0.75rem;
             cursor: pointer;
@@ -283,7 +283,8 @@
         .roll-btn:hover {
             background: var(--accent-soft-cyan);
             color: var(--bg-base);
-            box-shadow: 0 0 12px rgba(184, 227, 222, 0.4);
+            box-shadow: 0 0 15px rgba(184, 227, 222, 0.5);
+            transform: scale(1.05);
         }
 
         .stat-bar-container {
@@ -340,14 +341,14 @@
             transform: translateY(-2px);
         }
 
-        /* SPELLBOOK POPUP MODAL (NEW) */
+        /* SPELLBOOK POPUP MODAL */
         .spellbook-modal {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(15, 13, 24, 0.92);
+            background: rgba(15, 13, 24, 0.95);
             backdrop-filter: blur(20px);
             border-radius: var(--card-radius);
             padding: 2.2rem;
@@ -391,6 +392,13 @@
             border-radius: 16px;
             padding: 1rem 1.2rem;
             margin-bottom: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .spell-card:hover {
+            border-color: var(--accent-soft-cyan);
+            background: rgba(184, 227, 222, 0.04);
+            transform: translateX(4px);
         }
 
         .spell-card h4 {
@@ -463,7 +471,7 @@
             color: var(--text-sub);
         }
 
-        /* Popups & Overlay Effects */
+        /* Popups & Notifications */
         .dice-result-popup {
             position: fixed;
             top: 45%;
@@ -490,9 +498,9 @@
             bottom: 30px;
             left: 50%;
             transform: translateX(-50%) translateY(20px);
-            background: rgba(25, 21, 38, 0.9);
-            border: 1px solid var(--accent-gold);
-            color: var(--accent-gold);
+            background: rgba(25, 21, 38, 0.95);
+            border: 1px solid var(--accent-soft-cyan);
+            color: var(--accent-soft-cyan);
             padding: 10px 24px;
             border-radius: 30px;
             font-family: 'Cormorant Garamond', serif;
@@ -513,9 +521,9 @@
             position: fixed;
             bottom: 30px;
             right: 30px;
-            background: rgba(25, 21, 38, 0.6);
-            border: 1px solid rgba(243, 229, 200, 0.2);
-            color: var(--accent-gold);
+            background: rgba(25, 21, 38, 0.7);
+            border: 1px solid rgba(184, 227, 222, 0.3);
+            color: var(--accent-soft-cyan);
             padding: 8px 18px;
             border-radius: 30px;
             font-size: 0.8rem;
@@ -529,7 +537,7 @@
             top: 30px;
             right: 30px;
             z-index: 10;
-            background: rgba(25, 21, 38, 0.6);
+            background: rgba(25, 21, 38, 0.7);
             border: 1px solid rgba(255, 255, 255, 0.1);
             color: var(--text-sub);
             padding: 8px 16px;
@@ -572,10 +580,10 @@
     <button class="audio-toggle" id="audio-toggle">✨ SOUND: ON</button>
 
     <div class="dice-result-popup" id="dice-result">20</div>
-    <div class="skill-toast" id="skill-toast">🎲 Skill Check Result</div>
+    <div class="skill-toast" id="skill-toast">✨ Blessing Activated</div>
 
     <div class="interactive-hint">
-        🔮 คลิก Orbs ฝั่งซ้าย หรือ ทอยลูกเต๋า D20 ฝั่งขวา
+        🔮 คลิกอักขระเวทฝั่งซ้าย เพื่อรับพรสวรรค์สุ่ม | คลิก D20 ฝั่งขวา ทอยเต๋า
     </div>
 
     <div class="container">
@@ -707,7 +715,7 @@
                 </div>
             </div>
 
-            <!-- SPELLBOOK MODAL (NEW INTERACTIVE LEFT FEATURE) -->
+            <!-- SPELLBOOK MODAL -->
             <div class="spellbook-modal" id="spellbook-modal">
                 <button class="modal-close" onclick="toggleSpellbook(false)">✕</button>
                 <div class="brand-title" style="font-size: 2rem;">SPELLBOOK & LOGS</div>
@@ -738,7 +746,7 @@
             const modal = document.getElementById('spellbook-modal');
             if (show) {
                 modal.classList.add('active');
-                playSoftNote(600);
+                playChimeChord([523.25, 659.25, 783.99]); // C Major Chime
             } else {
                 modal.classList.remove('active');
                 playSoftNote(400);
@@ -751,16 +759,20 @@
             const toast = document.getElementById('skill-toast');
             let statusText = '';
 
-            if (roll === 20) statusText = '✨ Natural 20! Critical Mastery!';
-            else if (roll >= 15) statusText = `🎲 Rolled ${roll} + 5 = ${roll+5} (Great Success!)`;
-            else if (roll >= 8) statusText = `🎲 Rolled ${roll} + 5 = ${roll+5} (Success)`;
-            else statusText = `🎲 Rolled ${roll} + 5 = ${roll+5} (Close One!)`;
+            if (roll === 20) {
+                statusText = '✨ Natural 20! Legendary Success!';
+                playChimeChord([523.25, 659.25, 783.99, 1046.50]);
+            } else if (roll >= 15) {
+                statusText = `🎲 Rolled ${roll} + 5 = ${roll+5} (Great Success!)`;
+                playChimeChord([440, 554.37, 659.25]);
+            } else {
+                statusText = `🎲 Rolled ${roll} + 5 = ${roll+5} (Success)`;
+                playSoftNote(500);
+            }
 
             toast.innerText = statusText;
             toast.classList.add('active');
-            playSoftNote(300 + roll * 25);
-
-            setTimeout(() => toast.classList.remove('active'), 2500);
+            setTimeout(() => toast.classList.remove('active'), 2800);
         }
 
         // --- TAB SWITCHING SYSTEM ---
@@ -770,6 +782,7 @@
 
             btnElement.classList.add('active');
             document.getElementById(`tab-${tabName}`).classList.add('active');
+            playSoftNote(587.33); // D5 note
 
             if(tabName === 'home') {
                 document.querySelectorAll('.stat-bar-fill').forEach(bar => {
@@ -779,7 +792,7 @@
             }
         }
 
-        // --- SOFT MINIMAL SYNTHESIZED SOUNDS ---
+        // --- SYNTHESIZED AUDIO SYSTEM ---
         let soundEnabled = true;
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
@@ -795,22 +808,29 @@
             const gain = audioCtx.createGain();
             osc.type = 'sine';
             osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-            gain.gain.setValueAtTime(0.06, audioCtx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.5);
+            gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.6);
             osc.connect(gain);
             gain.connect(audioCtx.destination);
             osc.start();
-            osc.stop(audioCtx.currentTime + 0.5);
+            osc.stop(audioCtx.currentTime + 0.6);
+        }
+
+        function playChimeChord(frequencies) {
+            if (!soundEnabled) return;
+            frequencies.forEach((freq, idx) => {
+                setTimeout(() => playSoftNote(freq), idx * 60);
+            });
         }
 
         function playSoftRollSound() {
             if (!soundEnabled) return;
             const osc = audioCtx.createOscillator();
             const gain = audioCtx.createGain();
-            osc.type = 'sine';
-            osc.frequency.setValueAtTime(250 + Math.random() * 200, audioCtx.currentTime);
-            osc.frequency.exponentialRampToValueAtTime(120, audioCtx.currentTime + 0.08);
-            gain.gain.setValueAtTime(0.04, audioCtx.currentTime);
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(200 + Math.random() * 300, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.08);
+            gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
             gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.08);
             osc.connect(gain);
             gain.connect(audioCtx.destination);
@@ -818,9 +838,9 @@
             osc.stop(audioCtx.currentTime + 0.08);
         }
 
-        // --- THREE.JS SOFT SCENE SETUP ---
+        // --- THREE.JS ADVANCED MAGICAL SCENE ---
         const scene = new THREE.Scene();
-        scene.fog = new THREE.FogExp2(0x0f0d18, 0.025);
+        scene.fog = new THREE.FogExp2(0x0f0d18, 0.022);
 
         const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
         camera.position.z = 5;
@@ -833,15 +853,15 @@
         renderer.setSize(window.innerWidth, window.innerHeight);
 
         // --- LIGHTS ---
-        const ambientLight = new THREE.AmbientLight(0xdad5eb, 1.8);
+        const ambientLight = new THREE.AmbientLight(0xdfd9eb, 1.6);
         scene.add(ambientLight);
 
-        const goldLight = new THREE.PointLight(0xf3e5c8, 3, 20);
+        const goldLight = new THREE.PointLight(0xf3e5c8, 3.5, 25);
         goldLight.position.set(4, 4, 4);
         scene.add(goldLight);
 
-        const cyanLight = new THREE.PointLight(0xb8e3de, 2.5, 20);
-        cyanLight.position.set(-5, -2, 2);
+        const cyanLight = new THREE.PointLight(0xb8e3de, 3, 25);
+        cyanLight.position.set(-5, -2, 3);
         scene.add(cyanLight);
 
         // --- CRYSTAL D20 DICE (RIGHT SIDE) ---
@@ -854,18 +874,18 @@
             canvas.height = 256;
             const ctx = canvas.getContext('2d');
 
-            ctx.fillStyle = '#1e1a2e';
+            ctx.fillStyle = '#181424';
             ctx.fillRect(0, 0, 256, 256);
 
             ctx.strokeStyle = '#f3e5c8';
-            ctx.lineWidth = 12;
+            ctx.lineWidth = 14;
             ctx.strokeRect(12, 12, 232, 232);
 
             ctx.fillStyle = '#f3e5c8';
-            ctx.font = '600 110px Cormorant Garamond, serif';
+            ctx.font = '600 115px Cormorant Garamond, serif';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
-            ctx.fillText(number.toString(), 128, 130);
+            ctx.fillText(number.toString(), 128, 132);
 
             const texture = new THREE.CanvasTexture(canvas);
             d20Textures[number] = texture;
@@ -877,8 +897,8 @@
             map: getNumberTexture(20),
             roughness: 0.1,
             metalness: 0.1,
-            transmission: 0.6,
-            opacity: 0.9,
+            transmission: 0.65,
+            opacity: 0.92,
             transparent: true,
             ior: 1.5
         });
@@ -886,7 +906,7 @@
         const d20Mesh = new THREE.Mesh(d20Geo, d20Material);
         const d20Wire = new THREE.Mesh(
             d20Geo,
-            new THREE.MeshBasicMaterial({ color: 0xf3e5c8, wireframe: true, transparent: true, opacity: 0.4 })
+            new THREE.MeshBasicMaterial({ color: 0xf3e5c8, wireframe: true, transparent: true, opacity: 0.35 })
         );
         d20Wire.scale.setScalar(1.01);
 
@@ -901,39 +921,46 @@
         d20Group.add(d20Hitbox);
         scene.add(d20Group);
 
-        // --- INTERACTIVE FLOATING ORBS (LEFT SIDE - NEW) ---
+        // --- INTERACTIVE MAGICAL ORBS (LEFT SIDE - 10X FUN) ---
         const orbGroup = new THREE.Group();
         const orbMat = new THREE.MeshPhysicalMaterial({
             color: 0xb8e3de,
-            roughness: 0.2,
-            transmission: 0.8,
+            roughness: 0.15,
+            transmission: 0.85,
             transparent: true,
-            opacity: 0.85
+            opacity: 0.9
         });
 
         const orbMeshes = [];
+        const blessings = [
+            "✨ Blessing of Creativity: ปลดล็อกไอเดียพรั่งพรู!",
+            "🔮 Wisdom of The Ancients: ความเข้าใจลึกซึ้งระดับ S-Rank!",
+            "⚡ Velocity of Code & Art: ทำงานไวขึ้น 2 เท่าอย่างไร้รอยต่อ!"
+        ];
+
         for(let i = 0; i < 3; i++) {
-            const orbGeo = new THREE.IcosahedronGeometry(0.35 - i * 0.08, 1);
+            const orbGeo = new THREE.IcosahedronGeometry(0.38 - i * 0.07, 1);
             const orb = new THREE.Mesh(orbGeo, orbMat);
-            orb.position.set(-0.2, (i - 1) * 1.2, 0);
+            orb.position.set(-0.2, (i - 1) * 1.3, 0);
+            orb.userData = { id: i, blessing: blessings[i] };
             orbGroup.add(orb);
             orbMeshes.push(orb);
         }
         scene.add(orbGroup);
 
-        // --- PARTICLES & RING ---
-        const pCount = 500;
+        // --- PARTICLES & RINGS ---
+        const pCount = 600;
         const pPos = new Float32Array(pCount * 3);
         for(let i = 0; i < pCount * 3; i++) {
-            pPos[i] = (Math.random() - 0.5) * 18;
+            pPos[i] = (Math.random() - 0.5) * 20;
         }
         const pGeo = new THREE.BufferGeometry();
         pGeo.setAttribute('position', new THREE.BufferAttribute(pPos, 3));
-        const pMat = new THREE.PointsMaterial({ size: 0.03, color: 0xf3e5c8, transparent: true, opacity: 0.4 });
+        const pMat = new THREE.PointsMaterial({ size: 0.035, color: 0xb8e3de, transparent: true, opacity: 0.5 });
         const pMesh = new THREE.Points(pGeo, pMat);
         scene.add(pMesh);
 
-        const ringGeo = new THREE.TorusGeometry(2.8, 0.008, 16, 100);
+        const ringGeo = new THREE.TorusGeometry(2.9, 0.008, 16, 100);
         const ringMat = new THREE.MeshBasicMaterial({ color: 0xf3e5c8, transparent: true, opacity: 0.3 });
         const ring = new THREE.Mesh(ringGeo, ringMat);
         ring.rotation.x = Math.PI / 2.5;
@@ -975,11 +1002,11 @@
                 d20Material.map = getNumberTexture(tempVal);
                 d20Material.needsUpdate = true;
                 playSoftRollSound();
-            }, 70);
+            }, 60);
 
             gsap.to(d20Group.rotation, {
-                x: d20Group.rotation.x + Math.PI * 4 + Math.random(),
-                y: d20Group.rotation.y + Math.PI * 4 + Math.random(),
+                x: d20Group.rotation.x + Math.PI * 6 + Math.random(),
+                y: d20Group.rotation.y + Math.PI * 6 + Math.random(),
                 duration: 1.2,
                 ease: 'power2.out',
                 onComplete: () => {
@@ -991,8 +1018,14 @@
                     const popup = document.getElementById('dice-result');
                     popup.innerText = finalValue;
                     popup.classList.add('active');
-                    playSoftNote( finalValue * 30 + 300 );
-                    setTimeout(() => popup.classList.remove('active'), 1200);
+                    
+                    if (finalValue === 20) {
+                        playChimeChord([523.25, 659.25, 783.99, 1046.50]);
+                    } else {
+                        playSoftNote(finalValue * 35 + 250);
+                    }
+
+                    setTimeout(() => popup.classList.remove('active'), 1400);
                 }
             });
         }
@@ -1007,22 +1040,29 @@
             const intersectsD20 = raycaster.intersectObjects([d20Mesh, d20Wire, d20Hitbox]);
             if (intersectsD20.length > 0) rollDice();
 
-            // Check Left Orbs Click
+            // Check Left Orbs Click (Interactive 10x fun)
             const intersectsOrbs = raycaster.intersectObjects(orbMeshes);
             if (intersectsOrbs.length > 0) {
                 const clickedOrb = intersectsOrbs[0].object;
+                
                 gsap.to(clickedOrb.scale, {
-                    x: 1.6, y: 1.6, z: 1.6,
-                    duration: 0.2,
+                    x: 1.8, y: 1.8, z: 1.8,
+                    duration: 0.25,
                     yoyo: true,
                     repeat: 1,
                     ease: 'power2.out'
                 });
-                playSoftNote(700 + Math.random() * 300);
+
+                playChimeChord([659.25, 880, 1108.73]);
+
+                const toast = document.getElementById('skill-toast');
+                toast.innerText = clickedOrb.userData.blessing;
+                toast.classList.add('active');
+                setTimeout(() => toast.classList.remove('active'), 3000);
             }
         });
 
-        // Mouse Hover & Soft Card Tilt
+        // Mouse Hover & Card Tilt
         const card = document.getElementById('card');
         window.addEventListener('pointermove', (e) => {
             mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
@@ -1034,8 +1074,8 @@
             
             document.body.style.cursor = (intersectsD20.length > 0 || intersectsOrbs.length > 0) ? 'pointer' : 'default';
 
-            const rx = (e.clientY / window.innerHeight - 0.5) * -6;
-            const ry = (e.clientX / window.innerWidth - 0.5) * 6;
+            const rx = (e.clientY / window.innerHeight - 0.5) * -7;
+            const ry = (e.clientX / window.innerWidth - 0.5) * 7;
             card.style.transform = `rotateX(${rx}deg) rotateY(${ry}deg)`;
         });
 
@@ -1047,18 +1087,19 @@
             const elapsedTime = clock.getElapsedTime();
 
             if (!isRolling) {
-                d20Group.rotation.x = Math.sin(elapsedTime * 0.4) * 0.15;
-                d20Group.rotation.y = elapsedTime * 0.25;
+                d20Group.rotation.x = Math.sin(elapsedTime * 0.45) * 0.2;
+                d20Group.rotation.y = elapsedTime * 0.3;
             }
 
-            // Left Orbs Wave Motion
+            // Left Orbs Dynamic Floating Motion
             orbMeshes.forEach((orb, i) => {
-                orb.position.y = Math.sin(elapsedTime * 1.5 + i) * 0.2 + (i - 1) * 1.2;
-                orb.rotation.y = elapsedTime * 0.5;
+                orb.position.y = Math.sin(elapsedTime * 1.8 + i) * 0.25 + (i - 1) * 1.3;
+                orb.rotation.y = elapsedTime * 0.7;
+                orb.rotation.x = elapsedTime * 0.4;
             });
 
-            ring.rotation.z = elapsedTime * 0.08;
-            pMesh.rotation.y = elapsedTime * 0.02;
+            ring.rotation.z = elapsedTime * 0.1;
+            pMesh.rotation.y = elapsedTime * 0.03;
 
             renderer.render(scene, camera);
         }
