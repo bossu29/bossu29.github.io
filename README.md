@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>3D Portfolio | ศศิธร เซ้งรักษา (bossu29)</title>
+    <title>3D Portfolio | นางสาว ศศิธร เซ้งรักษา (bossu29)</title>
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -23,7 +23,7 @@
             --accent-red: #ff4757;
             --dark-purple: #120e24;
             --text-color: #f0f4f8;
-            --glass-bg: rgba(15, 12, 28, 0.78);
+            --glass-bg: rgba(15, 12, 28, 0.82);
             --border-glow: rgba(135, 232, 203, 0.5);
         }
 
@@ -51,29 +51,32 @@
             z-index: 1;
         }
 
-        /* Layout Grid System: ขยับการ์ดไปซ้าย */
-        .page-wrapper {
+        .container {
             position: relative;
             z-index: 2;
             width: 100%;
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 2.5rem 2rem;
             min-height: 100vh;
             display: flex;
             align-items: center;
-            padding: 2.5rem 5%;
+            justify-content: flex-start; /* ขยับกรอบไปทางซ้าย */
             pointer-events: none;
             perspective: 1000px;
         }
 
+        /* 3D Tilt Card (Left Positioned) */
         .dnd-card {
             pointer-events: auto;
-            width: 100%;
-            max-width: 620px; /* จำกัดความกว้างเพื่อไม่ให้บังเต๋าฝั่งขวา */
             background: var(--glass-bg);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
             border: 2px solid var(--primary-cyan);
             border-radius: 20px;
             padding: 2.5rem;
+            width: 100%;
+            max-width: 620px; /* จำกัดความกว้างให้อยู่ทางซ้ายอย่างสวยงาม */
             box-shadow: 0 0 40px rgba(135, 232, 203, 0.2),
                         inset 0 0 30px rgba(172, 169, 222, 0.15);
             position: relative;
@@ -82,7 +85,7 @@
         }
 
         .dnd-card:hover {
-            box-shadow: 0 0 60px rgba(135, 232, 203, 0.4),
+            box-shadow: 0 0 60px rgba(135, 232, 203, 0.35),
                         inset 0 0 40px rgba(172, 169, 222, 0.25);
         }
 
@@ -104,35 +107,29 @@
             box-shadow: 0 0 15px var(--primary-cyan);
         }
 
-        /* Navigation Bar สำหรับสลับหน้าต่าง */
-        .nav-menu {
+        /* TAB NAVIGATION */
+        .tab-nav {
             display: flex;
             gap: 10px;
             margin-bottom: 1.5rem;
-            border-bottom: 1px solid var(--border-glow);
+            border-bottom: 1px solid rgba(135, 232, 203, 0.3);
             padding-bottom: 0.8rem;
         }
 
-        .nav-btn {
-            background: transparent;
-            border: 1px solid transparent;
+        .tab-btn {
+            background: rgba(172, 169, 222, 0.1);
+            border: 1px solid var(--primary-purple);
             color: var(--primary-purple);
-            padding: 6px 16px;
+            padding: 8px 18px;
             border-radius: 12px;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             font-weight: 500;
             cursor: pointer;
             transition: all 0.3s ease;
             font-family: 'Cinzel', 'Prompt', serif;
         }
 
-        .nav-btn:hover {
-            color: var(--primary-cyan);
-            border-color: rgba(135, 232, 203, 0.3);
-            background: rgba(135, 232, 203, 0.05);
-        }
-
-        .nav-btn.active {
+        .tab-btn.active, .tab-btn:hover {
             background: var(--primary-cyan);
             color: var(--bg-color);
             border-color: var(--primary-cyan);
@@ -140,10 +137,10 @@
             font-weight: 600;
         }
 
-        /* Content Sections */
+        /* TAB CONTENTS */
         .tab-content {
             display: none;
-            animation: fadeIn 0.5s ease-out forwards;
+            animation: fadeIn 0.4s ease-out;
         }
 
         .tab-content.active {
@@ -154,7 +151,7 @@
             display: flex;
             gap: 8px;
             flex-wrap: wrap;
-            margin-bottom: 1rem;
+            margin-bottom: 0.8rem;
         }
 
         .class-badge {
@@ -165,13 +162,14 @@
             font-size: 0.8rem;
             letter-spacing: 1px;
             border: 1px solid rgba(135, 232, 203, 0.4);
+            box-shadow: 0 0 10px rgba(135, 232, 203, 0.15);
         }
 
         .brand-title {
             font-family: 'Cinzel', 'Prompt', serif;
             font-size: 2.2rem;
             font-weight: 900;
-            letter-spacing: 3px;
+            letter-spacing: 2px;
             background: linear-gradient(135deg, #ffffff 10%, var(--primary-cyan) 50%, var(--primary-purple) 90%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -191,7 +189,7 @@
             font-size: 2.4rem;
             font-weight: 800;
             color: #ffffff;
-            text-shadow: 0 0 15px rgba(135, 232, 203, 0.5);
+            text-shadow: 0 0 15px rgba(135, 232, 203, 0.5), 0 0 25px rgba(172, 169, 222, 0.4);
             margin-bottom: 0.2rem;
         }
 
@@ -214,19 +212,23 @@
             border: 1px solid rgba(172, 169, 222, 0.25);
             border-left: 4px solid var(--primary-cyan);
             padding: 1rem;
-            border-radius: 6px 14px 14px 6px;
+            border-radius: 6px 12px 12px 6px;
             transition: all 0.3s ease;
         }
 
         .info-box:hover {
             transform: translateY(-3px);
             border-color: var(--primary-cyan);
+            box-shadow: 0 5px 15px rgba(135, 232, 203, 0.15);
         }
 
         .info-box h3 {
             font-size: 1rem;
             color: var(--primary-cyan);
             margin-bottom: 0.4rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
             font-family: 'Cinzel', 'Prompt', serif;
         }
 
@@ -236,7 +238,7 @@
             line-height: 1.5;
         }
 
-        /* RPG Stats Progress Bar */
+        /* Stats Bar */
         .stats-section {
             margin-bottom: 1.5rem;
         }
@@ -268,7 +270,7 @@
             border-radius: 4px;
             box-shadow: 0 0 10px var(--primary-cyan);
             width: 0%;
-            transition: width 1.2s cubic-bezier(0.1, 0.5, 0.1, 1);
+            transition: width 1.5s cubic-bezier(0.1, 0.5, 0.1, 1);
         }
 
         .section-title {
@@ -293,8 +295,9 @@
             color: #fff;
             padding: 6px 14px;
             border-radius: 8px;
-            font-size: 0.88rem;
-            transition: all 0.3s ease;
+            font-size: 0.85rem;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
         }
 
         .skill-tag:hover {
@@ -302,26 +305,15 @@
             color: var(--bg-color);
             border-color: var(--primary-cyan);
             box-shadow: 0 0 15px var(--primary-cyan);
-            transform: translateY(-2px);
-        }
-
-        /* About & Contact Card Details */
-        .about-text {
-            font-size: 0.95rem;
-            line-height: 1.7;
-            color: #e0ddf5;
-            margin-bottom: 1.2rem;
-        }
-
-        .about-highlight {
-            color: var(--primary-cyan);
+            transform: translateY(-2px) scale(1.03);
             font-weight: 600;
         }
 
+        /* Contact Items Style */
         .contact-list {
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 1rem;
             margin-top: 1rem;
         }
 
@@ -330,47 +322,53 @@
             align-items: center;
             gap: 15px;
             background: rgba(18, 14, 36, 0.6);
-            border: 1px solid rgba(172, 169, 222, 0.2);
-            padding: 12px 18px;
+            border: 1px solid rgba(135, 232, 203, 0.3);
+            padding: 1rem 1.2rem;
             border-radius: 12px;
-            color: #fff;
             text-decoration: none;
+            color: var(--text-color);
             transition: all 0.3s ease;
         }
 
         .contact-item:hover {
+            background: rgba(135, 232, 203, 0.15);
             border-color: var(--primary-cyan);
-            background: rgba(135, 232, 203, 0.1);
-            transform: translateX(5px);
+            transform: translateX(8px);
             box-shadow: 0 0 15px rgba(135, 232, 203, 0.2);
         }
 
         .contact-icon {
-            font-size: 1.3rem;
+            font-size: 1.5rem;
+            background: var(--dark-purple);
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            border: 1px solid var(--primary-cyan);
             color: var(--primary-cyan);
         }
 
-        .contact-info label {
-            display: block;
-            font-size: 0.75rem;
-            color: var(--primary-purple);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .contact-info span {
+        .contact-text h4 {
             font-size: 0.95rem;
-            font-weight: 500;
+            color: var(--primary-cyan);
+            margin-bottom: 2px;
         }
 
-        /* Popups & Overlays */
+        .contact-text p {
+            font-size: 0.85rem;
+            color: var(--primary-purple);
+        }
+
+        /* Overlay Popups & Hints */
         .dice-result-popup {
             position: fixed;
             top: 45%;
-            left: 72%; /* แสดงเลขตรงกลางขวาเหนือเต๋า */
-            transform: translate(-50%, -50%) scale(0);
+            right: 25%;
+            transform: translate(50%, -50%) scale(0);
             font-family: 'Cinzel', serif;
-            font-size: 5rem;
+            font-size: 5.5rem;
             font-weight: 900;
             color: #fff;
             text-shadow: 0 0 30px var(--primary-cyan);
@@ -381,13 +379,13 @@
         }
 
         .dice-result-popup.active {
-            transform: translate(-50%, -50%) scale(1);
+            transform: translate(50%, -50%) scale(1);
             opacity: 1;
         }
 
         .nat20-banner {
             position: fixed;
-            top: 15%;
+            top: 20%;
             left: 50%;
             transform: translate(-50%, -50%) scale(0);
             background: linear-gradient(135deg, #ffd700, #87e8cb);
@@ -395,7 +393,7 @@
             padding: 1rem 3.5rem;
             border-radius: 50px;
             font-family: 'Cinzel', serif;
-            font-size: 2rem;
+            font-size: 2.2rem;
             font-weight: 900;
             box-shadow: 0 0 50px #ffd700;
             transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -450,16 +448,17 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        @media (max-width: 900px) {
-            .page-wrapper {
+        @media (max-width: 992px) {
+            .container {
                 justify-content: center;
-                padding: 1.5rem 1rem;
+                padding: 2rem 1rem;
             }
             .dnd-card {
                 max-width: 100%;
             }
             .dice-result-popup {
-                left: 50%;
+                right: 50%;
+                transform: translate(50%, -50%) scale(0);
             }
         }
     </style>
@@ -474,21 +473,21 @@
     <div class="nat20-banner" id="nat20-banner">✨ CRITICAL SUCCESS! ✨</div>
 
     <div class="interactive-hint">
-        🎲 คลิกทอยลูกเต๋า D20 ด้านขวา เพื่อสุ่มโชค!
+        🎲 คลิกทอยลูกเต๋า D20 (ด้านขวา) เพื่อเสี่ยงดวง!
     </div>
 
-    <div class="page-wrapper">
+    <div class="container">
         <div class="dnd-card" id="card">
             
-            <!-- Navigation Menu -->
-            <nav class="nav-menu">
-                <button class="nav-btn active" onclick="switchTab('main')">⚔️ หน้าหลัก</button>
-                <button class="nav-btn" onclick="switchTab('about')">📜 เกี่ยวกับ</button>
-                <button class="nav-btn" onclick="switchTab('contact')">📬 ติดต่อ</button>
-            </nav>
+            <!-- Tab Navigation Header -->
+            <div class="tab-nav">
+                <button class="tab-btn active" onclick="switchTab('home')">🛡️ โปรไฟล์ (Profile)</button>
+                <button class="tab-btn" onclick="switchTab('about')">📜 เกี่ยวกับ (About)</button>
+                <button class="tab-btn" onclick="switchTab('contact')">📬 ติดต่อ (Contact)</button>
+            </div>
 
-            <!-- 1. MAIN TAB (หน้าหลัก) -->
-            <div id="tab-main" class="tab-content active">
+            <!-- TAB 1: HOME PROFILE -->
+            <div class="tab-content active" id="tab-home">
                 <div class="badge-container">
                     <span class="class-badge">LVL 4 ARTIST & DESIGNER</span>
                     <span class="class-badge">GAME & ANIMATION</span>
@@ -498,27 +497,27 @@
                 <div class="brand-title">bossu29</div>
                 <hr class="divider-line">
 
-                <h1>ศศิธร เซ้งรักษา</h1>
+                <h1>นางสาว ศศิธร เซ้งรักษา</h1>
                 <div class="subtitle">Sasithorn Sengraksa | 3D & Digital Artist Portfolio</div>
 
                 <div class="info-grid">
                     <div class="info-box">
                         <h3>📜 การศึกษา (Education)</h3>
-                        <p><strong>มทร.รัตนโกสินทร์ ศาลายา</strong></p>
+                        <p><strong>มหาวิทยาลัยเทคโนโลยีราชมงคลรัตนโกสินทร์ ศาลายา</strong></p>
                         <p>คณะสถาปัตยกรรมศาสตร์ และการออกแบบ</p>
                         <p>สาขาเกมและอนิเมชั่น (ชั้นปีที่ 4)</p>
                     </div>
                     
                     <div class="info-box">
-                        <h3>🎨 ความเชี่ยวชาญ (Focus Area)</h3>
-                        <p>ออกแบบตัวละคร (Character Design), วาดภาพประกอบ (Illustration), 3D Assets & Modding</p>
+                        <h3>🎨 สไตล์งานวาด (Art Focus)</h3>
+                        <p>เชี่ยวชาญ<strong>การออกแบบตัวละคร (Character Design)</strong> วาดภาพประกอบ (Illustration) งานปั้น 3D และการทำ Mod Custom ใน Minecraft</p>
                     </div>
                 </div>
 
-                <div class="section-title">📊 สเตตัสและความชำนาญ (Stats)</div>
+                <div class="section-title">📊 สเตตัสและความชำนาญ (Character Stats)</div>
                 <div class="stats-section">
                     <div class="stat-bar-container">
-                        <div class="stat-header"><span>Character Design & Concept Art</span><span>98%</span></div>
+                        <div class="stat-header"><span>Character Design & Concepts</span><span>98%</span></div>
                         <div class="stat-bar-bg"><div class="stat-bar-fill" data-width="98%"></div></div>
                     </div>
                     <div class="stat-bar-container">
@@ -534,67 +533,68 @@
                         <div class="stat-bar-bg"><div class="stat-bar-fill" data-width="95%"></div></div>
                     </div>
                 </div>
-            </div>
 
-            <!-- 2. ABOUT TAB (เกี่ยวกับ) -->
-            <div id="tab-about" class="tab-content">
-                <div class="brand-title">ABOUT ME</div>
-                <hr class="divider-line">
-
-                <p class="about-text">
-                    สวัสดีครับ! ผม <span class="about-highlight">ศศิธร เซ้งรักษา (bossu29)</span> นศ. ชั้นปีที่ 4 สาขาเกมและอนิเมชั่น ผู้หลงใหลในโลกของ 3D Art, การออกแบบตัวละคร และระบบเกม RPG / Fantasy 🏰
-                </p>
-                <p class="about-text">
-                    ผมชอบถ่ายทอดจินตนาการผ่านงานวาดและโมเดล 3 มิติ ไม่ว่าจะเป็นแนว <span class="about-highlight">Cyberpunk, Fantasy หรือ D&D World</span> รวมไปถึงการม็อดเกม Custom อวตารและแอนิเมชันผ่าน <span class="about-highlight">Minecraft Figura Modding</span>
-                </p>
-
-                <div class="section-title">🛠️ เครื่องมือที่ใช้ (Tools & Software)</div>
+                <div class="section-title">⚔️ สกิลความสามารถ (Abilities & Skills)</div>
                 <div class="skills-container">
-                    <div class="skill-tag">🎨 Clip Studio Paint / Photoshop</div>
-                    <div class="skill-tag">🧊 Blender 3D</div>
-                    <div class="skill-tag">🕹️ Unity Engine</div>
-                    <div class="skill-tag">🦊 Figura API (Minecraft)</div>
-                    <div class="skill-tag">📐 Blockbench</div>
+                    <div class="skill-tag">🖌️ Digital Art</div>
+                    <div class="skill-tag">👤 Character Design</div>
+                    <div class="skill-tag">🖼️ Illustration</div>
+                    <div class="skill-tag">🏰 Minecraft World Building</div>
+                    <div class="skill-tag">🦊 Minecraft Figura Modding</div>
+                    <div class="skill-tag">🕹️ 3D & Game Art</div>
                 </div>
             </div>
 
-            <!-- 3. CONTACT TAB (ติดต่อ) -->
-            <div id="tab-contact" class="tab-content">
+            <!-- TAB 2: ABOUT -->
+            <div class="tab-content" id="tab-about">
+                <div class="brand-title">ABOUT ME</div>
+                <hr class="divider-line">
+                <div class="info-box" style="margin-bottom: 1.2rem;">
+                    <h3>✨ เกี่ยวกับฉัน (Biography)</h3>
+                    <p>สวัสดีค่ะ! ดิฉัน <strong>นางสาว ศศิธร เซ้งรักษา (bossu29)</strong> เป็นนักศึกษาชั้นปีที่ 4 สาขาเกมและอนิเมชั่น ผู้มีความหลงใหลในงานดิจิทัลอาร์ต การออกแบบตัวละครแฟนตาซีไซไฟ การทำ 3D โมเดลลิ่ง และการปรับแต่งโมดูลเกม อย่างเช่น Minecraft Figura Modding</p>
+                </div>
+                <div class="info-box" style="margin-bottom: 1.2rem;">
+                    <h3>🎯 เป้าหมายการทำงาน (Work Goal)</h3>
+                    <p>มุ่งมั่นที่จะสร้างสรรค์ผลงาน Character Design และ Game Asset ระดับคุณภาพ เพื่อเติมเต็มจินตนาการและสร้างประสบการณ์ที่น่าจดจำในอุตสาหกรรมสื่อสร้างสรรค์และเกม</p>
+                </div>
+                <div class="section-title">🛠️ เครื่องมือที่เชี่ยวชาญ (Software & Tools)</div>
+                <div class="skills-container">
+                    <div class="skill-tag">Blender 3D</div>
+                    <div class="skill-tag">Unity Engine</div>
+                    <div class="skill-tag">Clip Studio Paint</div>
+                    <div class="skill-tag">Adobe Photoshop</div>
+                    <div class="skill-tag">Blockbench</div>
+                </div>
+            </div>
+
+            <!-- TAB 3: CONTACT -->
+            <div class="tab-content" id="tab-contact">
                 <div class="brand-title">GET IN TOUCH</div>
                 <hr class="divider-line">
-
-                <p class="about-text">ยินดีรับงาน Freelance, Contract งานออกแบบตัวละคร, 3D Assets และงานทำ Mod มายคราฟครับ สามารถติดต่อได้ผ่านช่องทางด้านล่างนี้ได้เลยครับ ✨</p>
-
+                <p style="color: var(--primary-purple); font-size: 0.95rem;">สนใจร่วมงาน สอบถามข้อมูล หรือดูผลงานเพิ่มเติม สามารถติดต่อดิฉันได้ผ่านช่องทางด้านล่างนี้เลยค่ะ:</p>
+                
                 <div class="contact-list">
-                    <a href="mailto:sasithorn.seng@gmail.com" class="contact-item">
-                        <span class="contact-icon">✉️</span>
-                        <div class="contact-info">
-                            <label>Email</label>
-                            <span>sasithorn.seng@gmail.com</span>
+                    <a href="mailto:sasithorn.contact@email.com" class="contact-item">
+                        <div class="contact-icon">📧</div>
+                        <div class="contact-text">
+                            <h4>Email Address</h4>
+                            <p>sasithorn.contact@gmail.com</p>
                         </div>
                     </a>
 
-                    <a href="#" class="contact-item" onclick="return false;">
-                        <span class="contact-icon">💬</span>
-                        <div class="contact-info">
-                            <label>Discord</label>
-                            <span>bossu29#0000</span>
+                    <a href="#" class="contact-item">
+                        <div class="contact-icon">🎨</div>
+                        <div class="contact-text">
+                            <h4>ArtStation / Portfolio</h4>
+                            <p>artstation.com/bossu29</p>
                         </div>
                     </a>
 
-                    <a href="#" class="contact-item" onclick="return false;">
-                        <span class="contact-icon">🎨</span>
-                        <div class="contact-info">
-                            <label>ArtStation / Portfolio</label>
-                            <span>artstation.com/bossu29</span>
-                        </div>
-                    </a>
-
-                    <a href="#" class="contact-item" onclick="return false;">
-                        <span class="contact-icon">🌐</span>
-                        <div class="contact-info">
-                            <label>Location</label>
-                            <span>นครปฐม / กรุงเทพฯ, ประเทศไทย</span>
+                    <a href="#" class="contact-item">
+                        <div class="contact-icon">🌐</div>
+                        <div class="contact-text">
+                            <h4>Social Media (Twitter/X)</h4>
+                            <p>@bossu29_art</p>
                         </div>
                     </a>
                 </div>
@@ -604,16 +604,16 @@
     </div>
 
     <script>
-        // --- 0. TAB SWITCHING SYSTEM ---
+        // --- TAB SWITCHING SYSTEM ---
         function switchTab(tabName) {
-            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
 
-            document.getElementById(`tab-${tabName}`).classList.add('active');
             event.currentTarget.classList.add('active');
+            document.getElementById(`tab-${tabName}`).classList.add('active');
 
-            // Trigger Stat bar animation if switching to main tab
-            if(tabName === 'main') {
+            // Re-trigger Stat Bar Animation when switching back to home
+            if(tabName === 'home') {
                 document.querySelectorAll('.stat-bar-fill').forEach(bar => {
                     bar.style.width = '0%';
                     setTimeout(() => bar.style.width = bar.getAttribute('data-width'), 50);
@@ -621,7 +621,7 @@
             }
         }
 
-        // --- 1. SYNTHESIZED SOUND EFFECTS (Web Audio API) ---
+        // --- SYNTHESIZED SOUND EFFECTS ---
         let soundEnabled = true;
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
@@ -662,7 +662,7 @@
             });
         }
 
-        // --- 2. THREE.JS SCENE SETUP ---
+        // --- THREE.JS SCENE SETUP ---
         const scene = new THREE.Scene();
         scene.fog = new THREE.FogExp2(0x080612, 0.03);
 
@@ -676,19 +676,19 @@
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
         renderer.setSize(window.innerWidth, window.innerHeight);
 
-        // --- 3. LIGHTING ---
+        // --- LIGHTING ---
         const ambientLight = new THREE.AmbientLight(0x1a152b, 2.2);
         scene.add(ambientLight);
 
         const cyanLight = new THREE.PointLight(0x87e8cb, 3.5, 25);
-        cyanLight.position.set(6, 4, 3);
+        cyanLight.position.set(5, 4, 3);
         scene.add(cyanLight);
 
         const purpleLight = new THREE.PointLight(0xaca9de, 3.5, 25);
-        purpleLight.position.set(-6, -4, 3);
+        purpleLight.position.set(-5, -4, 3);
         scene.add(purpleLight);
 
-        // --- 4. D20 DICE & TEXTURE SYSTEM ---
+        // --- D20 DICE SYSTEM ---
         const d20Textures = {};
         function getOrCreateNumberTexture(number) {
             if (d20Textures[number]) return d20Textures[number];
@@ -723,7 +723,7 @@
             flatShading: true
         });
 
-        // ปรับขนาด D20 ให้ใหญ่เด่นขึ้นตรงกลางขวา (1.15)
+        // ขยายขนาด D20 ให้เด่นชัดยิ่งขึ้นที่ขวากลาง
         const d20Geo = new THREE.IcosahedronGeometry(1.15, 0);
         const d20Mesh = new THREE.Mesh(d20Geo, d20Material);
         
@@ -744,7 +744,7 @@
         d20Group.add(d20Hitbox);
         scene.add(d20Group);
 
-        // --- 5. FIREWORKS BURST FOR NAT 20 ---
+        // --- FIREWORKS BURST FOR NAT 20 ---
         const fwCount = 300;
         const fwGeo = new THREE.BufferGeometry();
         const fwPos = new Float32Array(fwCount * 3);
@@ -757,7 +757,7 @@
 
             const theta = Math.random() * Math.PI * 2;
             const phi = Math.random() * Math.PI;
-            const speed = 0.12 + Math.random() * 0.18;
+            const speed = 0.1 + Math.random() * 0.15;
 
             fwVel.push({
                 x: speed * Math.sin(phi) * Math.cos(theta),
@@ -789,7 +789,7 @@
             fireworks.geometry.attributes.position.needsUpdate = true;
         }
 
-        // --- 6. FLOATING DUST PARTICLES & MAGIC RINGS ---
+        // --- BACKGROUND PARTICLES & RINGS ---
         const bgGroup = new THREE.Group();
         const ringGeo = new THREE.TorusGeometry(3.0, 0.015, 16, 100);
         const ringMat = new THREE.MeshBasicMaterial({ color: 0x87e8cb, wireframe: true });
@@ -798,10 +798,10 @@
         bgGroup.add(ring);
         scene.add(bgGroup);
 
-        const pCount = 650;
+        const pCount = 700;
         const pPos = new Float32Array(pCount * 3);
         for(let i = 0; i < pCount * 3; i++) {
-            pPos[i] = (Math.random() - 0.5) * 18;
+            pPos[i] = (Math.random() - 0.5) * 20;
         }
         const pGeo = new THREE.BufferGeometry();
         pGeo.setAttribute('position', new THREE.BufferAttribute(pPos, 3));
@@ -809,24 +809,24 @@
         const pMesh = new THREE.Points(pGeo, pMat);
         scene.add(pMesh);
 
-        // --- 7. POSITIONING & RESPONSIVE (วาง D20 ตรงกลางฝั่งขวา) ---
+        // --- POSITIONING (วาง D20 ตรงกลางฝั่งขวา) ---
         function updatePositions() {
             const aspect = window.innerWidth / window.innerHeight;
             const vFOV = THREE.MathUtils.degToRad(camera.fov);
             const height = 2 * Math.tan(vFOV / 2) * camera.position.z;
             const width = height * aspect;
 
-            if (window.innerWidth > 900) {
-                // วาง D20 ฝั่งขวาตรงกลาง
+            if (window.innerWidth > 992) {
+                // วางไว้ที่กึ่งกลางฝั่งขวาสำหรับหน้าจอเดสก์ท็อป
                 d20Group.position.set(width / 4 + 0.5, 0, 0);
             } else {
-                // สำหรับมือถือ วางมุมขวาบน
-                d20Group.position.set(width / 2 - 1.0, height / 2 - 1.2, 0);
+                // วางไว้มุมบนขวาสำหรับหน้าจอมือถือ/แท็บเล็ต
+                d20Group.position.set(width / 2 - 1.2, height / 2 - 1.2, 0);
             }
         }
         updatePositions();
 
-        // --- 8. DICE ROLL LOGIC & INTERACTION ---
+        // --- DICE ROLL & INTERACTION ---
         const raycaster = new THREE.Raycaster();
         const mouse = new THREE.Vector2();
         let isRolling = false;
@@ -869,7 +869,6 @@
                 playRollSound();
             }, 60);
 
-            // GSAP 3D Spin Animation
             gsap.to(d20Group.rotation, {
                 x: d20Group.rotation.x + Math.PI * 6 + Math.random(),
                 y: d20Group.rotation.y + Math.PI * 6 + Math.random(),
@@ -906,26 +905,23 @@
             const intersects = raycaster.intersectObjects([d20Mesh, d20Wire, d20Hitbox]);
             document.body.style.cursor = intersects.length > 0 ? 'pointer' : 'default';
 
-            // 3D Card Tilt
             const rx = (e.clientY / window.innerHeight - 0.5) * -10;
             const ry = (e.clientX / window.innerWidth - 0.5) * 10;
             card.style.transform = `rotateX(${rx}deg) rotateY(${ry}deg)`;
         });
 
-        // --- 9. ANIMATION LOOP ---
+        // --- ANIMATION LOOP ---
         const clock = new THREE.Clock();
 
         function animate() {
             requestAnimationFrame(animate);
             const elapsedTime = clock.getElapsedTime();
 
-            // D20 Rotation Animation
             if (!isRolling) {
                 d20Group.rotation.x = Math.sin(elapsedTime * 0.5) * 0.2;
                 d20Group.rotation.y = elapsedTime * 0.4;
             }
 
-            // Fireworks Animation
             if (isFWActive) {
                 fwTimer += 0.016;
                 const pos = fireworks.geometry.attributes.position.array;
@@ -942,7 +938,6 @@
                 }
             }
 
-            // Background rotation
             ring.rotation.z = elapsedTime * 0.1;
             pMesh.rotation.y = elapsedTime * 0.03;
 
@@ -951,7 +946,7 @@
 
         animate();
 
-        // Animate Stat Bars on load
+        // Animate Stat Bars on page load
         window.addEventListener('load', () => {
             setTimeout(() => {
                 document.querySelectorAll('.stat-bar-fill').forEach(bar => {
