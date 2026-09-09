@@ -3,25 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio | ศศิธร เซ้งรักษา (Sasithorn)</title>
+    <title>3D Portfolio | ศศิธร เซ้งรักษา (Sasithorn)</title>
     
     <!-- Google Fonts: Prompt & Cinzel for D&D Fantasy Vibe -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=Prompt:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=Prompt:wght@300;400;500;600&display=swap" rel="stylesheet">
 
     <!-- Three.js CDN -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
     <style>
         :root {
-            --bg-color: #0d0b18;
+            --bg-color: #0b0813;
             --primary-cyan: #40e0d0;
             --light-cyan: #7fffd4;
             --primary-purple: #b39ddb;
-            --dark-purple: #2a1b4e;
+            --dark-purple: #23143c;
             --text-color: #e0f7fa;
-            --glass-bg: rgba(20, 15, 38, 0.65);
+            --glass-bg: rgba(18, 13, 34, 0.72);
             --border-glow: rgba(64, 224, 208, 0.4);
         }
 
@@ -36,6 +36,7 @@
             background-color: var(--bg-color);
             color: var(--text-color);
             overflow-x: hidden;
+            min-height: 100vh;
         }
 
         /* Canvas 3D Background */
@@ -48,118 +49,133 @@
             z-index: -1;
         }
 
-        /* Overlay Layout */
+        /* Container Layout */
         .container {
-            max-width: 1100px;
+            max-width: 1000px;
             margin: 0 auto;
-            padding: 2rem;
+            padding: 2.5rem 1.5rem;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
         }
 
-        /* UI Panel (DND Scroll/Card Style) */
+        /* UI Panel (DND Character Sheet / Quest Card Style) */
         .dnd-card {
             background: var(--glass-bg);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
             border: 2px solid var(--primary-cyan);
-            border-radius: 16px;
+            border-radius: 18px;
             padding: 2.5rem;
-            box-shadow: 0 0 25px rgba(64, 224, 208, 0.2),
-                        inset 0 0 15px rgba(179, 157, 219, 0.15);
+            box-shadow: 0 0 30px rgba(64, 224, 208, 0.25),
+                        inset 0 0 20px rgba(179, 157, 219, 0.15);
             position: relative;
-            margin-bottom: 2rem;
-            animation: fadeIn 1.5s ease-in-out;
+            animation: fadeIn 1.2s ease-out;
         }
 
-        /* Fantasy Corner Decorator */
+        /* D&D Decorative Corners */
         .dnd-card::before {
-            content: '✦';
+            content: '✦  CLASS SHEET  ✦';
             position: absolute;
-            top: 10px;
-            left: 15px;
-            color: var(--primary-purple);
-            font-size: 1.2rem;
-        }
-        .dnd-card::after {
-            content: '✦';
-            position: absolute;
-            bottom: 10px;
-            right: 15px;
-            color: var(--primary-cyan);
-            font-size: 1.2rem;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--dark-purple);
+            color: var(--light-cyan);
+            border: 1px solid var(--primary-cyan);
+            padding: 2px 16px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+            font-family: 'Cinzel', serif;
         }
 
-        /* Header */
+        /* Header Details */
+        .badge-container {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 0.8rem;
+        }
+
         .class-badge {
-            display: inline-block;
-            background: linear-gradient(45deg, var(--dark-purple), var(--primary-purple));
-            color: #fff;
-            padding: 4px 16px;
+            background: linear-gradient(135deg, var(--dark-purple), #3a2266);
+            color: var(--light-cyan);
+            padding: 4px 14px;
             border-radius: 20px;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             letter-spacing: 1px;
-            margin-bottom: 1rem;
-            border: 1px solid var(--light-cyan);
-            box-shadow: 0 0 10px rgba(127, 255, 212, 0.3);
+            border: 1px solid rgba(127, 255, 212, 0.4);
+            box-shadow: 0 0 10px rgba(127, 255, 212, 0.2);
         }
 
         h1 {
             font-family: 'Cinzel', 'Prompt', serif;
             font-size: 2.8rem;
-            color: #fff;
-            text-shadow: 0 0 10px var(--primary-cyan), 0 0 20px var(--primary-purple);
-            margin-bottom: 0.5rem;
+            font-weight: 800;
+            color: #ffffff;
+            text-shadow: 0 0 12px var(--primary-cyan), 0 0 24px var(--primary-purple);
+            margin-bottom: 0.3rem;
         }
 
         .subtitle {
             font-size: 1.1rem;
             color: var(--primary-purple);
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.8rem;
             font-weight: 300;
         }
 
-        /* Info Section */
+        /* Info Grid Layout */
         .info-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 1.5rem;
-            margin-top: 1.5rem;
+            margin-bottom: 1.8rem;
         }
 
         .info-box {
-            background: rgba(42, 27, 78, 0.4);
+            background: rgba(35, 20, 60, 0.45);
+            border: 1px solid rgba(179, 157, 219, 0.25);
             border-left: 4px solid var(--primary-cyan);
-            padding: 1rem 1.2rem;
-            border-radius: 0 8px 8px 0;
+            padding: 1.2rem;
+            border-radius: 4px 12px 12px 4px;
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+
+        .info-box:hover {
+            transform: translateY(-2px);
+            border-color: var(--light-cyan);
         }
 
         .info-box h3 {
-            font-size: 1rem;
+            font-size: 1.05rem;
             color: var(--light-cyan);
-            margin-bottom: 0.3rem;
+            margin-bottom: 0.5rem;
             display: flex;
             align-items: center;
             gap: 8px;
+            font-family: 'Cinzel', 'Prompt', serif;
         }
 
         .info-box p {
             font-size: 0.95rem;
             color: #d1c4e9;
-            line-height: 1.5;
+            line-height: 1.6;
         }
 
-        /* Skills / Abilities Section */
-        .skills-title {
+        /* Skills & Specialty Section */
+        .section-title {
             font-family: 'Cinzel', 'Prompt', serif;
-            font-size: 1.5rem;
+            font-size: 1.4rem;
             color: var(--light-cyan);
-            margin-top: 2rem;
+            margin-top: 1rem;
             margin-bottom: 1rem;
             border-bottom: 1px solid var(--border-glow);
-            padding-bottom: 0.5rem;
+            padding-bottom: 0.4rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .skills-container {
@@ -169,27 +185,26 @@
         }
 
         .skill-tag {
-            background: rgba(179, 157, 219, 0.15);
+            background: rgba(179, 157, 219, 0.12);
             border: 1px solid var(--primary-purple);
             color: #fff;
             padding: 8px 16px;
             border-radius: 8px;
             font-size: 0.95rem;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: default;
         }
 
         .skill-tag:hover {
             background: var(--primary-cyan);
             color: var(--bg-color);
+            border-color: var(--light-cyan);
             box-shadow: 0 0 15px var(--primary-cyan);
-            transform: translateY(-3px);
+            transform: translateY(-3px) scale(1.03);
             font-weight: 600;
         }
 
-        /* Animation */
+        /* Animations */
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
@@ -197,8 +212,9 @@
 
         /* Responsive */
         @media (max-width: 768px) {
-            h1 { font-size: 2rem; }
-            .dnd-card { padding: 1.5rem; }
+            h1 { font-size: 2.1rem; }
+            .dnd-card { padding: 1.8rem 1.2rem; }
+            .container { padding: 1rem; }
         }
     </style>
 </head>
@@ -210,31 +226,39 @@
     <!-- UI Overlay Container -->
     <div class="container">
         <div class="dnd-card">
-            <span class="class-badge">LVL 4 • GAME & ANIMATION CREATOR</span>
+            
+            <div class="badge-container">
+                <span class="class-badge">LVL 4 ARTIST & DESIGNER</span>
+                <span class="class-badge">GAME & ANIMATION</span>
+            </div>
+
             <h1>ศศิธร เซ้งรักษา</h1>
             <div class="subtitle">Sasithorn Sengraksa | 3D & Digital Artist Portfolio</div>
 
             <div class="info-grid">
                 <div class="info-box">
                     <h3>📜 การศึกษา (Education)</h3>
-                    <p>มหาวิทยาลัยเทคโนโลยีราชมงคลรัตนโกสินทร์ ศาลายา</p>
-                    <p>คณะสถาปัตยกรรมศาสตร์และการออกแบบ</p>
-                    <p><strong>สาขา:</strong> เกมและอนิเมชั่น (ปี 4)</p>
+                    <p><strong>มหาวิทยาลัยเทคโนโลยีราชมงคลรัตนโกสินทร์ ศาลายา</strong></p>
+                    <p>คณะสถาปัตยกรรมศาสตร์ และการออกแบบ</p>
+                    <p>สาขาเกมและอนิเมชั่น (ชั้นปีที่ 4)</p>
                 </div>
+                
                 <div class="info-box">
-                    <h3>🔮 สไตล์งาน (Art Style & Interest)</h3>
-                    <p>เน้นงานออกแบบฉาก สภาพแวดล้อม 3D Voxel/Blocky โมเดลตัวละคร และงานวาดดิจิทัลแฟนตาซี</p>
+                    <h3>🎨 สไตล์งานวาด (Art Style Focus)</h3>
+                    <p>เน้น<strong>การออกแบบตัวละคร (Character Design)</strong> และการวาดภาพประกอบชิ้นงานประเภทต่างๆ (Illustrations) ผสมผสานความถนัดด้าน 3D & Modding</p>
                 </div>
             </div>
 
-            <div class="skills-title">⚔️ ความถนัดและความสามารถ (Abilities & Skills)</div>
+            <div class="section-title">⚔️ ความถนัดและความสามารถ (Abilities & Skills)</div>
             <div class="skills-container">
-                <div class="skill-tag">🎨 วาดรูปดิจิทัล (Digital Art)</div>
+                <div class="skill-tag">🖌️ วาดรูปดิจิทัล (Digital Art)</div>
+                <div class="skill-tag">👤 การออกแบบตัวละคร (Character Design)</div>
+                <div class="skill-tag">🖼️ วาดภาพประกอบ (Illustration)</div>
                 <div class="skill-tag">🏰 สร้างแมพมายคราฟ (Minecraft World Building)</div>
                 <div class="skill-tag">🦊 การทำ Figura มายคราฟ (Minecraft Figura Modding)</div>
-                <div class="skill-tag">📐 3D Modeling & Design</div>
-                <div class="skill-tag">🕹️ Game & Character Design</div>
+                <div class="skill-tag">🕹️ 3D & Game Art</div>
             </div>
+
         </div>
     </div>
 
@@ -242,8 +266,7 @@
     <script>
         // --- 1. SETUP SCENE, CAMERA, RENDERER ---
         const scene = new THREE.Scene();
-        // Add subtle fog for D&D atmosphere
-        scene.fog = new THREE.FogExp2(0x0d0b18, 0.03);
+        scene.fog = new THREE.FogExp2(0x0b0813, 0.035);
 
         const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
         camera.position.z = 5;
@@ -252,62 +275,63 @@
             canvas: document.querySelector('#webgl-bg'),
             antialias: true
         });
-        renderer.setPixelRatio(window.devicePixelRatio);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
         renderer.setSize(window.innerWidth, window.innerHeight);
 
-        // --- 2. LIGHTING (Cyan & Lavender Lights) ---
-        const ambientLight = new THREE.AmbientLight(0x2a1b4e, 1.5);
+        // --- 2. LIGHTING (Cyan & Purple Magic Lights) ---
+        const ambientLight = new THREE.AmbientLight(0x23143c, 1.8);
         scene.add(ambientLight);
 
-        // Cyan Point Light
-        const cyanLight = new THREE.PointLight(0x40e0d0, 3, 20);
-        cyanLight.position.set(3, 2, 2);
+        const cyanLight = new THREE.PointLight(0x40e0d0, 3, 25);
+        cyanLight.position.set(4, 3, 2);
         scene.add(cyanLight);
 
-        // Lavender/Purple Point Light
-        const purpleLight = new THREE.PointLight(0xb39ddb, 3, 20);
-        purpleLight.position.set(-3, -2, 2);
+        const purpleLight = new THREE.PointLight(0xb39ddb, 3, 25);
+        purpleLight.position.set(-4, -3, 2);
         scene.add(purpleLight);
 
-        // --- 3. 3D OBJECTS (D&D Magic Orb + Runes Ring) ---
-        const group = new THREE.Group();
+        // --- 3. 3D OBJECTS (Magical D&D Crystal Core & Rings) ---
+        const mainGroup = new THREE.Group();
 
-        // Magic Crystal/Orb Center
-        const orbGeo = new THREE.IcosahedronGeometry(1.2, 1);
+        // Outer Icosahedron Sphere (Cyan Wireframe)
+        const orbGeo = new THREE.IcosahedronGeometry(1.3, 1);
         const orbMat = new THREE.MeshStandardMaterial({
             color: 0x40e0d0,
             wireframe: true,
-            emissive: 0x113333,
+            emissive: 0x0a2b2a,
             roughness: 0.2,
             metalness: 0.8
         });
         const magicOrb = new THREE.Mesh(orbGeo, orbMat);
-        group.add(magicOrb);
+        mainGroup.add(magicOrb);
 
-        // Inner Core Glow
+        // Inner Crystal Core (Purple Solid Octahedron)
         const coreGeo = new THREE.OctahedronGeometry(0.6, 0);
         const coreMat = new THREE.MeshBasicMaterial({
             color: 0xb39ddb,
             wireframe: false
         });
         const core = new THREE.Mesh(coreGeo, coreMat);
-        group.add(core);
+        mainGroup.add(core);
 
-        // Outer Magical Ring
-        const ringGeo = new THREE.TorusGeometry(2, 0.02, 16, 100);
-        const ringMat = new THREE.MeshBasicMaterial({ color: 0x7fffd4, wireframe: true });
-        const ring = new THREE.Mesh(ringGeo, ringMat);
-        ring.rotation.x = Math.PI / 3;
-        group.add(ring);
+        // Magical Ring 1
+        const ringGeo1 = new THREE.TorusGeometry(2.1, 0.015, 16, 100);
+        const ringMat1 = new THREE.MeshBasicMaterial({ color: 0x7fffd4, wireframe: true });
+        const ring1 = new THREE.Mesh(ringGeo1, ringMat1);
+        ring1.rotation.x = Math.PI / 3;
+        mainGroup.add(ring1);
 
-        scene.add(group);
+        // Magical Ring 2
+        const ringGeo2 = new THREE.TorusGeometry(2.5, 0.01, 16, 100);
+        const ringMat2 = new THREE.MeshBasicMaterial({ color: 0xb39ddb, wireframe: true });
+        const ring2 = new THREE.Mesh(ringGeo2, ringMat2);
+        ring2.rotation.y = Math.PI / 4;
+        mainGroup.add(ring2);
 
-        // Adjust position relative to screen
-        group.position.x = 0;
-        group.position.y = 0;
+        scene.add(mainGroup);
 
-        // --- 4. PARTICLES (Floating Magic Dust) ---
-        const particlesCount = 700;
+        // --- 4. PARTICLES (Floating Magic Mana Dust) ---
+        const particlesCount = 800;
         const posArray = new Float32Array(particlesCount * 3);
         const colorArray = new Float32Array(particlesCount * 3);
 
@@ -315,13 +339,11 @@
         const colorPurple = new THREE.Color(0xb39ddb);
 
         for(let i = 0; i < particlesCount * 3; i += 3) {
-            // Position
-            posArray[i] = (Math.random() - 0.5) * 15;
-            posArray[i+1] = (Math.random() - 0.5) * 15;
-            posArray[i+2] = (Math.random() - 0.5) * 15;
+            posArray[i] = (Math.random() - 0.5) * 16;
+            posArray[i+1] = (Math.random() - 0.5) * 16;
+            posArray[i+2] = (Math.random() - 0.5) * 16;
 
-            // Color mix (Cyan + Purple)
-            const mixedColor = Math.random() > 0.5 ? colorCyan : colorPurple;
+            const mixedColor = Math.random() > 0.4 ? colorCyan : colorPurple;
             colorArray[i] = mixedColor.r;
             colorArray[i+1] = mixedColor.g;
             colorArray[i+2] = mixedColor.b;
@@ -332,16 +354,16 @@
         particlesGeo.setAttribute('color', new THREE.BufferAttribute(colorArray, 3));
 
         const particlesMat = new THREE.PointsMaterial({
-            size: 0.04,
+            size: 0.035,
             vertexColors: true,
             transparent: true,
-            opacity: 0.8
+            opacity: 0.75
         });
 
         const particlesMesh = new THREE.Points(particlesGeo, particlesMat);
         scene.add(particlesMesh);
 
-        // --- 5. INTERACTION (Mouse Parallax) ---
+        // --- 5. INTERACTION (Mouse Parallax Effect) ---
         let mouseX = 0;
         let mouseY = 0;
 
@@ -357,23 +379,26 @@
             requestAnimationFrame(animate);
             const elapsedTime = clock.getElapsedTime();
 
-            // Rotate 3D Objects
-            magicOrb.rotation.y = elapsedTime * 0.3;
-            magicOrb.rotation.x = elapsedTime * 0.2;
+            // Rotations
+            magicOrb.rotation.y = elapsedTime * 0.25;
+            magicOrb.rotation.x = elapsedTime * 0.15;
             
-            core.rotation.y = -elapsedTime * 0.5;
-            core.rotation.z = elapsedTime * 0.3;
+            core.rotation.y = -elapsedTime * 0.4;
+            core.rotation.z = elapsedTime * 0.2;
 
-            ring.rotation.z = elapsedTime * 0.1;
-            ring.rotation.x = Math.PI / 3 + Math.sin(elapsedTime) * 0.1;
+            ring1.rotation.z = elapsedTime * 0.1;
+            ring1.rotation.x = Math.PI / 3 + Math.sin(elapsedTime * 0.8) * 0.15;
 
-            // Rotate Particles Floating
-            particlesMesh.rotation.y = elapsedTime * 0.05;
-            particlesMesh.rotation.x = -elapsedTime * 0.02;
+            ring2.rotation.y = elapsedTime * 0.12;
+            ring2.rotation.z = Math.sin(elapsedTime * 0.5) * 0.2;
 
-            // Smooth Mouse Movement Tracking
-            group.rotation.y += (mouseX * 0.8 - group.rotation.y) * 0.05;
-            group.rotation.x += (-mouseY * 0.8 - group.rotation.x) * 0.05;
+            // Particles floating rotation
+            particlesMesh.rotation.y = elapsedTime * 0.03;
+            particlesMesh.rotation.x = -elapsedTime * 0.015;
+
+            // Smooth Mouse Movement Tracking (Parallax)
+            mainGroup.rotation.y += (mouseX * 0.6 - mainGroup.rotation.y) * 0.05;
+            mainGroup.rotation.x += (-mouseY * 0.6 - mainGroup.rotation.x) * 0.05;
 
             renderer.render(scene, camera);
         }
