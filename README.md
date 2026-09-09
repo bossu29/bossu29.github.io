@@ -697,6 +697,7 @@
 
         function playRollSound() {
             if (!soundEnabled) return;
+            if (audioCtx.state === 'suspended') audioCtx.resume();
             const osc = audioCtx.createOscillator();
             const gain = audioCtx.createGain();
             osc.type = 'triangle';
@@ -712,6 +713,7 @@
 
         function playWinSound() {
             if (!soundEnabled) return;
+            if (audioCtx.state === 'suspended') audioCtx.resume();
             const now = audioCtx.currentTime;
             [523.25, 659.25, 783.99, 1046.50].forEach((freq, i) => {
                 const osc = audioCtx.createOscillator();
@@ -858,263 +860,146 @@
         purpleLight.position.set(-5, -4, 3);
         scene.add(purpleLight);
 
-        // --- D20 DICE SYSTEM ---
-        const d20Textures = {};
-        function getOrCreateNumberTexture(number) {
-            if (d20Textures[number]) return d20Textures[number];
-
-            const canvas = document.createElement('canvas');
-            canvas.width = 256;
-            canvas.height = 256;
-            const ctx = canvas.getContext('2d');
-
-            ctx.fillStyle = '#aca9de';
-            ctx.fillRect(0, 0, 256, 256);
-
-            ctx.strokeStyle = '#87e8cb';
-            ctx.lineWidth = 16;
-            ctx.strokeRect(10, 10, 236, 236);
-
-            ctx.fillStyle = '#080612';
-            ctx.font = 'Bold 115px Cinzel, sans-serif';
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            ctx.fillText(number.toString(), 128, 128);
-
-            const texture = new THREE.CanvasTexture(canvas);
-            d20Textures[number] = texture;
-            return texture;
-        }
-
+        // --- D20 DICE CREATION ---
+        const d20Geometry = new THREE.IcosahedronGeometry(1.2, 0);
         const d20Material = new THREE.MeshStandardMaterial({
-            map: getOrCreateNumberTexture(20),
-            roughness: 0.25,
-            metalness: 0.5,
+            color: 0x120e24,
+            roughness: 0.2,
+            metalness: 0.8,
+            wireframe: false,
             flatShading: true
         });
 
-        const d20Geo = new THREE.IcosahedronGeometry(1.15, 0);
-        const d20Mesh = new THREE.Mesh(d20Geo, d20Material);
-        
-        const d20Wire = new THREE.Mesh(
-            d20Geo,
-            new THREE.MeshBasicMaterial({ color: 0x87e8cb, wireframe: true })
-        );
-        d20Wire.scale.setScalar(1.02);
+        const diceGroup = new THREE.Group();
+        const diceMesh = new THREE.Mesh(d20Geometry, d20Material);
+        diceGroup.add(diceMesh);
 
-        const d20Hitbox = new THREE.Mesh(
-            new THREE.SphereGeometry(1.4, 8, 8),
-            new THREE.MeshBasicMaterial({ visible: false })
-        );
+        // Add glowing wireframe edges to D20
+        const wireframeGeo = new THREE.WireframeGeometry(d20Geometry);
+        const wireframeMat = new THREE.LineBasicMaterial({ color: 0x87e8cb, linewidth: 2 });
+        const wireframe = new THREE.LineSegments(wireframeGeo, wireframeMat);
+        diceGroup.add(wireframe);
 
-        const d20Group = new THREE.Group();
-        d20Group.add(d20Mesh);
-        d20Group.add(d20Wire);
-        d20Group.add(d20Hitbox);
-        scene.add(d20Group);
+        // Position D20 to the right side
+        diceGroup.position.set(2.8, 0, 0);
+        scene.add(diceGroup);
 
-        // --- FIREWORKS BURST FOR NAT 20 ---
-        const fwCount = 300;
-        const fwGeo = new THREE.BufferGeometry();
-        const fwPos = new Float32Array(fwCount * 3);
-        const fwVel = [];
+        // --- BACKGROUND PARTICLES ---
+        const particleCount = 200;
+        const particleGeo = new THREE.BufferGeometry();
+        const particlePos = new Float32Array(particleCount * 3);
 
-        for(let i = 0; i < fwCount; i++) {
-            fwPos[i*3] = 0;
-            fwPos[i*3+1] = 0;
-            fwPos[i*3+2] = 0;
-
-            const theta = Math.random() * Math.PI * 2;
-            const phi = Math.random() * Math.PI;
-            const speed = 0.1 + Math.random() * 0.15;
-
-            fwVel.push({
-                x: speed * Math.sin(phi) * Math.cos(theta),
-                y: speed * Math.sin(phi) * Math.sin(theta),
-                z: speed * Math.cos(phi)
-            });
+        for (let i = 0; i < particleCount * 3; i += 3) {
+            particlePos[i] = (Math.random() - 0.5) * 20;
+            particlePos[i + 1] = (Math.random() - 0.5) * 20;
+            particlePos[i + 2] = (Math.random() - 0.5) * 15;
         }
 
-        fwGeo.setAttribute('position', new THREE.BufferAttribute(fwPos, 3));
-        const fwMat = new THREE.PointsMaterial({
-            color: 0xffd700,
-            size: 0.12,
+        particleGeo.setAttribute('position', new THREE.BufferAttribute(particlePos, 3));
+        const particleMat = new THREE.PointsMaterial({
+            size: 0.05,
+            color: 0x87e8cb,
             transparent: true,
-            opacity: 0
+            opacity: 0.6
         });
-        const fireworks = new THREE.Points(fwGeo, fwMat);
-        scene.add(fireworks);
+        const particles = new THREE.Points(particleGeo, particleMat);
+        scene.add(particles);
 
-        let isFWActive = false;
-        let fwTimer = 0;
-
-        function triggerFireworks() {
-            isFWActive = true;
-            fwTimer = 0;
-            fwMat.opacity = 1;
-            const pos = fireworks.geometry.attributes.position.array;
-            for(let i = 0; i < fwCount * 3; i++) pos[i] = 0;
-            fireworks.position.copy(d20Group.position);
-            fireworks.geometry.attributes.position.needsUpdate = true;
-        }
-
-        // --- BACKGROUND PARTICLES & RINGS ---
-        const bgGroup = new THREE.Group();
-        const ringGeo = new THREE.TorusGeometry(3.0, 0.015, 16, 100);
-        const ringMat = new THREE.MeshBasicMaterial({ color: 0x87e8cb, wireframe: true });
-        const ring = new THREE.Mesh(ringGeo, ringMat);
-        ring.rotation.x = Math.PI / 3;
-        bgGroup.add(ring);
-        scene.add(bgGroup);
-
-        const pCount = 700;
-        const pPos = new Float32Array(pCount * 3);
-        for(let i = 0; i < pCount * 3; i++) {
-            pPos[i] = (Math.random() - 0.5) * 20;
-        }
-        const pGeo = new THREE.BufferGeometry();
-        pGeo.setAttribute('position', new THREE.BufferAttribute(pPos, 3));
-        const pMat = new THREE.PointsMaterial({ size: 0.035, color: 0xaca9de, transparent: true, opacity: 0.5 });
-        const pMesh = new THREE.Points(pGeo, pMat);
-        scene.add(pMesh);
-
-        // --- POSITIONING ---
-        function updatePositions() {
-            const aspect = window.innerWidth / window.innerHeight;
-            const vFOV = THREE.MathUtils.degToRad(camera.fov);
-            const height = 2 * Math.tan(vFOV / 2) * camera.position.z;
-            const width = height * aspect;
-
-            if (window.innerWidth > 992) {
-                d20Group.position.set(width / 4 + 0.5, 0, 0);
-            } else {
-                d20Group.position.set(width / 2 - 1.2, height / 2 - 1.2, 0);
-            }
-        }
-        updatePositions();
-
-        // --- DICE ROLL & INTERACTION ---
+        // --- D20 INTERACTION & ROLLING MECHANIC ---
+        let isRolling = false;
         const raycaster = new THREE.Raycaster();
         const mouse = new THREE.Vector2();
-        let isRolling = false;
-
-        function showResultPopup(value) {
-            const popup = document.getElementById('dice-result');
-            const banner = document.getElementById('nat20-banner');
-            popup.innerText = value;
-            
-            if(value === 20) {
-                popup.style.color = '#ffd700';
-                popup.style.textShadow = '0 0 40px #ffd700';
-                banner.classList.add('active');
-                triggerFireworks();
-                playWinSound();
-                setTimeout(() => banner.classList.remove('active'), 3000);
-            } else if(value === 1) {
-                popup.style.color = '#ff4757';
-                popup.style.textShadow = '0 0 30px #ff4757';
-            } else {
-                popup.style.color = '#87e8cb';
-                popup.style.textShadow = '0 0 30px #87e8cb';
-            }
-
-            popup.classList.add('active');
-            setTimeout(() => popup.classList.remove('active'), 1200);
-        }
-
-        function rollDice() {
-            if (isRolling) return;
-            if (audioCtx.state === 'suspended') audioCtx.resume();
-            
-            isRolling = true;
-            let finalValue = Math.floor(Math.random() * 20) + 1;
-
-            const rollInterval = setInterval(() => {
-                let tempVal = Math.floor(Math.random() * 20) + 1;
-                d20Material.map = getOrCreateNumberTexture(tempVal);
-                d20Material.needsUpdate = true;
-                playRollSound();
-            }, 60);
-
-            gsap.to(d20Group.rotation, {
-                x: d20Group.rotation.x + Math.PI * 6 + Math.random(),
-                y: d20Group.rotation.y + Math.PI * 6 + Math.random(),
-                z: d20Group.rotation.z + Math.PI * 4,
-                duration: 1.2,
-                ease: 'power2.out',
-                onComplete: () => {
-                    clearInterval(rollInterval);
-                    d20Material.map = getOrCreateNumberTexture(finalValue);
-                    d20Material.needsUpdate = true;
-                    isRolling = false;
-                    showResultPopup(finalValue);
-                }
-            });
-        }
 
         window.addEventListener('pointerdown', (e) => {
             mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
             mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
 
             raycaster.setFromCamera(mouse, camera);
-            const intersectsD20 = raycaster.intersectObjects([d20Mesh, d20Wire, d20Hitbox]);
+            const intersects = raycaster.intersectObject(diceMesh);
 
-            if (intersectsD20.length > 0) rollDice();
+            if (intersects.length > 0 && !isRolling) {
+                rollDice();
+            }
         });
 
-        // Mouse Hover & Card 3D Tilt Effect
-        const card = document.getElementById('card');
-        window.addEventListener('pointermove', (e) => {
-            mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
-            mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+        function rollDice() {
+            isRolling = true;
+            const dicePopup = document.getElementById('dice-result');
+            const banner = document.getElementById('nat20-banner');
+            
+            dicePopup.classList.remove('active');
+            banner.classList.remove('active');
 
-            raycaster.setFromCamera(mouse, camera);
-            const intersects = raycaster.intersectObjects([d20Mesh, d20Wire, d20Hitbox]);
-            document.body.style.cursor = intersects.length > 0 ? 'pointer' : 'default';
+            const result = Math.floor(Math.random() * 20) + 1;
+            
+            // Roll sound effects during rotation
+            let interval = setInterval(() => {
+                playRollSound();
+            }, 100);
 
-            const rx = (e.clientY / window.innerHeight - 0.5) * -10;
-            const ry = (e.clientX / window.innerWidth - 0.5) * 10;
-            card.style.transform = `rotateX(${rx}deg) rotateY(${ry}deg)`;
-        });
+            gsap.to(diceGroup.rotation, {
+                x: diceGroup.rotation.x + Math.PI * 8 + Math.random() * 2,
+                y: diceGroup.rotation.y + Math.PI * 8 + Math.random() * 2,
+                z: diceGroup.rotation.z + Math.PI * 4,
+                duration: 1.5,
+                ease: "power4.out",
+                onComplete: () => {
+                    clearInterval(interval);
+                    isRolling = false;
+                    dicePopup.innerText = result;
+                    dicePopup.classList.add('active');
 
-        // --- ANIMATION LOOP ---
-        const clock = new THREE.Clock();
+                    if (result === 20) {
+                        playWinSound();
+                        banner.classList.add('active');
+                    }
 
-        function animate() {
-            requestAnimationFrame(animate);
-            const elapsedTime = clock.getElapsedTime();
-
-            if (!isRolling) {
-                d20Group.rotation.x = Math.sin(elapsedTime * 0.5) * 0.2;
-                d20Group.rotation.y = elapsedTime * 0.4;
-            }
-
-            if (isFWActive) {
-                fwTimer += 0.016;
-                const pos = fireworks.geometry.attributes.position.array;
-                for (let i = 0; i < fwCount; i++) {
-                    pos[i * 3] += fwVel[i].x;
-                    pos[i * 3 + 1] += fwVel[i].y;
-                    pos[i * 3 + 2] += fwVel[i].z;
+                    setTimeout(() => {
+                        dicePopup.classList.remove('active');
+                        if (result === 20) banner.classList.remove('active');
+                    }, 2500);
                 }
-                fireworks.geometry.attributes.position.needsUpdate = true;
+            });
 
-                if (fwTimer > 1.5) {
-                    fwMat.opacity -= 0.02;
-                    if (fwMat.opacity <= 0) isFWActive = false;
-                }
-            }
-
-            ring.rotation.z = elapsedTime * 0.1;
-            pMesh.rotation.y = elapsedTime * 0.03;
-
-            renderer.render(scene, camera);
+            gsap.to(diceGroup.position, {
+                y: 0.8,
+                duration: 0.3,
+                yoyo: true,
+                repeat: 1,
+                ease: "power2.out"
+            });
         }
 
-        animate();
+        // --- MOUSE PARALLAX & CARD TILT ---
+        let targetX = 0, targetY = 0;
+        window.addEventListener('mousemove', (e) => {
+            targetX = (e.clientX / window.innerWidth - 0.5) * 0.5;
+            targetY = (e.clientY / window.innerHeight - 0.5) * 0.5;
 
-        // Animate Stat Bars on page load
-        window.addEventListener('load', () => {
+            // Subtle 3D Card Parallax Tilt
+            const card = document.getElementById('card');
+            const rotX = (e.clientY / window.innerHeight - 0.5) * -12;
+            const rotY = (e.clientX / window.innerWidth - 0.5) * 12;
+            card.style.transform = `rotateX(${rotX}deg) rotateY(${rotY}deg)`;
+        });
+
+        // Responsive layout adjustment for Three.js
+        function handleResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+
+            if (window.innerWidth <= 992) {
+                diceGroup.position.set(0, -2.5, 0);
+            } else {
+                diceGroup.position.set(2.8, 0, 0);
+            }
+        }
+        window.addEventListener('resize', handleResize);
+        handleResize();
+
+        // Initial Stat Bar trigger on load
+        window.addEventListener('DOMContentLoaded', () => {
             setTimeout(() => {
                 document.querySelectorAll('.stat-bar-fill').forEach(bar => {
                     bar.style.width = bar.getAttribute('data-width');
@@ -1122,13 +1007,30 @@
             }, 300);
         });
 
-        // Window Resize
-        window.addEventListener('resize', () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            updatePositions();
-        });
+        // --- ANIMATION LOOP ---
+        const clock = new THREE.Clock();
+        function animate() {
+            requestAnimationFrame(animate);
+            const elapsedTime = clock.getElapsedTime();
+
+            // Floating idle movement for D20
+            if (!isRolling) {
+                diceGroup.rotation.x += 0.005;
+                diceGroup.rotation.y += 0.008;
+                diceGroup.position.y += Math.sin(elapsedTime * 2) * 0.002;
+            }
+
+            // Slowly rotate particles
+            particles.rotation.y = elapsedTime * 0.03;
+
+            // Smooth Camera Parallax
+            camera.position.x += (targetX - camera.position.x) * 0.05;
+            camera.position.y += (-targetY - camera.position.y) * 0.05;
+            camera.lookAt(scene.position);
+
+            renderer.render(scene, camera);
+        }
+        animate();
     </script>
 </body>
 </html>
