@@ -58,13 +58,23 @@
             width: 100%;
             max-width: 1350px;
             margin: 0 auto;
-            padding: 3rem 2rem;
+            padding: 2.5rem 2rem;
             min-height: 100vh;
             display: flex;
-            align-items: center;
-            justify-content: flex-start;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
             pointer-events: none;
             perspective: 1200px;
+        }
+
+        /* Layout Grid */
+        .layout-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            width: 100%;
+            max-width: 620px;
         }
 
         /* 3D Minimal Soft Glass Card */
@@ -75,9 +85,8 @@
             -webkit-backdrop-filter: blur(24px) saturate(140%);
             border: 1px solid var(--glass-border);
             border-radius: var(--card-radius);
-            padding: 3rem 2.5rem;
+            padding: 2.5rem 2.2rem;
             width: 100%;
-            max-width: 600px;
             box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4),
                         inset 0 1px 0 rgba(255, 255, 255, 0.15);
             position: relative;
@@ -98,14 +107,14 @@
             background: rgba(243, 229, 200, 0.08);
             border: 1px solid rgba(243, 229, 200, 0.2);
             color: var(--accent-gold);
-            padding: 6px 16px;
+            padding: 5px 14px;
             border-radius: 30px;
             font-size: 0.75rem;
             letter-spacing: 2px;
             text-transform: uppercase;
             font-family: 'Cormorant Garamond', serif;
             font-weight: 700;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.2rem;
         }
 
         .card-tag::before {
@@ -114,14 +123,119 @@
             color: var(--accent-gold);
         }
 
+        /* LEFT SIDEBAR / INTERACTIVE WIDGETS */
+        .left-interactive-panel {
+            pointer-events: auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            width: 100%;
+        }
+
+        .widget-box {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .widget-box:hover {
+            border-color: rgba(243, 229, 200, 0.3);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+
+        .widget-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 0.95rem;
+            color: var(--accent-gold);
+            letter-spacing: 1px;
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        /* Dice Tray Controls */
+        .dice-set {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .dice-btn {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-sub);
+            padding: 6px 10px;
+            border-radius: 10px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            flex: 1;
+            text-align: center;
+        }
+
+        .dice-btn:hover {
+            background: rgba(243, 229, 200, 0.15);
+            border-color: var(--accent-gold);
+            color: var(--accent-gold);
+        }
+
+        .dice-display {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--accent-gold);
+            text-align: right;
+            line-height: 1;
+        }
+
+        /* Spell Cast Buttons */
+        .spell-grid {
+            display: flex;
+            gap: 8px;
+        }
+
+        .spell-btn {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .spell-btn:hover {
+            background: rgba(184, 227, 222, 0.15);
+            border-color: var(--accent-soft-cyan);
+            transform: scale(1.03);
+        }
+
+        .spell-icon {
+            font-size: 1.2rem;
+            margin-bottom: 2px;
+        }
+
+        .spell-name {
+            font-size: 0.7rem;
+            color: var(--text-sub);
+        }
+
         /* TAB NAVIGATION */
         .tab-nav {
             display: flex;
             gap: 8px;
-            margin-bottom: 2rem;
+            margin-bottom: 1.8rem;
             background: rgba(15, 13, 24, 0.4);
-            padding: 6px;
-            border-radius: 18px;
+            padding: 5px;
+            border-radius: 16px;
             border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
@@ -130,8 +244,8 @@
             background: transparent;
             border: none;
             color: var(--text-sub);
-            padding: 10px 16px;
-            border-radius: 12px;
+            padding: 8px 14px;
+            border-radius: 10px;
             font-size: 0.85rem;
             font-weight: 500;
             cursor: pointer;
@@ -167,14 +281,14 @@
 
         .brand-title {
             font-family: 'Cormorant Garamond', serif;
-            font-size: 3rem;
+            font-size: 2.8rem;
             font-weight: 600;
             letter-spacing: 1px;
             background: linear-gradient(135deg, #ffffff 30%, var(--accent-gold) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             line-height: 1.1;
-            margin-bottom: 0.3rem;
+            margin-bottom: 0.2rem;
         }
 
         .subtitle-th {
@@ -187,23 +301,23 @@
         .subtitle-en {
             font-size: 0.85rem;
             color: var(--text-sub);
-            margin-bottom: 1.8rem;
+            margin-bottom: 1.5rem;
             font-weight: 300;
             letter-spacing: 0.5px;
         }
 
         .info-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 1rem;
-            margin-bottom: 1.8rem;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 0.9rem;
+            margin-bottom: 1.5rem;
         }
 
         .info-box {
             background: rgba(255, 255, 255, 0.025);
             border: 1px solid rgba(255, 255, 255, 0.07);
-            padding: 1.2rem;
-            border-radius: 18px;
+            padding: 1.1rem;
+            border-radius: 16px;
             transition: all 0.3s ease;
         }
 
@@ -226,7 +340,7 @@
         .info-box p {
             font-size: 0.85rem;
             color: var(--text-sub);
-            line-height: 1.6;
+            line-height: 1.5;
         }
 
         .info-box p strong {
@@ -239,19 +353,19 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-top: 1.8rem;
-            margin-bottom: 1rem;
+            margin-top: 1.5rem;
+            margin-bottom: 0.9rem;
         }
 
         .section-title {
             font-family: 'Cormorant Garamond', serif;
-            font-size: 1.2rem;
+            font-size: 1.15rem;
             color: var(--accent-gold);
             letter-spacing: 1px;
         }
 
         .stat-bar-container {
-            margin-bottom: 0.9rem;
+            margin-bottom: 0.8rem;
         }
 
         .stat-header {
@@ -259,7 +373,7 @@
             justify-content: space-between;
             font-size: 0.8rem;
             color: var(--text-sub);
-            margin-bottom: 0.4rem;
+            margin-bottom: 0.3rem;
         }
 
         .stat-bar-bg {
@@ -290,8 +404,8 @@
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid rgba(255, 255, 255, 0.08);
             color: var(--text-main);
-            padding: 6px 14px;
-            border-radius: 12px;
+            padding: 5px 12px;
+            border-radius: 10px;
             font-size: 0.8rem;
             transition: all 0.3s ease;
             cursor: pointer;
@@ -308,18 +422,18 @@
         .contact-list {
             display: flex;
             flex-direction: column;
-            gap: 0.9rem;
-            margin-top: 1.2rem;
+            gap: 0.8rem;
+            margin-top: 1rem;
         }
 
         .contact-item {
             display: flex;
             align-items: center;
-            gap: 16px;
+            gap: 14px;
             background: rgba(255, 255, 255, 0.025);
             border: 1px solid rgba(255, 255, 255, 0.07);
-            padding: 1.1rem 1.4rem;
-            border-radius: 18px;
+            padding: 1rem 1.2rem;
+            border-radius: 16px;
             text-decoration: none;
             color: var(--text-main);
             transition: all 0.3s ease;
@@ -332,10 +446,10 @@
         }
 
         .contact-icon {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             background: rgba(243, 229, 200, 0.08);
-            width: 42px;
-            height: 42px;
+            width: 40px;
+            height: 40px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -454,7 +568,7 @@
                 justify-content: center;
                 padding: 2rem 1rem;
             }
-            .dnd-card {
+            .layout-wrapper {
                 max-width: 100%;
             }
             .dice-result-popup {
@@ -478,125 +592,165 @@
     </div>
 
     <div class="container">
-        <div class="dnd-card" id="card">
-            
-            <div class="card-tag">CHARACTER SHEET</div>
+        <div class="layout-wrapper">
 
-            <!-- Tab Navigation Header -->
-            <div class="tab-nav">
-                <button class="tab-btn active" onclick="switchTab('home', this)">🛡️ โปรไฟล์</button>
-                <button class="tab-btn" onclick="switchTab('about', this)">📜 เกี่ยวกับ</button>
-                <button class="tab-btn" onclick="switchTab('contact', this)">📬 ติดต่อ</button>
-            </div>
+            <!-- MAIN DND CARD -->
+            <div class="dnd-card" id="card">
+                
+                <div class="card-tag">CHARACTER SHEET</div>
 
-            <!-- TAB 1: HOME PROFILE -->
-            <div class="tab-content active" id="tab-home">
-                <div class="brand-title">bossu29</div>
-                <div class="subtitle-th">นางสาว ศศิธร เซ้งรักษา</div>
-                <div class="subtitle-en">Sasithorn Sengraksa | 3D & Digital Character Artist</div>
+                <!-- Tab Navigation Header -->
+                <div class="tab-nav">
+                    <button class="tab-btn active" onclick="switchTab('home', this)">🛡️ โปรไฟล์</button>
+                    <button class="tab-btn" onclick="switchTab('about', this)">📜 เกี่ยวกับ</button>
+                    <button class="tab-btn" onclick="switchTab('contact', this)">📬 ติดต่อ</button>
+                </div>
 
-                <div class="info-grid">
-                    <div class="info-box">
-                        <h3>การศึกษา (Education)</h3>
-                        <p><strong>มทร.รัตนโกสินทร์ ศาลายา</strong></p>
-                        <p>คณะสถาปัตยกรรมศาสตร์และการออกแบบ</p>
-                        <p>สาขาเกมและอนิเมชั่น (ปี 4)</p>
+                <!-- TAB 1: HOME PROFILE -->
+                <div class="tab-content active" id="tab-home">
+                    <div class="brand-title">bossu29</div>
+                    <div class="subtitle-th">นางสาว ศศิธร เซ้งรักษา</div>
+                    <div class="subtitle-en">Sasithorn Sengraksa | 3D & Digital Character Artist</div>
+
+                    <div class="info-grid">
+                        <div class="info-box">
+                            <h3>การศึกษา (Education)</h3>
+                            <p><strong>มทร.รัตนโกสินทร์ ศาลายา</strong></p>
+                            <p>คณะสถาปัตยกรรมศาสตร์และการออกแบบ</p>
+                            <p>สาขาเกมและอนิเมชั่น (ปี 4)</p>
+                        </div>
+                        
+                        <div class="info-box">
+                            <h3>สายงานที่เชี่ยวชาญ (Specialization)</h3>
+                            <p><strong>Character Design & 3D Modeling</strong></p>
+                            <p>วาดภาพประกอบ แฟนตาซีไซไฟ และ Minecraft Custom Modding</p>
+                        </div>
+                    </div>
+
+                    <div class="section-header">
+                        <div class="section-title">📊 สเตตัสและความสามารถ (Stats & Mastery)</div>
+                    </div>
+
+                    <div class="stats-section">
+                        <div class="stat-bar-container">
+                            <div class="stat-header"><span>Character Design & Concepts</span><span>98%</span></div>
+                            <div class="stat-bar-bg"><div class="stat-bar-fill" data-width="98%"></div></div>
+                        </div>
+                        <div class="stat-bar-container">
+                            <div class="stat-header"><span>Digital Illustration</span><span>92%</span></div>
+                            <div class="stat-bar-bg"><div class="stat-bar-fill" data-width="92%"></div></div>
+                        </div>
+                        <div class="stat-bar-container">
+                            <div class="stat-header"><span>3D Asset Modeling (Blender / Unity)</span><span>88%</span></div>
+                            <div class="stat-bar-bg"><div class="stat-bar-fill" data-width="88%"></div></div>
+                        </div>
+                        <div class="stat-bar-container">
+                            <div class="stat-header"><span>Minecraft World & Figura Modding</span><span>95%</span></div>
+                            <div class="stat-bar-bg"><div class="stat-bar-fill" data-width="95%"></div></div>
+                        </div>
+                    </div>
+
+                    <div class="skills-container">
+                        <div class="skill-tag">🎨 Digital Art</div>
+                        <div class="skill-tag">👤 Character Design</div>
+                        <div class="skill-tag">🖼️ Illustration</div>
+                        <div class="skill-tag">🏰 Minecraft World Building</div>
+                        <div class="skill-tag">🦊 Figura Modding</div>
+                        <div class="skill-tag">🕹️ Game Assets</div>
+                    </div>
+                </div>
+
+                <!-- TAB 2: ABOUT -->
+                <div class="tab-content" id="tab-about">
+                    <div class="brand-title">ABOUT ME</div>
+                    <div class="subtitle-en">Biography & Creative Vision</div>
+
+                    <div class="info-box" style="margin-bottom: 0.9rem;">
+                        <h3>ประวัติโดยย่อ (Biography)</h3>
+                        <p>สวัสดีค่ะ! ดิฉัน <strong>ศศิธร เซ้งรักษา (bossu29)</strong> เป็นนักศึกษาชั้นปีที่ 4 สาขาเกมและอนิเมชั่น หลงใหลในการดีไซน์ตัวละครแฟนตาซี งานปั้น 3D โมเดลลิ่ง ตลอดจนการสร้างสรรค์ Mod สกิลและอวตารคัสตอมในเกม Minecraft</p>
                     </div>
                     
-                    <div class="info-box">
-                        <h3>สายงานที่เชี่ยวชาญ (Specialization)</h3>
-                        <p><strong>Character Design & 3D Modeling</strong></p>
-                        <p>วาดภาพประกอบ แฟนตาซีไซไฟ และ Minecraft Custom Modding</p>
+                    <div class="info-box" style="margin-bottom: 0.9rem;">
+                        <h3>เป้าหมาย (Creative Focus)</h3>
+                        <p>มุ่งมั่นที่จะถ่ายทอดเรื่องราวและความคิดสร้างสรรค์ผ่าน Character Design คุณภาพสูง เพื่อเติมเต็มจินตนาการและสร้างประสบการณ์ที่ดีในอุตสาหกรรมสื่อสร้างสรรค์และเกม</p>
+                    </div>
+
+                    <div class="section-title" style="margin-bottom: 0.5rem;">🛠️ เครื่องมือที่ใช้งาน (Tools & Software)</div>
+                    <div class="skills-container">
+                        <div class="skill-tag">Blender 3D</div>
+                        <div class="skill-tag">Unity Engine</div>
+                        <div class="skill-tag">Clip Studio Paint</div>
+                        <div class="skill-tag">Photoshop</div>
+                        <div class="skill-tag">Blockbench</div>
                     </div>
                 </div>
 
-                <div class="section-header">
-                    <div class="section-title">📊 สเตตัสและความสามารถ (Stats & Mastery)</div>
+                <!-- TAB 3: CONTACT -->
+                <div class="tab-content" id="tab-contact">
+                    <div class="brand-title">GET IN TOUCH</div>
+                    <div class="subtitle-en">Contact Channels & Social Media</div>
+                    
+                    <div class="contact-list">
+                        <a href="mailto:sengraksa2005@gmail.com" class="contact-item">
+                            <div class="contact-icon">📧</div>
+                            <div class="contact-text">
+                                <h4>Email Address</h4>
+                                <p>sengraksa2005@gmail.com</p>
+                            </div>
+                        </a>
+
+                        <div class="contact-item">
+                            <div class="contact-icon">💬</div>
+                            <div class="contact-text">
+                                <h4>Discord</h4>
+                                <p>bossu_u</p>
+                            </div>
+                        </div>
+
+                        <a href="#" class="contact-item">
+                            <div class="contact-icon">🌐</div>
+                            <div class="contact-text">
+                                <h4>Twitter / X</h4>
+                                <p>@bossu29_art</p>
+                            </div>
+                        </a>
+                    </div>
                 </div>
 
-                <div class="stats-section">
-                    <div class="stat-bar-container">
-                        <div class="stat-header"><span>Character Design & Concepts</span><span>98%</span></div>
-                        <div class="stat-bar-bg"><div class="stat-bar-fill" data-width="98%"></div></div>
-                    </div>
-                    <div class="stat-bar-container">
-                        <div class="stat-header"><span>Digital Illustration</span><span>92%</span></div>
-                        <div class="stat-bar-bg"><div class="stat-bar-fill" data-width="92%"></div></div>
-                    </div>
-                    <div class="stat-bar-container">
-                        <div class="stat-header"><span>3D Asset Modeling (Blender / Unity)</span><span>88%</span></div>
-                        <div class="stat-bar-bg"><div class="stat-bar-fill" data-width="88%"></div></div>
-                    </div>
-                    <div class="stat-bar-container">
-                        <div class="stat-header"><span>Minecraft World & Figura Modding</span><span>95%</span></div>
-                        <div class="stat-bar-bg"><div class="stat-bar-fill" data-width="95%"></div></div>
-                    </div>
-                </div>
-
-                <div class="skills-container">
-                    <div class="skill-tag">🎨 Digital Art</div>
-                    <div class="skill-tag">👤 Character Design</div>
-                    <div class="skill-tag">🖼️ Illustration</div>
-                    <div class="skill-tag">🏰 Minecraft World Building</div>
-                    <div class="skill-tag">🦊 Figura Modding</div>
-                    <div class="skill-tag">🕹️ Game Assets</div>
-                </div>
             </div>
 
-            <!-- TAB 2: ABOUT -->
-            <div class="tab-content" id="tab-about">
-                <div class="brand-title">ABOUT ME</div>
-                <div class="subtitle-en">Biography & Creative Vision</div>
-
-                <div class="info-box" style="margin-bottom: 1rem;">
-                    <h3>ประวัติโดยย่อ (Biography)</h3>
-                    <p>สวัสดีค่ะ! ดิฉัน <strong>ศศิธร เซ้งรักษา (bossu29)</strong> เป็นนักศึกษาชั้นปีที่ 4 สาขาเกมและอนิเมชั่น หลงใหลในการดีไซน์ตัวละครแฟนตาซี งานปั้น 3D โมเดลลิ่ง ตลอดจนการสร้างสรรค์ Mod สกิลและอวตารคัสตอมในเกม Minecraft</p>
+            <!-- LEFT INTERACTIVE PANEL (NEW ADDITION) -->
+            <div class="left-interactive-panel">
+                <!-- Mini Dice Roller Widget -->
+                <div class="widget-box">
+                    <div class="widget-title">
+                        <span>🎲 DICE TRAY</span>
+                        <span id="sub-dice-result" class="dice-display">--</span>
+                    </div>
+                    <div class="dice-set">
+                        <button class="dice-btn" onclick="rollSubDice(4)">d4</button>
+                        <button class="dice-btn" onclick="rollSubDice(6)">d6</button>
+                        <button class="dice-btn" onclick="rollSubDice(8)">d8</button>
+                        <button class="dice-btn" onclick="rollSubDice(10)">d10</button>
+                        <button class="dice-btn" onclick="rollSubDice(12)">d12</button>
+                    </div>
                 </div>
-                
-                <div class="info-box" style="margin-bottom: 1rem;">
-                    <h3>เป้าหมาย (Creative Focus)</h3>
-                    <p>มุ่งมั่นที่จะถ่ายทอดเรื่องราวและความคิดสร้างสรรค์ผ่าน Character Design คุณภาพสูง เพื่อเติมเต็มจินตนาการและสร้างประสบการณ์ที่ดีในอุตสาหกรรมสื่อสร้างสรรค์และเกม</p>
-                </div>
 
-                <div class="section-title" style="margin-bottom: 0.6rem;">🛠️ เครื่องมือที่ใช้งาน (Tools & Software)</div>
-                <div class="skills-container">
-                    <div class="skill-tag">Blender 3D</div>
-                    <div class="skill-tag">Unity Engine</div>
-                    <div class="skill-tag">Clip Studio Paint</div>
-                    <div class="skill-tag">Photoshop</div>
-                    <div class="skill-tag">Blockbench</div>
-                </div>
-            </div>
-
-            <!-- TAB 3: CONTACT -->
-            <div class="tab-content" id="tab-contact">
-                <div class="brand-title">GET IN TOUCH</div>
-                <div class="subtitle-en">Contact Channels & Social Media</div>
-                
-                <div class="contact-list">
-                    <a href="mailto:sengraksa2005@gmail.com" class="contact-item">
-                        <div class="contact-icon">📧</div>
-                        <div class="contact-text">
-                            <h4>Email Address</h4>
-                            <p>sengraksa2005@gmail.com</p>
+                <!-- Spell Cast Widget -->
+                <div class="widget-box">
+                    <div class="widget-title">
+                        <span>✨ QUICK CANTRIPS</span>
+                    </div>
+                    <div class="spell-grid">
+                        <div class="spell-btn" onclick="castSpell('Aura of Focus')">
+                            <div class="spell-icon">🔮</div>
+                            <div class="spell-name">Focus Aura</div>
                         </div>
-                    </a>
-
-                    <div class="contact-item">
-                        <div class="contact-icon">💬</div>
-                        <div class="contact-text">
-                            <h4>Discord</h4>
-                            <p>bossu_u</p>
+                        <div class="spell-btn" onclick="castSpell('Inspire')">
+                            <div class="spell-icon">📜</div>
+                            <div class="spell-name">Inspire</div>
                         </div>
                     </div>
-
-                    <a href="#" class="contact-item">
-                        <div class="contact-icon">🌐</div>
-                        <div class="contact-text">
-                            <h4>Twitter / X</h4>
-                            <p>@bossu29_art</p>
-                        </div>
-                    </a>
                 </div>
             </div>
 
@@ -618,6 +772,29 @@
                     setTimeout(() => bar.style.width = bar.getAttribute('data-width'), 50);
                 });
             }
+        }
+
+        // --- SUB DICE TRAY & SPELL INTERACTION ---
+        function rollSubDice(sides) {
+            const display = document.getElementById('sub-dice-result');
+            playSoftRollSound();
+            let count = 0;
+            const interval = setInterval(() => {
+                display.innerText = Math.floor(Math.random() * sides) + 1;
+                count++;
+                if(count > 8) {
+                    clearInterval(interval);
+                    display.innerText = Math.floor(Math.random() * sides) + 1;
+                    playSoftChime();
+                }
+            }, 50);
+        }
+
+        function castSpell(spellName) {
+            playSoftChime();
+            // Pulse ring light effect
+            gsap.to(ring.scale, { x: 1.25, y: 1.25, duration: 0.3, yoyo: true, repeat: 1, ease: "power2.out" });
+            gsap.to(goldLight, { intensity: 6, duration: 0.3, yoyo: true, repeat: 1 });
         }
 
         // --- SOFT MINIMAL SYNTHESIZED SOUNDS ---
@@ -651,13 +828,13 @@
                 const osc = audioCtx.createOscillator();
                 const gain = audioCtx.createGain();
                 osc.type = 'sine';
-                osc.frequency.setValueAtTime(freq, now + i * 0.12);
-                gain.gain.setValueAtTime(0.08, now + i * 0.12);
-                gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.12 + 0.6);
+                osc.frequency.setValueAtTime(freq, now + i * 0.1);
+                gain.gain.setValueAtTime(0.06, now + i * 0.1);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.1 + 0.5);
                 osc.connect(gain);
                 gain.connect(audioCtx.destination);
-                osc.start(now + i * 0.12);
-                osc.stop(now + i * 0.12 + 0.6);
+                osc.start(now + i * 0.1);
+                osc.stop(now + i * 0.1 + 0.5);
             });
         }
 
@@ -717,7 +894,6 @@
 
         const d20Geo = new THREE.IcosahedronGeometry(1.2, 0);
         
-        // Glass Mesh
         const d20Material = new THREE.MeshPhysicalMaterial({
             map: getNumberTexture(20),
             roughness: 0.1,
@@ -858,8 +1034,8 @@
             const intersects = raycaster.intersectObjects([d20Mesh, d20Wire, d20Hitbox]);
             document.body.style.cursor = intersects.length > 0 ? 'pointer' : 'default';
 
-            const rx = (e.clientY / window.innerHeight - 0.5) * -6;
-            const ry = (e.clientX / window.innerWidth - 0.5) * 6;
+            const rx = (e.clientY / window.innerHeight - 0.5) * -5;
+            const ry = (e.clientX / window.innerWidth - 0.5) * 5;
             card.style.transform = `rotateX(${rx}deg) rotateY(${ry}deg)`;
         });
 
