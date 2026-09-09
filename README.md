@@ -44,12 +44,12 @@
             left: 0;
             width: 100vw;
             height: 100vh;
-            z-index: 1; /* วาง Canvas ไว้ให้อยู่ใน Layer ที่รับ Raycast ได้ */
+            z-index: 1;
         }
 
         .container {
             position: relative;
-            z-index: 2; /* วางข้อความเหนือ Canvas */
+            z-index: 2;
             max-width: 900px;
             margin: 0 auto;
             padding: 2.5rem 1.5rem;
@@ -57,11 +57,11 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
-            pointer-events: none; /* เพื่อให้พื้นที่ว่างคลิกผ่านไปยัง 3D Canvas ได้ */
+            pointer-events: none;
         }
 
         .dnd-card {
-            pointer-events: auto; /* ให้คลิกหรือคลุมดำเลือกข้อความภายในการ์ดได้ตามปกติ */
+            pointer-events: auto;
             background: var(--glass-bg);
             backdrop-filter: blur(14px);
             -webkit-backdrop-filter: blur(14px);
@@ -233,6 +233,25 @@
             z-index: 10;
         }
 
+        /* Roll Output Popup */
+        .roll-result-badge {
+            position: fixed;
+            top: 15px;
+            right: 140px;
+            background: var(--dark-purple);
+            border: 2px solid var(--primary-cyan);
+            color: var(--primary-cyan);
+            padding: 6px 18px;
+            border-radius: 20px;
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            font-weight: bold;
+            box-shadow: 0 0 15px rgba(135, 232, 203, 0.4);
+            z-index: 20;
+            pointer-events: none;
+            transition: all 0.3s ease;
+        }
+
         .nat20-banner {
             position: fixed;
             top: 20%;
@@ -265,6 +284,7 @@
             .brand-title { font-size: 1.8rem; }
             .dnd-card { padding: 1.8rem 1.2rem; }
             .container { padding: 1rem; }
+            .roll-result-badge { right: 20px; top: 70px; }
         }
     </style>
 </head>
@@ -272,6 +292,7 @@
 
     <canvas id="webgl-bg"></canvas>
 
+    <div class="roll-result-badge" id="roll-badge">D20: Ready</div>
     <div class="nat20-banner" id="nat20-banner">✨ NATURAL 20! ✨</div>
 
     <div class="interactive-hint">
@@ -310,7 +331,6 @@
             <div class="skills-container">
                 <div class="skill-tag">🖌️ วาดรูปดิจิทัล (Digital Art)</div>
                 <div class="skill-tag">👤 การออกแบบตัวละคร (Character Design)</div>
-                <div class="skill-tag">🖼️ วาดภาพประกอบ (Illustration)</div>
                 <div class="skill-tag">🏰 สร้างแมพมายคราฟ (Minecraft World Building)</div>
                 <div class="skill-tag">🦊 การทำ Figura มายคราฟ (Minecraft Figura Modding)</div>
                 <div class="skill-tag">🕹️ 3D & Game Art</div>
@@ -319,329 +339,16 @@
         </div>
     </div>
 
-    <!-- Three.js Script -->
-    <script>
-        // --- 1. SETUP SCENE & CAMERA ---
-        const scene = new THREE.Scene();
-        scene.fog = new THREE.FogExp2(0x0b0914, 0.035);
+    <!-- Three.jsปัญหานี้มักเกิดจาก **โครงสร้างการวางโค้ด** หรือ **การสะกดชื่อตัวแปร/ฟังก์ชัน** ใน JavaScript ไม่ตรงกันครับ (เช่น ปุ่มกดได้เพราะรับ Event ได้ แต่ฟังก์ชันสุ่มไม่ถูกเรียก หรือไม่ได้สั่งให้เอาค่าไปแสดงผลใน HTML)
 
-        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        camera.position.z = 5;
+นี่คือจุดที่ต้องเช็ค 3 จุดหลัก พร้อมแนวทางแก้ไขครับ:
 
-        const renderer = new THREE.WebGLRenderer({
-            canvas: document.querySelector('#webgl-bg'),
-            antialias: true
-        });
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-        renderer.setSize(window.innerWidth, window.innerHeight);
+---
 
-        // --- 2. LIGHTING ---
-        const ambientLight = new THREE.AmbientLight(0x1a152b, 1.8);
-        scene.add(ambientLight);
+### 1. เช็คว่าได้ใส่ `.innerText` หรือ `.innerHTML` เพื่อแสดงผลหรือยัง?
+บางครั้งระบบสุ่มเลขเรียบร้อยแล้ว แต่ลืมสั่งให้มันนำค่าที่สุ่มได้ไปเขียนลงในหน้าเว็บ
 
-        const cyanLight = new THREE.PointLight(0x87e8cb, 2.5, 25);
-        cyanLight.position.set(4, 3, 2);
-        scene.add(cyanLight);
-
-        const purpleLight = new THREE.PointLight(0xaca9de, 2.5, 25);
-        purpleLight.position.set(-4, -3, 2);
-        scene.add(purpleLight);
-
-        // --- 3. D20 WITH NUMBERS & TEXTURES ---
-        function createNumberTexture(number) {
-            const canvas = document.createElement('canvas');
-            canvas.width = 256;
-            canvas.height = 256;
-            const ctx = canvas.getContext('2d');
-
-            ctx.fillStyle = '#aca9de';
-            ctx.fillRect(0, 0, 256, 256);
-
-            ctx.strokeStyle = '#87e8cb';
-            ctx.lineWidth = 14;
-            ctx.strokeRect(8, 8, 240, 240);
-
-            ctx.fillStyle = '#0b0914';
-            ctx.font = 'Bold 120px Cinzel, sans-serif';
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            ctx.fillText(number.toString(), 128, 128);
-
-            return new THREE.CanvasTexture(canvas);
-        }
-
-        const d20Materials = [];
-        for (let i = 1; i <= 20; i++) {
-            d20Materials.push(new THREE.MeshStandardMaterial({
-                map: createNumberTexture(i),
-                roughness: 0.3,
-                metalness: 0.4,
-                flatShading: true
-            }));
-        }
-
-        const d20Geo = new THREE.IcosahedronGeometry(0.85, 0);
-        const d20Mesh = new THREE.Mesh(d20Geo, d20Materials);
-        
-        const d20Wire = new THREE.Mesh(
-            d20Geo,
-            new THREE.MeshBasicMaterial({ color: 0x87e8cb, wireframe: true })
-        );
-        d20Wire.scale.setScalar(1.02);
-
-        const d20Group = new THREE.Group();
-        d20Group.add(d20Mesh);
-        d20Group.add(d20Wire);
-        scene.add(d20Group);
-
-        // --- 4. INTERACTIVE CAMPFIRE ---
-        const campfireGroup = new THREE.Group();
-
-        const logMat = new THREE.MeshStandardMaterial({ color: 0x4a2e18, roughness: 0.9 });
-        for(let i = 0; i < 3; i++) {
-            const logGeo = new THREE.CylinderGeometry(0.08, 0.08, 0.7, 8);
-            const log = new THREE.Mesh(logGeo, logMat);
-            log.rotation.z = Math.PI / 2;
-            log.rotation.y = (i * Math.PI) / 3;
-            log.position.y = 0.04;
-            campfireGroup.add(log);
-        }
-
-        // Hitbox ซ่อนไว้เพื่อช่วยให้คลิกแคมป์ไฟได้ง่ายขึ้น
-        const campfireHitboxGeo = new THREE.SphereGeometry(0.6, 8, 8);
-        const campfireHitboxMat = new THREE.MeshBasicMaterial({ visible: false });
-        const campfireHitbox = new THREE.Mesh(campfireHitboxGeo, campfireHitboxMat);
-        campfireGroup.add(campfireHitbox);
-
-        const fireLight = new THREE.PointLight(0xff6600, 4, 8);
-        fireLight.position.set(0, 0.3, 0);
-        campfireGroup.add(fireLight);
-
-        const fireParticlesCount = 60;
-        const fireGeo = new THREE.BufferGeometry();
-        const firePositions = new Float32Array(fireParticlesCount * 3);
-
-        for(let i = 0; i < fireParticlesCount * 3; i += 3) {
-            firePositions[i] = (Math.random() - 0.5) * 0.25;
-            firePositions[i+1] = Math.random() * 0.45;
-            firePositions[i+2] = (Math.random() - 0.5) * 0.25;
-        }
-
-        fireGeo.setAttribute('position', new THREE.BufferAttribute(firePositions, 3));
-        const fireMat = new THREE.PointsMaterial({
-            color: 0xffaa00,
-            size: 0.09,
-            transparent: true,
-            opacity: 0.8
-        });
-        const fireParticles = new THREE.Points(fireGeo, fireMat);
-        campfireGroup.add(fireParticles);
-
-        scene.add(campfireGroup);
-        let isFireOn = true;
-
-        // --- 5. NAT 20 SHOOTING STARS ---
-        const starsCount = 180;
-        const starsGeo = new THREE.BufferGeometry();
-        const starsPos = new Float32Array(starsCount * 3);
-        const starsVel = [];
-
-        for(let i = 0; i < starsCount * 3; i += 3) {
-            starsPos[i] = (Math.random() - 0.5) * 20;
-            starsPos[i+1] = Math.random() * 10 + 5;
-            starsPos[i+2] = (Math.random() - 0.5) * 10;
-            starsVel.push({
-                x: -0.12 - Math.random() * 0.1,
-                y: -0.25 - Math.random() * 0.2
-            });
-        }
-
-        starsGeo.setAttribute('position', new THREE.BufferAttribute(starsPos, 3));
-        const starsMat = new THREE.PointsMaterial({
-            color: 0x87e8cb,
-            size: 0.1,
-            transparent: true,
-            opacity: 0
-        });
-        const shootingStars = new THREE.Points(starsGeo, starsMat);
-        scene.add(shootingStars);
-
-        let isNat20Active = false;
-        let nat20Timer = 0;
-
-        function triggerNat20Effect() {
-            isNat20Active = true;
-            nat20Timer = 0;
-            starsMat.opacity = 1;
-            const banner = document.getElementById('nat20-banner');
-            banner.classList.add('active');
-
-            setTimeout(() => {
-                banner.classList.remove('active');
-            }, 3000);
-        }
-
-        // --- 6. BACKGROUND RINGS & DUST ---
-        const bgGroup = new THREE.Group();
-        const ringGeo = new THREE.TorusGeometry(2.3, 0.012, 16, 100);
-        const ringMat = new THREE.MeshBasicMaterial({ color: 0x87e8cb, wireframe: true });
-        const ring = new THREE.Mesh(ringGeo, ringMat);
-        ring.rotation.x = Math.PI / 3;
-        bgGroup.add(ring);
-        scene.add(bgGroup);
-
-        const particlesCount = 500;
-        const pArray = new Float32Array(particlesCount * 3);
-        for(let i = 0; i < particlesCount * 3; i++) {
-            pArray[i] = (Math.random() - 0.5) * 16;
-        }
-        const pGeo = new THREE.BufferGeometry();
-        pGeo.setAttribute('position', new THREE.BufferAttribute(pArray, 3));
-        const pMat = new THREE.PointsMaterial({ size: 0.03, color: 0xaca9de, transparent: true, opacity: 0.6 });
-        const pMesh = new THREE.Points(pGeo, pMat);
-        scene.add(pMesh);
-
-        // --- 7. POSITIONING & RESPONSIVE ---
-        function updatePositions() {
-            const aspect = window.innerWidth / window.innerHeight;
-            const vFOV = THREE.MathUtils.degToRad(camera.fov);
-            const height = 2 * Math.tan(vFOV / 2) * camera.position.z;
-            const width = height * aspect;
-
-            // วาง D20 มุมขวาบน
-            d20Group.position.set(width / 2 - 1.1, height / 2 - 1.1, 0);
-
-            // วาง Campfire มุมซ้ายล่าง
-            campfireGroup.position.set(-width / 2 + 1.2, -height / 2 + 1.0, 0);
-        }
-        updatePositions();
-
-        // --- 8. RAYCASTING & CLICK INTERACTION (ปรับปรุงให้คลิกง่ายขึ้น) ---
-        const raycaster = new THREE.Raycaster();
-        const mouse = new THREE.Vector2();
-        let isRolling = false;
-        let rollTargetRotation = { x: 0, y: 0, z: 0 };
-
-        window.addEventListener('pointerdown', (e) => {
-            mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
-            mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
-
-            raycaster.setFromCamera(mouse, camera);
-            
-            // ตรวจจับการคลิกที่ D20 และ Campfire
-            const intersectsD20 = raycaster.intersectObjects([d20Mesh, d20Wire]);
-            const intersectsCampfire = raycaster.intersectObjects(campfireGroup.children);
-
-            // 1. ถ้าคลิกที่ D20
-            if (intersectsD20.length > 0) {
-                if (!isRolling) {
-                    isRolling = true;
-                    const rolledValue = Math.floor(Math.random() * 20) + 1;
-
-                    rollTargetRotation = {
-                        x: d20Group.rotation.x + Math.PI * 6 + Math.random() * Math.PI,
-                        y: d20Group.rotation.y + Math.PI * 6 + Math.random() * Math.PI,
-                        z: d20Group.rotation.z + Math.PI * 2
-                    };
-
-                    setTimeout(() => {
-                        isRolling = false;
-                        if (rolledValue === 20) {
-                            triggerNat20Effect();
-                        }
-                    }, 1000);
-                }
-            }
-
-            // 2. ถ้าคลิกที่ Campfire
-            if (intersectsCampfire.length > 0) {
-                isFireOn = !isFireOn;
-                fireLight.intensity = isFireOn ? 4 : 0;
-                fireMat.opacity = isFireOn ? 0.8 : 0;
-            }
-        });
-
-        // Mouse Cursor Hover Feedback
-        window.addEventListener('pointermove', (e) => {
-            mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
-            mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
-
-            raycaster.setFromCamera(mouse, camera);
-            const intersects = raycaster.intersectObjects([d20Mesh, d20Wire, ...campfireGroup.children]);
-
-            if (intersects.length > 0) {
-                document.body.style.cursor = 'pointer';
-            } else {
-                document.body.style.cursor = 'default';
-            }
-        });
-
-        // --- 9. ANIMATION LOOP ---
-        const clock = new THREE.Clock();
-
-        function animate() {
-            requestAnimationFrame(animate);
-            const elapsedTime = clock.getElapsedTime();
-
-            // D20 Rotation
-            if (isRolling) {
-                d20Group.rotation.x += (rollTargetRotation.x - d20Group.rotation.x) * 0.12;
-                d20Group.rotation.y += (rollTargetRotation.y - d20Group.rotation.y) * 0.12;
-                d20Group.rotation.z += (rollTargetRotation.z - d20Group.rotation.z) * 0.12;
-            } else {
-                d20Group.rotation.x = Math.sin(elapsedTime * 0.5) * 0.3;
-                d20Group.rotation.y = elapsedTime * 0.4;
-            }
-
-            // Campfire Animation
-            if (isFireOn) {
-                fireLight.intensity = 3.5 + Math.sin(elapsedTime * 12) * 0.8;
-                const positions = fireParticles.geometry.attributes.position.array;
-                for (let i = 1; i < fireParticlesCount * 3; i += 3) {
-                    positions[i] += 0.008;
-                    if (positions[i] > 0.45) positions[i] = 0;
-                }
-                fireParticles.geometry.attributes.position.needsUpdate = true;
-            }
-
-            // Nat 20 Shooting Stars Animation
-            if (isNat20Active) {
-                nat20Timer += 0.016;
-                const pos = shootingStars.geometry.attributes.position.array;
-                for (let i = 0; i < starsCount; i++) {
-                    pos[i * 3] += starsVel[i].x;
-                    pos[i * 3 + 1] += starsVel[i].y;
-
-                    if (pos[i * 3 + 1] < -6) {
-                        pos[i * 3 + 1] = Math.random() * 6 + 5;
-                        pos[i * 3] = (Math.random() - 0.5) * 20;
-                    }
-                }
-                shootingStars.geometry.attributes.position.needsUpdate = true;
-
-                if (nat20Timer > 4) {
-                    starsMat.opacity -= 0.01;
-                    if (starsMat.opacity <= 0) {
-                        isNat20Active = false;
-                    }
-                }
-            }
-
-            // Ambient background animation
-            ring.rotation.z = elapsedTime * 0.1;
-
-            renderer.render(scene, camera);
-        }
-
-        animate();
-
-        // Window Resize
-        window.addEventListener('resize', () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            updatePositions();
-        });
-    </script>
-</body>
-</html>
+```html
+<!-- HTML -->
+<h1 id="result">0</h1>
+<button id="myBtn">สุ่มเลข</button>
