@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>3D Portfolio | ศศิธร เซ้งรักษา (Sasithorn)</title>
+    <title>3D Portfolio | ศศิธร เซ้งรักษา (bossu29)</title>
     
     <!-- Google Fonts: Prompt & Cinzel for D&D Fantasy Vibe -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -91,6 +91,31 @@
             font-family: 'Cinzel', serif;
         }
 
+        /* ============================================== */
+        /* แก้ไขส่วนข้อความ bossu29 ให้อ่านง่าย ชัดเจน */
+        /* ============================================== */
+        .bossu-title {
+            font-family: 'Cinzel', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--light-cyan); /* เปลี่ยนเป็นสีสว่างเพื่อความเด่นและอ่านง่าย */
+            text-shadow: 
+                0 0 8px rgba(64, 224, 208, 0.7),
+                0 0 20px rgba(179, 157, 219, 0.4); /* ควบคุมเงาเรืองแสงให้พอดี ไม่เบลอกลบข้อความ */
+            letter-spacing: 1.5px;
+            display: inline-block;
+            margin-bottom: 0.2rem;
+        }
+
+        .bossu-divider {
+            border: 0;
+            height: 1.5px;
+            background: linear-gradient(90deg, var(--primary-cyan), var(--primary-purple), transparent);
+            margin-bottom: 1.5rem;
+            opacity: 0.8;
+        }
+        /* ============================================== */
+
         /* Header Details */
         .badge-container {
             display: flex;
@@ -112,7 +137,7 @@
 
         h1 {
             font-family: 'Cinzel', 'Prompt', serif;
-            font-size: 2.8rem;
+            font-size: 2.5rem;
             font-weight: 800;
             color: #ffffff;
             text-shadow: 0 0 12px var(--primary-cyan), 0 0 24px var(--primary-purple);
@@ -213,6 +238,7 @@
         /* Responsive */
         @media (max-width: 768px) {
             h1 { font-size: 2.1rem; }
+            .bossu-title { font-size: 2rem; }
             .dnd-card { padding: 1.8rem 1.2rem; }
             .container { padding: 1rem; }
         }
@@ -227,6 +253,10 @@
     <div class="container">
         <div class="dnd-card">
             
+            <!-- ส่วนหัวข้อ bossu29 ที่ได้รับการแก้ไข -->
+            <div class="bossu-title">bossu29</div>
+            <hr class="bossu-divider">
+
             <div class="badge-container">
                 <span class="class-badge">LVL 4 ARTIST & DESIGNER</span>
                 <span class="class-badge">GAME & ANIMATION</span>
