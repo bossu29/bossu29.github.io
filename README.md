@@ -95,6 +95,8 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 1.2rem;
+            gap: 10px;
+            flex-wrap: wrap;
         }
 
         .card-tag {
@@ -113,12 +115,13 @@
             font-weight: 700;
         }
 
-        /* SPELLBOOK WIDGET */
-        .spellbook-trigger {
-            background: rgba(184, 227, 222, 0.08);
-            border: 1px solid rgba(184, 227, 222, 0.3);
-            color: var(--accent-soft-cyan);
-            padding: 6px 14px;
+        /* ACTION BUTTONS HEADER */
+        .header-btn-group {
+            display: flex;
+            gap: 8px;
+        }
+
+        .spellbook-trigger, .dragon-battle-trigger {
             border-radius: 14px;
             font-size: 0.78rem;
             cursor: pointer;
@@ -126,6 +129,13 @@
             display: flex;
             align-items: center;
             gap: 6px;
+            padding: 6px 14px;
+        }
+
+        .spellbook-trigger {
+            background: rgba(184, 227, 222, 0.08);
+            border: 1px solid rgba(184, 227, 222, 0.3);
+            color: var(--accent-soft-cyan);
         }
 
         .spellbook-trigger:hover {
@@ -133,6 +143,19 @@
             color: var(--bg-base);
             transform: scale(1.04);
             box-shadow: 0 0 16px rgba(184, 227, 222, 0.5);
+        }
+
+        .dragon-battle-trigger {
+            background: rgba(232, 184, 200, 0.08);
+            border: 1px solid rgba(232, 184, 200, 0.3);
+            color: var(--accent-rose);
+        }
+
+        .dragon-battle-trigger:hover {
+            background: var(--accent-rose);
+            color: var(--bg-base);
+            transform: scale(1.04);
+            box-shadow: 0 0 16px rgba(232, 184, 200, 0.5);
         }
 
         /* TAB NAVIGATION */
@@ -341,8 +364,8 @@
             transform: translateY(-2px);
         }
 
-        /* SPELLBOOK POPUP MODAL */
-        .spellbook-modal {
+        /* SPELLBOOK / DRAGON MODALS */
+        .spellbook-modal, .dragon-modal {
             position: absolute;
             top: 0;
             left: 0;
@@ -359,7 +382,7 @@
             overflow-y: auto;
         }
 
-        .spellbook-modal.active {
+        .spellbook-modal.active, .dragon-modal.active {
             display: block;
             opacity: 1;
         }
@@ -414,6 +437,71 @@
             font-size: 0.82rem;
             color: var(--text-sub);
             line-height: 1.5;
+        }
+
+        /* Dragon Boss Battle UI inside Modal */
+        .boss-status-box {
+            background: rgba(232, 184, 200, 0.05);
+            border: 1px solid rgba(232, 184, 200, 0.2);
+            border-radius: 16px;
+            padding: 1.2rem;
+            margin-bottom: 1.2rem;
+            text-align: center;
+        }
+
+        .boss-name {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.4rem;
+            color: var(--accent-rose);
+            margin-bottom: 0.5rem;
+        }
+
+        .hp-bar-bg {
+            width: 100%;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 8px;
+        }
+
+        .hp-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #e8b8c8, #ff6b81);
+            width: 100%;
+            border-radius: 10px;
+            transition: width 0.4s ease;
+        }
+
+        .boss-action-btn {
+            background: linear-gradient(135deg, rgba(232, 184, 200, 0.2), rgba(255, 107, 129, 0.2));
+            border: 1px solid var(--accent-rose);
+            color: var(--text-main);
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s ease;
+            margin-top: 0.8rem;
+        }
+
+        .boss-action-btn:hover {
+            background: var(--accent-rose);
+            color: var(--bg-base);
+            box-shadow: 0 0 25px rgba(232, 184, 200, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .boss-log {
+            margin-top: 1rem;
+            font-size: 0.85rem;
+            color: var(--text-sub);
+            min-height: 50px;
+            line-height: 1.5;
+            text-align: center;
         }
 
         /* Contact Items */
@@ -583,7 +671,7 @@
     <div class="skill-toast" id="skill-toast">✨ Blessing Activated</div>
 
     <div class="interactive-hint">
-        🔮 คลิกอักขระเวทฝั่งซ้าย เพื่อรับพรสวรรค์สุ่ม | คลิก D20 ฝั่งขวา ทอยเต๋า
+        🐉 คลิกมังกรบนฟ้า หรือเปิดเมนูปะทะบอส เพื่อทอยเต๋าโจมตี!
     </div>
 
     <div class="container">
@@ -591,9 +679,14 @@
             
             <div class="card-header-flex">
                 <div class="card-tag">CHARACTER SHEET</div>
-                <button class="spellbook-trigger" onclick="toggleSpellbook(true)">
-                    📖 Spellbook & Mod Log
-                </button>
+                <div class="header-btn-group">
+                    <button class="dragon-battle-trigger" onclick="toggleDragonModal(true)">
+                        🐉 สู้กับมังกร
+                    </button>
+                    <button class="spellbook-trigger" onclick="toggleSpellbook(true)">
+                        📖 Spellbook
+                    </button>
+                </div>
             </div>
 
             <!-- TAB NAVIGATION -->
@@ -737,19 +830,103 @@
                 </div>
             </div>
 
+            <!-- DRAGON BOSS BATTLE MODAL -->
+            <div class="dragon-modal" id="dragon-modal">
+                <button class="modal-close" onclick="toggleDragonModal(false)">✕</button>
+                <div class="brand-title" style="font-size: 2rem;">DRAGON RAID</div>
+                <div class="subtitle-en">Turn-based D20 Combat vs. Ancient Wyrm</div>
+
+                <div class="boss-status-box">
+                    <div class="boss-name" id="boss-name-text">🐲 Pyraexis, The Astral Drake</div>
+                    <div style="font-size: 0.8rem; color: var(--text-sub);">HP: <span id="boss-hp-val">100</span> / 100</div>
+                    <div class="hp-bar-bg">
+                        <div class="hp-bar-fill" id="boss-hp-fill" style="width: 100%;"></div>
+                    </div>
+                </div>
+
+                <button class="boss-action-btn" onclick="attackDragonWithDice()">🎲 ทอยเต๋าโจมตีมังกร (Attack!)</button>
+                <div class="boss-log" id="boss-log">คลิกปุ่มเพื่อทอยเต๋าโจมตีมังกรโบราณ! หากแต้มเกิน 12 จะสร้างความเสียหายมหาศาล</div>
+            </div>
+
         </div>
     </div>
 
     <script>
-        // --- SPELLBOOK MODAL TOGGLE ---
+        // --- SPELLBOOK & DRAGON MODAL TOGGLES ---
         function toggleSpellbook(show) {
             const modal = document.getElementById('spellbook-modal');
             if (show) {
                 modal.classList.add('active');
-                playChimeChord([523.25, 659.25, 783.99]); // C Major Chime
+                playChimeChord([523.25, 659.25, 783.99]);
             } else {
                 modal.classList.remove('active');
                 playSoftNote(400);
+            }
+        }
+
+        function toggleDragonModal(show) {
+            const modal = document.getElementById('dragon-modal');
+            if (show) {
+                modal.classList.add('active');
+                playChimeChord([440, 554.37, 659.25]);
+            } else {
+                modal.classList.remove('active');
+                playSoftNote(350);
+            }
+        }
+
+        // --- DRAGON COMBAT SYSTEM ---
+        let bossHp = 100;
+        function attackDragonWithDice() {
+            const roll = Math.floor(Math.random() * 20) + 1;
+            const logEl = document.getElementById('boss-log');
+            const hpFill = document.getElementById('boss-hp-fill');
+            const hpVal = document.getElementById('boss-hp-val');
+            const toast = document.getElementById('skill-toast');
+
+            let dmg = 0;
+            let resultMessage = '';
+
+            if (roll === 20) {
+                dmg = 45;
+                resultMessage = `✨ Critical Hit! ทอยได้ 20 ฟันมังกรขาดกระวิง เสียหาย ${dmg} HP!`;
+                playChimeChord([523.25, 659.25, 783.99, 1046.50]);
+            } else if (roll >= 12) {
+                dmg = 25;
+                resultMessage = `⚔️ โจมตีสำเร็จ! ทอยได้ ${roll} สร้างความเสียหาย ${dmg} HP!`;
+                playChimeChord([440, 554.37, 659.25]);
+            } else if (roll >= 6) {
+                dmg = 10;
+                resultMessage = `🛡️ ถากๆ! ทอยได้ ${roll} สร้างความเสียหายเบาๆ ${dmg} HP!`;
+                playSoftNote(500);
+            } else {
+                dmg = 0;
+                resultMessage = `💥 พลาดเป้า! ทอยได้ ${roll} มังกรพ่นไฟสวนกลับมาทันที!`;
+                playSoftNote(200);
+            }
+
+            bossHp = Math.max(0, bossHp - dmg);
+            hpVal.innerText = bossHp;
+            hpFill.style.width = `${bossHp}%`;
+            logEl.innerText = resultMessage;
+
+            toast.innerText = `Rolled D20: ${roll} (${dmg > 0 ? '-' + dmg + ' HP' : 'Miss!'})`;
+            toast.classList.add('active');
+            setTimeout(() => toast.classList.remove('active'), 2500);
+
+            // Dragon reaction animation jump
+            if (dragonGroup) {
+                gsap.to(dragonGroup.position, { y: dragonGroup.position.y + 0.4, duration: 0.15, yoyo: true, repeat: 1 });
+            }
+
+            if (bossHp === 0) {
+                logEl.innerText = "🎉 ยินดีด้วย! คุณปราบมังกรโบราณลงได้สำเร็จ รับตำแหน่ง Dragon Slayer!";
+                playChimeChord([523.25, 659.25, 783.99, 1046.50, 1318.51]);
+                setTimeout(() => {
+                    bossHp = 100;
+                    hpVal.innerText = bossHp;
+                    hpFill.style.width = '100%';
+                }, 4000);
             }
         }
 
@@ -782,7 +959,7 @@
 
             btnElement.classList.add('active');
             document.getElementById(`tab-${tabName}`).classList.add('active');
-            playSoftNote(587.33); // D5 note
+            playSoftNote(587.33);
 
             if(tabName === 'home') {
                 document.querySelectorAll('.stat-bar-fill').forEach(bar => {
@@ -864,6 +1041,56 @@
         cyanLight.position.set(-5, -2, 3);
         scene.add(cyanLight);
 
+        const dragonFireLight = new THREE.PointLight(0xff6b81, 4, 15);
+        dragonFireLight.position.set(0, 3, 2);
+        scene.add(dragonFireLight);
+
+        // --- PROCEDURAL LOW-POLY DRAGON (BOSS) ---
+        const dragonGroup = new THREE.Group();
+        const dragonMat = new THREE.MeshPhysicalMaterial({
+            color: 0x9c3848,
+            roughness: 0.3,
+            metalness: 0.4,
+            clearcoat: 0.5
+        });
+        const wingMat = new THREE.MeshPhysicalMaterial({
+            color: 0x2e1a22,
+            roughness: 0.5,
+            transparent: true,
+            opacity: 0.9,
+            side: THREE.DoubleSide
+        });
+
+        // Body parts
+        const bodyMesh = new THREE.Mesh(new THREE.ConeGeometry(0.6, 1.8, 5), dragonMat);
+        bodyMesh.rotation.x = Math.PI / 2;
+        dragonGroup.add(bodyMesh);
+
+        const headMesh = new THREE.Mesh(new THREE.DodecahedronGeometry(0.4, 0), dragonMat);
+        headMesh.position.set(0, 0.3, 1.1);
+        dragonGroup.add(headMesh);
+
+        // Wings
+        const leftWing = new THREE.Mesh(new THREE.BufferGeometry(), wingMat);
+        // Simple procedural wing shape using triangle geometry or scaled planes
+        const wingGeo = new THREE.ConeGeometry(0.8, 1.5, 3);
+        const leftWingMesh = new THREE.Mesh(wingGeo, wingMat);
+        leftWingMesh.position.set(0.9, 0.2, 0);
+        leftWingMesh.rotation.z = -Math.PI / 3;
+        dragonGroup.add(leftWingMesh);
+
+        const rightWingMesh = new THREE.Mesh(wingGeo, wingMat);
+        rightWingMesh.position.set(-0.9, 0.2, 0);
+        rightWingMesh.rotation.z = Math.PI / 3;
+        dragonGroup.add(rightWingMesh);
+
+        const dragonHitbox = new THREE.Mesh(
+            new THREE.SphereGeometry(1.8, 8, 8),
+            new THREE.MeshBasicMaterial({ visible: false })
+        );
+        dragonGroup.add(dragonHitbox);
+        scene.add(dragonGroup);
+
         // --- CRYSTAL D20 DICE (RIGHT SIDE) ---
         const d20Textures = {};
         function getNumberTexture(number) {
@@ -921,33 +1148,6 @@
         d20Group.add(d20Hitbox);
         scene.add(d20Group);
 
-        // --- INTERACTIVE MAGICAL ORBS (LEFT SIDE - 10X FUN) ---
-        const orbGroup = new THREE.Group();
-        const orbMat = new THREE.MeshPhysicalMaterial({
-            color: 0xb8e3de,
-            roughness: 0.15,
-            transmission: 0.85,
-            transparent: true,
-            opacity: 0.9
-        });
-
-        const orbMeshes = [];
-        const blessings = [
-            "✨ Blessing of Creativity: ปลดล็อกไอเดียพรั่งพรู!",
-            "🔮 Wisdom of The Ancients: ความเข้าใจลึกซึ้งระดับ S-Rank!",
-            "⚡ Velocity of Code & Art: ทำงานไวขึ้น 2 เท่าอย่างไร้รอยต่อ!"
-        ];
-
-        for(let i = 0; i < 3; i++) {
-            const orbGeo = new THREE.IcosahedronGeometry(0.38 - i * 0.07, 1);
-            const orb = new THREE.Mesh(orbGeo, orbMat);
-            orb.position.set(-0.2, (i - 1) * 1.3, 0);
-            orb.userData = { id: i, blessing: blessings[i] };
-            orbGroup.add(orb);
-            orbMeshes.push(orb);
-        }
-        scene.add(orbGroup);
-
         // --- PARTICLES & RINGS ---
         const pCount = 600;
         const pPos = new Float32Array(pCount * 3);
@@ -974,13 +1174,13 @@
             const width = height * aspect;
 
             if (window.innerWidth > 992) {
-                d20Group.position.set(width / 4 + 0.3, 0, 0);
+                d20Group.position.set(width / 4 + 0.3, -0.6, 0);
                 ring.position.copy(d20Group.position);
-                orbGroup.position.set(-width / 4 - 0.5, 0, 0);
+                dragonGroup.position.set(width / 4 + 0.3, 2.2, 0);
             } else {
                 d20Group.position.set(width / 2 - 1.2, height / 2 - 1.2, 0);
                 ring.position.copy(d20Group.position);
-                orbGroup.position.set(-width / 2 + 0.8, -height / 2 + 1.2, 0);
+                dragonGroup.position.set(0, height / 2 - 0.8, 0);
             }
         }
         updatePositions();
@@ -1040,25 +1240,10 @@
             const intersectsD20 = raycaster.intersectObjects([d20Mesh, d20Wire, d20Hitbox]);
             if (intersectsD20.length > 0) rollDice();
 
-            // Check Left Orbs Click (Interactive 10x fun)
-            const intersectsOrbs = raycaster.intersectObjects(orbMeshes);
-            if (intersectsOrbs.length > 0) {
-                const clickedOrb = intersectsOrbs[0].object;
-                
-                gsap.to(clickedOrb.scale, {
-                    x: 1.8, y: 1.8, z: 1.8,
-                    duration: 0.25,
-                    yoyo: true,
-                    repeat: 1,
-                    ease: 'power2.out'
-                });
-
-                playChimeChord([659.25, 880, 1108.73]);
-
-                const toast = document.getElementById('skill-toast');
-                toast.innerText = clickedOrb.userData.blessing;
-                toast.classList.add('active');
-                setTimeout(() => toast.classList.remove('active'), 3000);
+            // Check Dragon Click -> Opens Boss Raid Modal directly!
+            const intersectsDragon = raycaster.intersectObject(dragonHitbox);
+            if (intersectsDragon.length > 0) {
+                toggleDragonModal(true);
             }
         });
 
@@ -1070,9 +1255,9 @@
 
             raycaster.setFromCamera(mouse, camera);
             const intersectsD20 = raycaster.intersectObjects([d20Mesh, d20Wire, d20Hitbox]);
-            const intersectsOrbs = raycaster.intersectObjects(orbMeshes);
+            const intersectsDragon = raycaster.intersectObject(dragonHitbox);
             
-            document.body.style.cursor = (intersectsD20.length > 0 || intersectsOrbs.length > 0) ? 'pointer' : 'default';
+            document.body.style.cursor = (intersectsD20.length > 0 || intersectsDragon.length > 0) ? 'pointer' : 'default';
 
             const rx = (e.clientY / window.innerHeight - 0.5) * -7;
             const ry = (e.clientX / window.innerWidth - 0.5) * 7;
@@ -1091,12 +1276,10 @@
                 d20Group.rotation.y = elapsedTime * 0.3;
             }
 
-            // Left Orbs Dynamic Floating Motion
-            orbMeshes.forEach((orb, i) => {
-                orb.position.y = Math.sin(elapsedTime * 1.8 + i) * 0.25 + (i - 1) * 1.3;
-                orb.rotation.y = elapsedTime * 0.7;
-                orb.rotation.x = elapsedTime * 0.4;
-            });
+            // Dragon Floating & Wing Flapping Motion
+            dragonGroup.position.y += Math.sin(elapsedTime * 2.5) * 0.003;
+            dragonGroup.rotation.z = Math.sin(elapsedTime * 1.5) * 0.08;
+            dragonGroup.rotation.y = Math.sin(elapsedTime * 0.8) * 0.3;
 
             ring.rotation.z = elapsedTime * 0.1;
             pMesh.rotation.y = elapsedTime * 0.03;
