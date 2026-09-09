@@ -8,7 +8,7 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600&family=Prompt:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600&family=Prompt:wght@300;400;500;600&display=swap" rel="stylesheet">
 
     <!-- Three.js & GSAP -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -17,12 +17,11 @@
     <style>
         :root {
             --bg-base: #0f0d18;
-            --glass-bg: rgba(25, 21, 38, 0.55);
+            --glass-bg: rgba(25, 21, 38, 0.6);
             --glass-border: rgba(235, 215, 190, 0.18);
             --accent-gold: #f3e5c8;
             --accent-soft-cyan: #b8e3de;
             --accent-rose: #e8b8c8;
-            --accent-glow: rgba(243, 229, 200, 0.4);
             --text-main: #f5f3f7;
             --text-sub: #b3acc3;
             --card-radius: 28px;
@@ -56,25 +55,15 @@
             position: relative;
             z-index: 2;
             width: 100%;
-            max-width: 1350px;
+            max-width: 1380px;
             margin: 0 auto;
-            padding: 2.5rem 2rem;
+            padding: 3rem 2rem;
             min-height: 100vh;
             display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: flex-start;
+            align-items: center;
+            justify-content: flex-start;
             pointer-events: none;
             perspective: 1200px;
-        }
-
-        /* Layout Grid */
-        .layout-wrapper {
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-            width: 100%;
-            max-width: 620px;
         }
 
         /* 3D Minimal Soft Glass Card */
@@ -85,8 +74,9 @@
             -webkit-backdrop-filter: blur(24px) saturate(140%);
             border: 1px solid var(--glass-border);
             border-radius: var(--card-radius);
-            padding: 2.5rem 2.2rem;
+            padding: 2.8rem 2.4rem;
             width: 100%;
+            max-width: 630px;
             box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4),
                         inset 0 1px 0 rgba(255, 255, 255, 0.15);
             position: relative;
@@ -96,8 +86,15 @@
 
         .dnd-card:hover {
             box-shadow: 0 35px 70px rgba(0, 0, 0, 0.5),
-                        0 0 40px rgba(243, 229, 200, 0.12),
+                        0 0 40px rgba(243, 229, 200, 0.1),
                         inset 0 1px 0 rgba(255, 255, 255, 0.25);
+        }
+
+        .card-header-flex {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.2rem;
         }
 
         .card-tag {
@@ -114,118 +111,28 @@
             text-transform: uppercase;
             font-family: 'Cormorant Garamond', serif;
             font-weight: 700;
-            margin-bottom: 1.2rem;
         }
 
-        .card-tag::before {
-            content: '✦';
-            font-size: 0.8rem;
+        /* SPELLBOOK WIDGET (NEW LEFT INTERACTIVE) */
+        .spellbook-trigger {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(243, 229, 200, 0.25);
             color: var(--accent-gold);
-        }
-
-        /* LEFT SIDEBAR / INTERACTIVE WIDGETS */
-        .left-interactive-panel {
-            pointer-events: auto;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-            width: 100%;
-        }
-
-        .widget-box {
-            background: var(--glass-bg);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
-            border-radius: 20px;
-            padding: 1.2rem;
+            padding: 5px 12px;
+            border-radius: 12px;
+            font-size: 0.78rem;
+            cursor: pointer;
             transition: all 0.3s ease;
-        }
-
-        .widget-box:hover {
-            border-color: rgba(243, 229, 200, 0.3);
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-        }
-
-        .widget-title {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 0.95rem;
-            color: var(--accent-gold);
-            letter-spacing: 1px;
-            margin-bottom: 0.8rem;
             display: flex;
             align-items: center;
-            justify-content: space-between;
-        }
-
-        /* Dice Tray Controls */
-        .dice-set {
-            display: flex;
             gap: 6px;
-            flex-wrap: wrap;
         }
 
-        .dice-btn {
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: var(--text-sub);
-            padding: 6px 10px;
-            border-radius: 10px;
-            font-size: 0.75rem;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            flex: 1;
-            text-align: center;
-        }
-
-        .dice-btn:hover {
+        .spellbook-trigger:hover {
             background: rgba(243, 229, 200, 0.15);
             border-color: var(--accent-gold);
-            color: var(--accent-gold);
-        }
-
-        .dice-display {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: var(--accent-gold);
-            text-align: right;
-            line-height: 1;
-        }
-
-        /* Spell Cast Buttons */
-        .spell-grid {
-            display: flex;
-            gap: 8px;
-        }
-
-        .spell-btn {
-            flex: 1;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 12px;
-            padding: 8px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .spell-btn:hover {
-            background: rgba(184, 227, 222, 0.15);
-            border-color: var(--accent-soft-cyan);
             transform: scale(1.03);
-        }
-
-        .spell-icon {
-            font-size: 1.2rem;
-            margin-bottom: 2px;
-        }
-
-        .spell-name {
-            font-size: 0.7rem;
-            color: var(--text-sub);
+            box-shadow: 0 0 12px rgba(243, 229, 200, 0.2);
         }
 
         /* TAB NAVIGATION */
@@ -234,8 +141,8 @@
             gap: 8px;
             margin-bottom: 1.8rem;
             background: rgba(15, 13, 24, 0.4);
-            padding: 5px;
-            border-radius: 16px;
+            padding: 6px;
+            border-radius: 18px;
             border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
@@ -244,8 +151,8 @@
             background: transparent;
             border: none;
             color: var(--text-sub);
-            padding: 8px 14px;
-            border-radius: 10px;
+            padding: 10px 16px;
+            border-radius: 12px;
             font-size: 0.85rem;
             font-weight: 500;
             cursor: pointer;
@@ -288,11 +195,11 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             line-height: 1.1;
-            margin-bottom: 0.2rem;
+            margin-bottom: 0.3rem;
         }
 
         .subtitle-th {
-            font-size: 1.15rem;
+            font-size: 1.1rem;
             color: var(--text-main);
             font-weight: 500;
             margin-bottom: 0.2rem;
@@ -303,13 +210,12 @@
             color: var(--text-sub);
             margin-bottom: 1.5rem;
             font-weight: 300;
-            letter-spacing: 0.5px;
         }
 
         .info-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 0.9rem;
+            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+            gap: 1rem;
             margin-bottom: 1.5rem;
         }
 
@@ -317,7 +223,7 @@
             background: rgba(255, 255, 255, 0.025);
             border: 1px solid rgba(255, 255, 255, 0.07);
             padding: 1.1rem;
-            border-radius: 16px;
+            border-radius: 18px;
             transition: all 0.3s ease;
         }
 
@@ -328,7 +234,7 @@
         }
 
         .info-box h3 {
-            font-size: 0.8rem;
+            font-size: 0.78rem;
             color: var(--accent-gold);
             margin-bottom: 0.4rem;
             text-transform: uppercase;
@@ -338,30 +244,46 @@
         }
 
         .info-box p {
-            font-size: 0.85rem;
+            font-size: 0.83rem;
             color: var(--text-sub);
             line-height: 1.5;
         }
 
         .info-box p strong {
             color: var(--text-main);
-            font-weight: 500;
         }
 
-        /* Stats Section */
+        /* Stats Section & SKILL ROLL BUTTON (NEW) */
         .section-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
             margin-top: 1.5rem;
-            margin-bottom: 0.9rem;
+            margin-bottom: 0.8rem;
         }
 
         .section-title {
             font-family: 'Cormorant Garamond', serif;
-            font-size: 1.15rem;
+            font-size: 1.2rem;
             color: var(--accent-gold);
             letter-spacing: 1px;
+        }
+
+        .roll-btn {
+            background: rgba(184, 227, 222, 0.1);
+            border: 1px solid var(--accent-soft-cyan);
+            color: var(--accent-soft-cyan);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .roll-btn:hover {
+            background: var(--accent-soft-cyan);
+            color: var(--bg-base);
+            box-shadow: 0 0 12px rgba(184, 227, 222, 0.4);
         }
 
         .stat-bar-container {
@@ -404,8 +326,8 @@
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid rgba(255, 255, 255, 0.08);
             color: var(--text-main);
-            padding: 5px 12px;
-            border-radius: 10px;
+            padding: 6px 14px;
+            border-radius: 12px;
             font-size: 0.8rem;
             transition: all 0.3s ease;
             cursor: pointer;
@@ -418,22 +340,90 @@
             transform: translateY(-2px);
         }
 
+        /* SPELLBOOK POPUP MODAL (NEW) */
+        .spellbook-modal {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 13, 24, 0.92);
+            backdrop-filter: blur(20px);
+            border-radius: var(--card-radius);
+            padding: 2.2rem;
+            z-index: 10;
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            overflow-y: auto;
+        }
+
+        .spellbook-modal.active {
+            display: block;
+            opacity: 1;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.08);
+            border: none;
+            color: var(--text-main);
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .modal-close:hover {
+            background: var(--accent-gold);
+            color: var(--bg-base);
+        }
+
+        .spell-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(243, 229, 200, 0.15);
+            border-radius: 16px;
+            padding: 1rem 1.2rem;
+            margin-bottom: 0.9rem;
+        }
+
+        .spell-card h4 {
+            font-family: 'Cormorant Garamond', serif;
+            color: var(--accent-gold);
+            font-size: 1.1rem;
+            margin-bottom: 4px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .spell-card p {
+            font-size: 0.82rem;
+            color: var(--text-sub);
+            line-height: 1.5;
+        }
+
         /* Contact Items */
         .contact-list {
             display: flex;
             flex-direction: column;
-            gap: 0.8rem;
-            margin-top: 1rem;
+            gap: 0.9rem;
+            margin-top: 1.2rem;
         }
 
         .contact-item {
             display: flex;
             align-items: center;
-            gap: 14px;
+            gap: 16px;
             background: rgba(255, 255, 255, 0.025);
             border: 1px solid rgba(255, 255, 255, 0.07);
-            padding: 1rem 1.2rem;
-            border-radius: 16px;
+            padding: 1.1rem 1.4rem;
+            border-radius: 18px;
             text-decoration: none;
             color: var(--text-main);
             transition: all 0.3s ease;
@@ -446,10 +436,10 @@
         }
 
         .contact-icon {
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             background: rgba(243, 229, 200, 0.08);
-            width: 40px;
-            height: 40px;
+            width: 42px;
+            height: 42px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -495,30 +485,28 @@
             opacity: 1;
         }
 
-        .nat20-banner {
+        .skill-toast {
             position: fixed;
-            top: 15%;
+            bottom: 30px;
             left: 50%;
-            transform: translate(-50%, -50%) scale(0.8);
-            background: rgba(25, 21, 38, 0.85);
+            transform: translateX(-50%) translateY(20px);
+            background: rgba(25, 21, 38, 0.9);
             border: 1px solid var(--accent-gold);
             color: var(--accent-gold);
-            padding: 0.8rem 2.5rem;
-            border-radius: 40px;
+            padding: 10px 24px;
+            border-radius: 30px;
             font-family: 'Cormorant Garamond', serif;
-            font-size: 1.4rem;
-            letter-spacing: 3px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5), 0 0 30px rgba(243, 229, 200, 0.2);
-            backdrop-filter: blur(12px);
-            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            z-index: 100;
-            pointer-events: none;
+            font-size: 1.1rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
             opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s ease;
+            z-index: 90;
         }
 
-        .nat20-banner.active {
-            transform: translate(-50%, -50%) scale(1);
+        .skill-toast.active {
             opacity: 1;
+            transform: translateX(-50%) translateY(0);
         }
 
         .interactive-hint {
@@ -534,7 +522,6 @@
             backdrop-filter: blur(10px);
             pointer-events: none;
             z-index: 10;
-            letter-spacing: 0.5px;
         }
 
         .audio-toggle {
@@ -568,7 +555,7 @@
                 justify-content: center;
                 padding: 2rem 1rem;
             }
-            .layout-wrapper {
+            .dnd-card {
                 max-width: 100%;
             }
             .dice-result-popup {
@@ -585,172 +572,160 @@
     <button class="audio-toggle" id="audio-toggle">✨ SOUND: ON</button>
 
     <div class="dice-result-popup" id="dice-result">20</div>
-    <div class="nat20-banner" id="nat20-banner">✦ CRITICAL SUCCESS ✦</div>
+    <div class="skill-toast" id="skill-toast">🎲 Skill Check Result</div>
 
     <div class="interactive-hint">
-        🎲 คลิกทอยลูกเต๋า D20 ด้านขวา
+        🔮 คลิก Orbs ฝั่งซ้าย หรือ ทอยลูกเต๋า D20 ฝั่งขวา
     </div>
 
     <div class="container">
-        <div class="layout-wrapper">
-
-            <!-- MAIN DND CARD -->
-            <div class="dnd-card" id="card">
-                
+        <div class="dnd-card" id="card">
+            
+            <div class="card-header-flex">
                 <div class="card-tag">CHARACTER SHEET</div>
-
-                <!-- Tab Navigation Header -->
-                <div class="tab-nav">
-                    <button class="tab-btn active" onclick="switchTab('home', this)">🛡️ โปรไฟล์</button>
-                    <button class="tab-btn" onclick="switchTab('about', this)">📜 เกี่ยวกับ</button>
-                    <button class="tab-btn" onclick="switchTab('contact', this)">📬 ติดต่อ</button>
-                </div>
-
-                <!-- TAB 1: HOME PROFILE -->
-                <div class="tab-content active" id="tab-home">
-                    <div class="brand-title">bossu29</div>
-                    <div class="subtitle-th">นางสาว ศศิธร เซ้งรักษา</div>
-                    <div class="subtitle-en">Sasithorn Sengraksa | 3D & Digital Character Artist</div>
-
-                    <div class="info-grid">
-                        <div class="info-box">
-                            <h3>การศึกษา (Education)</h3>
-                            <p><strong>มทร.รัตนโกสินทร์ ศาลายา</strong></p>
-                            <p>คณะสถาปัตยกรรมศาสตร์และการออกแบบ</p>
-                            <p>สาขาเกมและอนิเมชั่น (ปี 4)</p>
-                        </div>
-                        
-                        <div class="info-box">
-                            <h3>สายงานที่เชี่ยวชาญ (Specialization)</h3>
-                            <p><strong>Character Design & 3D Modeling</strong></p>
-                            <p>วาดภาพประกอบ แฟนตาซีไซไฟ และ Minecraft Custom Modding</p>
-                        </div>
-                    </div>
-
-                    <div class="section-header">
-                        <div class="section-title">📊 สเตตัสและความสามารถ (Stats & Mastery)</div>
-                    </div>
-
-                    <div class="stats-section">
-                        <div class="stat-bar-container">
-                            <div class="stat-header"><span>Character Design & Concepts</span><span>98%</span></div>
-                            <div class="stat-bar-bg"><div class="stat-bar-fill" data-width="98%"></div></div>
-                        </div>
-                        <div class="stat-bar-container">
-                            <div class="stat-header"><span>Digital Illustration</span><span>92%</span></div>
-                            <div class="stat-bar-bg"><div class="stat-bar-fill" data-width="92%"></div></div>
-                        </div>
-                        <div class="stat-bar-container">
-                            <div class="stat-header"><span>3D Asset Modeling (Blender / Unity)</span><span>88%</span></div>
-                            <div class="stat-bar-bg"><div class="stat-bar-fill" data-width="88%"></div></div>
-                        </div>
-                        <div class="stat-bar-container">
-                            <div class="stat-header"><span>Minecraft World & Figura Modding</span><span>95%</span></div>
-                            <div class="stat-bar-bg"><div class="stat-bar-fill" data-width="95%"></div></div>
-                        </div>
-                    </div>
-
-                    <div class="skills-container">
-                        <div class="skill-tag">🎨 Digital Art</div>
-                        <div class="skill-tag">👤 Character Design</div>
-                        <div class="skill-tag">🖼️ Illustration</div>
-                        <div class="skill-tag">🏰 Minecraft World Building</div>
-                        <div class="skill-tag">🦊 Figura Modding</div>
-                        <div class="skill-tag">🕹️ Game Assets</div>
-                    </div>
-                </div>
-
-                <!-- TAB 2: ABOUT -->
-                <div class="tab-content" id="tab-about">
-                    <div class="brand-title">ABOUT ME</div>
-                    <div class="subtitle-en">Biography & Creative Vision</div>
-
-                    <div class="info-box" style="margin-bottom: 0.9rem;">
-                        <h3>ประวัติโดยย่อ (Biography)</h3>
-                        <p>สวัสดีค่ะ! ดิฉัน <strong>ศศิธร เซ้งรักษา (bossu29)</strong> เป็นนักศึกษาชั้นปีที่ 4 สาขาเกมและอนิเมชั่น หลงใหลในการดีไซน์ตัวละครแฟนตาซี งานปั้น 3D โมเดลลิ่ง ตลอดจนการสร้างสรรค์ Mod สกิลและอวตารคัสตอมในเกม Minecraft</p>
-                    </div>
-                    
-                    <div class="info-box" style="margin-bottom: 0.9rem;">
-                        <h3>เป้าหมาย (Creative Focus)</h3>
-                        <p>มุ่งมั่นที่จะถ่ายทอดเรื่องราวและความคิดสร้างสรรค์ผ่าน Character Design คุณภาพสูง เพื่อเติมเต็มจินตนาการและสร้างประสบการณ์ที่ดีในอุตสาหกรรมสื่อสร้างสรรค์และเกม</p>
-                    </div>
-
-                    <div class="section-title" style="margin-bottom: 0.5rem;">🛠️ เครื่องมือที่ใช้งาน (Tools & Software)</div>
-                    <div class="skills-container">
-                        <div class="skill-tag">Blender 3D</div>
-                        <div class="skill-tag">Unity Engine</div>
-                        <div class="skill-tag">Clip Studio Paint</div>
-                        <div class="skill-tag">Photoshop</div>
-                        <div class="skill-tag">Blockbench</div>
-                    </div>
-                </div>
-
-                <!-- TAB 3: CONTACT -->
-                <div class="tab-content" id="tab-contact">
-                    <div class="brand-title">GET IN TOUCH</div>
-                    <div class="subtitle-en">Contact Channels & Social Media</div>
-                    
-                    <div class="contact-list">
-                        <a href="mailto:sengraksa2005@gmail.com" class="contact-item">
-                            <div class="contact-icon">📧</div>
-                            <div class="contact-text">
-                                <h4>Email Address</h4>
-                                <p>sengraksa2005@gmail.com</p>
-                            </div>
-                        </a>
-
-                        <div class="contact-item">
-                            <div class="contact-icon">💬</div>
-                            <div class="contact-text">
-                                <h4>Discord</h4>
-                                <p>bossu_u</p>
-                            </div>
-                        </div>
-
-                        <a href="#" class="contact-item">
-                            <div class="contact-icon">🌐</div>
-                            <div class="contact-text">
-                                <h4>Twitter / X</h4>
-                                <p>@bossu29_art</p>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-
+                <button class="spellbook-trigger" onclick="toggleSpellbook(true)">
+                    📖 Spellbook & Mod Log
+                </button>
             </div>
 
-            <!-- LEFT INTERACTIVE PANEL (NEW ADDITION) -->
-            <div class="left-interactive-panel">
-                <!-- Mini Dice Roller Widget -->
-                <div class="widget-box">
-                    <div class="widget-title">
-                        <span>🎲 DICE TRAY</span>
-                        <span id="sub-dice-result" class="dice-display">--</span>
+            <!-- TAB NAVIGATION -->
+            <div class="tab-nav">
+                <button class="tab-btn active" onclick="switchTab('home', this)">🛡️ โปรไฟล์</button>
+                <button class="tab-btn" onclick="switchTab('about', this)">📜 เกี่ยวกับ</button>
+                <button class="tab-btn" onclick="switchTab('contact', this)">📬 ติดต่อ</button>
+            </div>
+
+            <!-- TAB 1: HOME PROFILE -->
+            <div class="tab-content active" id="tab-home">
+                <div class="brand-title">bossu29</div>
+                <div class="subtitle-th">นางสาว ศศิธร เซ้งรักษา</div>
+                <div class="subtitle-en">Sasithorn Sengraksa | 3D & Digital Character Artist</div>
+
+                <div class="info-grid">
+                    <div class="info-box">
+                        <h3>การศึกษา (Education)</h3>
+                        <p><strong>มทร.รัตนโกสินทร์ ศาลายา</strong></p>
+                        <p>คณะสถาปัตยกรรมศาสตร์และการออกแบบ</p>
+                        <p>สาขาเกมและอนิเมชั่น (ปี 4)</p>
                     </div>
-                    <div class="dice-set">
-                        <button class="dice-btn" onclick="rollSubDice(4)">d4</button>
-                        <button class="dice-btn" onclick="rollSubDice(6)">d6</button>
-                        <button class="dice-btn" onclick="rollSubDice(8)">d8</button>
-                        <button class="dice-btn" onclick="rollSubDice(10)">d10</button>
-                        <button class="dice-btn" onclick="rollSubDice(12)">d12</button>
+                    
+                    <div class="info-box">
+                        <h3>สายงานที่เชี่ยวชาญ (Specialization)</h3>
+                        <p><strong>Character Design & 3D Modeling</strong></p>
+                        <p>วาดภาพประกอบ แฟนตาซีไซไฟ และ Minecraft Custom Modding</p>
                     </div>
                 </div>
 
-                <!-- Spell Cast Widget -->
-                <div class="widget-box">
-                    <div class="widget-title">
-                        <span>✨ QUICK CANTRIPS</span>
+                <div class="section-header">
+                    <div class="section-title">📊 สเตตัสและความสามารถ (Stats & Mastery)</div>
+                    <button class="roll-btn" onclick="rollSkillCheck()">🎲 Roll Skill Check</button>
+                </div>
+
+                <div class="stats-section">
+                    <div class="stat-bar-container">
+                        <div class="stat-header"><span>Character Design & Concepts</span><span>98%</span></div>
+                        <div class="stat-bar-bg"><div class="stat-bar-fill" data-width="98%"></div></div>
                     </div>
-                    <div class="spell-grid">
-                        <div class="spell-btn" onclick="castSpell('Aura of Focus')">
-                            <div class="spell-icon">🔮</div>
-                            <div class="spell-name">Focus Aura</div>
+                    <div class="stat-bar-container">
+                        <div class="stat-header"><span>Digital Illustration</span><span>92%</span></div>
+                        <div class="stat-bar-bg"><div class="stat-bar-fill" data-width="92%"></div></div>
+                    </div>
+                    <div class="stat-bar-container">
+                        <div class="stat-header"><span>3D Asset Modeling (Blender / Unity)</span><span>88%</span></div>
+                        <div class="stat-bar-bg"><div class="stat-bar-fill" data-width="88%"></div></div>
+                    </div>
+                    <div class="stat-bar-container">
+                        <div class="stat-header"><span>Minecraft World & Figura Modding</span><span>95%</span></div>
+                        <div class="stat-bar-bg"><div class="stat-bar-fill" data-width="95%"></div></div>
+                    </div>
+                </div>
+
+                <div class="skills-container">
+                    <div class="skill-tag">🎨 Digital Art</div>
+                    <div class="skill-tag">👤 Character Design</div>
+                    <div class="skill-tag">🖼️ Illustration</div>
+                    <div class="skill-tag">🏰 Minecraft World Building</div>
+                    <div class="skill-tag">🦊 Figura Modding</div>
+                    <div class="skill-tag">🕹️ Game Assets</div>
+                </div>
+            </div>
+
+            <!-- TAB 2: ABOUT -->
+            <div class="tab-content" id="tab-about">
+                <div class="brand-title">ABOUT ME</div>
+                <div class="subtitle-en">Biography & Creative Vision</div>
+
+                <div class="info-box" style="margin-bottom: 1rem;">
+                    <h3>ประวัติโดยย่อ (Biography)</h3>
+                    <p>สวัสดีค่ะ! ดิฉัน <strong>ศศิธร เซ้งรักษา (bossu29)</strong> เป็นนักศึกษาชั้นปีที่ 4 สาขาเกมและอนิเมชั่น หลงใหลในการดีไซน์ตัวละครแฟนตาซี งานปั้น 3D โมเดลลิ่ง ตลอดจนการสร้างสรรค์ Mod สกิลและอวตารคัสตอมในเกม Minecraft</p>
+                </div>
+                
+                <div class="info-box" style="margin-bottom: 1rem;">
+                    <h3>เป้าหมาย (Creative Focus)</h3>
+                    <p>มุ่งมั่นที่จะถ่ายทอดเรื่องราวและความคิดสร้างสรรค์ผ่าน Character Design คุณภาพสูง เพื่อเติมเต็มจินตนาการและสร้างประสบการณ์ที่ดีในอุตสาหกรรมสื่อสร้างสรรค์และเกม</p>
+                </div>
+
+                <div class="section-title" style="margin-bottom: 0.6rem;">🛠️ เครื่องมือที่ใช้งาน (Tools & Software)</div>
+                <div class="skills-container">
+                    <div class="skill-tag">Blender 3D</div>
+                    <div class="skill-tag">Unity Engine</div>
+                    <div class="skill-tag">Clip Studio Paint</div>
+                    <div class="skill-tag">Photoshop</div>
+                    <div class="skill-tag">Blockbench</div>
+                </div>
+            </div>
+
+            <!-- TAB 3: CONTACT -->
+            <div class="tab-content" id="tab-contact">
+                <div class="brand-title">GET IN TOUCH</div>
+                <div class="subtitle-en">Contact Channels & Social Media</div>
+                
+                <div class="contact-list">
+                    <a href="mailto:sengraksa2005@gmail.com" class="contact-item">
+                        <div class="contact-icon">📧</div>
+                        <div class="contact-text">
+                            <h4>Email Address</h4>
+                            <p>sengraksa2005@gmail.com</p>
                         </div>
-                        <div class="spell-btn" onclick="castSpell('Inspire')">
-                            <div class="spell-icon">📜</div>
-                            <div class="spell-name">Inspire</div>
+                    </a>
+
+                    <div class="contact-item">
+                        <div class="contact-icon">💬</div>
+                        <div class="contact-text">
+                            <h4>Discord</h4>
+                            <p>bossu_u</p>
                         </div>
                     </div>
+
+                    <a href="#" class="contact-item">
+                        <div class="contact-icon">🌐</div>
+                        <div class="contact-text">
+                            <h4>Twitter / X</h4>
+                            <p>@bossu29_art</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- SPELLBOOK MODAL (NEW INTERACTIVE LEFT FEATURE) -->
+            <div class="spellbook-modal" id="spellbook-modal">
+                <button class="modal-close" onclick="toggleSpellbook(false)">✕</button>
+                <div class="brand-title" style="font-size: 2rem;">SPELLBOOK & LOGS</div>
+                <div class="subtitle-en">Active Abilities & Special Artifacts</div>
+
+                <div class="spell-card">
+                    <h4><span>✦ Character Crafting</span> <span>RANK S</span></h4>
+                    <p>ความสามารถในการออกแบบตัวละครและอนิเมชั่นอารมณ์ความรู้สึก พร้อมเอกสาร Character Sheet Deconstruction ละเอียดทุกมุมมอง</p>
+                </div>
+
+                <div class="spell-card">
+                    <h4><span>✦ Figura Avatar Alchemy</span> <span>RANK A+</span></h4>
+                    <p>เชี่ยวชาญการใช้ Global API จัดการ Particle, Custom Model และ Lua Script เพื่อสร้าง Mod อวตารใน Minecraft ชนิดสมจริง</p>
+                </div>
+
+                <div class="spell-card">
+                    <h4><span>✦ 3D Asset Weaver</span> <span>RANK A</span></h4>
+                    <p>การนำออกโมเดล 3D จาก Blender สู่ Unity / Game Engines พร้อมปรับแต่ง UV, Rigging และ Material ให้พร้อมใช้งานในเกม</p>
                 </div>
             </div>
 
@@ -758,6 +733,36 @@
     </div>
 
     <script>
+        // --- SPELLBOOK MODAL TOGGLE ---
+        function toggleSpellbook(show) {
+            const modal = document.getElementById('spellbook-modal');
+            if (show) {
+                modal.classList.add('active');
+                playSoftNote(600);
+            } else {
+                modal.classList.remove('active');
+                playSoftNote(400);
+            }
+        }
+
+        // --- SKILL CHECK RANDOM ROLLER ---
+        function rollSkillCheck() {
+            const roll = Math.floor(Math.random() * 20) + 1;
+            const toast = document.getElementById('skill-toast');
+            let statusText = '';
+
+            if (roll === 20) statusText = '✨ Natural 20! Critical Mastery!';
+            else if (roll >= 15) statusText = `🎲 Rolled ${roll} + 5 = ${roll+5} (Great Success!)`;
+            else if (roll >= 8) statusText = `🎲 Rolled ${roll} + 5 = ${roll+5} (Success)`;
+            else statusText = `🎲 Rolled ${roll} + 5 = ${roll+5} (Close One!)`;
+
+            toast.innerText = statusText;
+            toast.classList.add('active');
+            playSoftNote(300 + roll * 25);
+
+            setTimeout(() => toast.classList.remove('active'), 2500);
+        }
+
         // --- TAB SWITCHING SYSTEM ---
         function switchTab(tabName, btnElement) {
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
@@ -774,29 +779,6 @@
             }
         }
 
-        // --- SUB DICE TRAY & SPELL INTERACTION ---
-        function rollSubDice(sides) {
-            const display = document.getElementById('sub-dice-result');
-            playSoftRollSound();
-            let count = 0;
-            const interval = setInterval(() => {
-                display.innerText = Math.floor(Math.random() * sides) + 1;
-                count++;
-                if(count > 8) {
-                    clearInterval(interval);
-                    display.innerText = Math.floor(Math.random() * sides) + 1;
-                    playSoftChime();
-                }
-            }, 50);
-        }
-
-        function castSpell(spellName) {
-            playSoftChime();
-            // Pulse ring light effect
-            gsap.to(ring.scale, { x: 1.25, y: 1.25, duration: 0.3, yoyo: true, repeat: 1, ease: "power2.out" });
-            gsap.to(goldLight, { intensity: 6, duration: 0.3, yoyo: true, repeat: 1 });
-        }
-
         // --- SOFT MINIMAL SYNTHESIZED SOUNDS ---
         let soundEnabled = true;
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -806,36 +788,34 @@
             e.target.innerText = soundEnabled ? '✨ SOUND: ON' : '🔇 SOUND: OFF';
         });
 
+        function playSoftNote(freq = 440) {
+            if (!soundEnabled) return;
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+            gain.gain.setValueAtTime(0.06, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.5);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.5);
+        }
+
         function playSoftRollSound() {
             if (!soundEnabled) return;
             const osc = audioCtx.createOscillator();
             const gain = audioCtx.createGain();
             osc.type = 'sine';
-            osc.frequency.setValueAtTime(300 + Math.random() * 200, audioCtx.currentTime);
-            osc.frequency.exponentialRampToValueAtTime(150, audioCtx.currentTime + 0.08);
-            gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+            osc.frequency.setValueAtTime(250 + Math.random() * 200, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(120, audioCtx.currentTime + 0.08);
+            gain.gain.setValueAtTime(0.04, audioCtx.currentTime);
             gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.08);
             osc.connect(gain);
             gain.connect(audioCtx.destination);
             osc.start();
             osc.stop(audioCtx.currentTime + 0.08);
-        }
-
-        function playSoftChime() {
-            if (!soundEnabled) return;
-            const now = audioCtx.currentTime;
-            [523.25, 659.25, 783.99, 1046.50].forEach((freq, i) => {
-                const osc = audioCtx.createOscillator();
-                const gain = audioCtx.createGain();
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(freq, now + i * 0.1);
-                gain.gain.setValueAtTime(0.06, now + i * 0.1);
-                gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.1 + 0.5);
-                osc.connect(gain);
-                gain.connect(audioCtx.destination);
-                osc.start(now + i * 0.1);
-                osc.stop(now + i * 0.1 + 0.5);
-            });
         }
 
         // --- THREE.JS SOFT SCENE SETUP ---
@@ -852,7 +832,7 @@
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
         renderer.setSize(window.innerWidth, window.innerHeight);
 
-        // --- SOFT LIGHTING ---
+        // --- LIGHTS ---
         const ambientLight = new THREE.AmbientLight(0xdad5eb, 1.8);
         scene.add(ambientLight);
 
@@ -860,11 +840,11 @@
         goldLight.position.set(4, 4, 4);
         scene.add(goldLight);
 
-        const cyanLight = new THREE.PointLight(0xb8e3de, 2, 20);
-        cyanLight.position.set(-4, -3, 2);
+        const cyanLight = new THREE.PointLight(0xb8e3de, 2.5, 20);
+        cyanLight.position.set(-5, -2, 2);
         scene.add(cyanLight);
 
-        // --- CRYSTAL D20 DICE ---
+        // --- CRYSTAL D20 DICE (RIGHT SIDE) ---
         const d20Textures = {};
         function getNumberTexture(number) {
             if (d20Textures[number]) return d20Textures[number];
@@ -893,7 +873,6 @@
         }
 
         const d20Geo = new THREE.IcosahedronGeometry(1.2, 0);
-        
         const d20Material = new THREE.MeshPhysicalMaterial({
             map: getNumberTexture(20),
             roughness: 0.1,
@@ -901,12 +880,10 @@
             transmission: 0.6,
             opacity: 0.9,
             transparent: true,
-            ior: 1.5,
-            reflectivity: 0.5
+            ior: 1.5
         });
 
         const d20Mesh = new THREE.Mesh(d20Geo, d20Material);
-        
         const d20Wire = new THREE.Mesh(
             d20Geo,
             new THREE.MeshBasicMaterial({ color: 0xf3e5c8, wireframe: true, transparent: true, opacity: 0.4 })
@@ -924,7 +901,27 @@
         d20Group.add(d20Hitbox);
         scene.add(d20Group);
 
-        // --- SOFT MAGIC DUST PARTICLES ---
+        // --- INTERACTIVE FLOATING ORBS (LEFT SIDE - NEW) ---
+        const orbGroup = new THREE.Group();
+        const orbMat = new THREE.MeshPhysicalMaterial({
+            color: 0xb8e3de,
+            roughness: 0.2,
+            transmission: 0.8,
+            transparent: true,
+            opacity: 0.85
+        });
+
+        const orbMeshes = [];
+        for(let i = 0; i < 3; i++) {
+            const orbGeo = new THREE.IcosahedronGeometry(0.35 - i * 0.08, 1);
+            const orb = new THREE.Mesh(orbGeo, orbMat);
+            orb.position.set(-0.2, (i - 1) * 1.2, 0);
+            orbGroup.add(orb);
+            orbMeshes.push(orb);
+        }
+        scene.add(orbGroup);
+
+        // --- PARTICLES & RING ---
         const pCount = 500;
         const pPos = new Float32Array(pCount * 3);
         for(let i = 0; i < pCount * 3; i++) {
@@ -932,16 +929,10 @@
         }
         const pGeo = new THREE.BufferGeometry();
         pGeo.setAttribute('position', new THREE.BufferAttribute(pPos, 3));
-        const pMat = new THREE.PointsMaterial({
-            size: 0.03,
-            color: 0xf3e5c8,
-            transparent: true,
-            opacity: 0.4
-        });
+        const pMat = new THREE.PointsMaterial({ size: 0.03, color: 0xf3e5c8, transparent: true, opacity: 0.4 });
         const pMesh = new THREE.Points(pGeo, pMat);
         scene.add(pMesh);
 
-        // --- ELEGANT RING ---
         const ringGeo = new THREE.TorusGeometry(2.8, 0.008, 16, 100);
         const ringMat = new THREE.MeshBasicMaterial({ color: 0xf3e5c8, transparent: true, opacity: 0.3 });
         const ring = new THREE.Mesh(ringGeo, ringMat);
@@ -958,32 +949,19 @@
             if (window.innerWidth > 992) {
                 d20Group.position.set(width / 4 + 0.3, 0, 0);
                 ring.position.copy(d20Group.position);
+                orbGroup.position.set(-width / 4 - 0.5, 0, 0);
             } else {
                 d20Group.position.set(width / 2 - 1.2, height / 2 - 1.2, 0);
                 ring.position.copy(d20Group.position);
+                orbGroup.position.set(-width / 2 + 0.8, -height / 2 + 1.2, 0);
             }
         }
         updatePositions();
 
-        // --- ROLL INTERACTION ---
+        // --- RAYCASTING & INTERACTION ---
         const raycaster = new THREE.Raycaster();
         const mouse = new THREE.Vector2();
         let isRolling = false;
-
-        function showResultPopup(value) {
-            const popup = document.getElementById('dice-result');
-            const banner = document.getElementById('nat20-banner');
-            popup.innerText = value;
-            
-            if(value === 20) {
-                banner.classList.add('active');
-                playSoftChime();
-                setTimeout(() => banner.classList.remove('active'), 3000);
-            }
-
-            popup.classList.add('active');
-            setTimeout(() => popup.classList.remove('active'), 1200);
-        }
 
         function rollDice() {
             if (isRolling) return;
@@ -1009,7 +987,12 @@
                     d20Material.map = getNumberTexture(finalValue);
                     d20Material.needsUpdate = true;
                     isRolling = false;
-                    showResultPopup(finalValue);
+                    
+                    const popup = document.getElementById('dice-result');
+                    popup.innerText = finalValue;
+                    popup.classList.add('active');
+                    playSoftNote( finalValue * 30 + 300 );
+                    setTimeout(() => popup.classList.remove('active'), 1200);
                 }
             });
         }
@@ -1019,23 +1002,40 @@
             mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
 
             raycaster.setFromCamera(mouse, camera);
+            
+            // Check D20 Click
             const intersectsD20 = raycaster.intersectObjects([d20Mesh, d20Wire, d20Hitbox]);
-
             if (intersectsD20.length > 0) rollDice();
+
+            // Check Left Orbs Click
+            const intersectsOrbs = raycaster.intersectObjects(orbMeshes);
+            if (intersectsOrbs.length > 0) {
+                const clickedOrb = intersectsOrbs[0].object;
+                gsap.to(clickedOrb.scale, {
+                    x: 1.6, y: 1.6, z: 1.6,
+                    duration: 0.2,
+                    yoyo: true,
+                    repeat: 1,
+                    ease: 'power2.out'
+                });
+                playSoftNote(700 + Math.random() * 300);
+            }
         });
 
-        // Mouse Hover & Soft Tilt Card
+        // Mouse Hover & Soft Card Tilt
         const card = document.getElementById('card');
         window.addEventListener('pointermove', (e) => {
             mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
             mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
 
             raycaster.setFromCamera(mouse, camera);
-            const intersects = raycaster.intersectObjects([d20Mesh, d20Wire, d20Hitbox]);
-            document.body.style.cursor = intersects.length > 0 ? 'pointer' : 'default';
+            const intersectsD20 = raycaster.intersectObjects([d20Mesh, d20Wire, d20Hitbox]);
+            const intersectsOrbs = raycaster.intersectObjects(orbMeshes);
+            
+            document.body.style.cursor = (intersectsD20.length > 0 || intersectsOrbs.length > 0) ? 'pointer' : 'default';
 
-            const rx = (e.clientY / window.innerHeight - 0.5) * -5;
-            const ry = (e.clientX / window.innerWidth - 0.5) * 5;
+            const rx = (e.clientY / window.innerHeight - 0.5) * -6;
+            const ry = (e.clientX / window.innerWidth - 0.5) * 6;
             card.style.transform = `rotateX(${rx}deg) rotateY(${ry}deg)`;
         });
 
@@ -1050,6 +1050,12 @@
                 d20Group.rotation.x = Math.sin(elapsedTime * 0.4) * 0.15;
                 d20Group.rotation.y = elapsedTime * 0.25;
             }
+
+            // Left Orbs Wave Motion
+            orbMeshes.forEach((orb, i) => {
+                orb.position.y = Math.sin(elapsedTime * 1.5 + i) * 0.2 + (i - 1) * 1.2;
+                orb.rotation.y = elapsedTime * 0.5;
+            });
 
             ring.rotation.z = elapsedTime * 0.08;
             pMesh.rotation.y = elapsedTime * 0.02;
