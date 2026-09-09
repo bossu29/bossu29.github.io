@@ -23,7 +23,7 @@
             --accent-red: #ff4757;
             --dark-purple: #120e24;
             --text-color: #f0f4f8;
-            --glass-bg: rgba(15, 12, 28, 0.82);
+            --glass-bg: rgba(15, 12, 28, 0.88);
             --border-glow: rgba(135, 232, 203, 0.5);
         }
 
@@ -63,10 +63,10 @@
             align-items: center;
             justify-content: flex-start;
             pointer-events: none;
-            perspective: 1000px;
+            perspective: 1500px;
         }
 
-        /* 3D Tilt Card (Left Positioned) */
+        /* 3D Book / Card Container */
         .dnd-card {
             pointer-events: auto;
             background: var(--glass-bg);
@@ -105,6 +105,7 @@
             font-family: 'Cinzel', serif;
             font-weight: 800;
             box-shadow: 0 0 15px var(--primary-cyan);
+            z-index: 10;
         }
 
         /* TAB NAVIGATION */
@@ -114,6 +115,8 @@
             margin-bottom: 1.5rem;
             border-bottom: 1px solid rgba(135, 232, 203, 0.3);
             padding-bottom: 0.8rem;
+            position: relative;
+            z-index: 10;
         }
 
         .tab-btn {
@@ -137,14 +140,49 @@
             font-weight: 600;
         }
 
-        /* TAB CONTENTS */
+        /* 3D BOOK FLIP SYSTEM */
+        .pages-wrapper {
+            position: relative;
+            min-height: 480px;
+            perspective: 1200px;
+            transform-style: preserve-3d;
+        }
+
         .tab-content {
-            display: none;
-            animation: fadeIn 0.4s ease-out;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            visibility: hidden;
+            transform-origin: left center;
+            transform: rotateY(-90deg);
+            backface-visibility: hidden;
+            transition: none;
+            z-index: 1;
         }
 
         .tab-content.active {
-            display: block;
+            opacity: 1;
+            visibility: visible;
+            transform: rotateY(0deg);
+            z-index: 5;
+        }
+
+        /* Page Shadow Overlay during Flip */
+        .page-shadow {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0) 100%);
+            pointer-events: none;
+            opacity: 0;
+            z-index: 6;
+            border-radius: 12px;
+            transition: opacity 0.3s ease;
         }
 
         .badge-container {
@@ -270,7 +308,7 @@
             border-radius: 4px;
             box-shadow: 0 0 10px var(--primary-cyan);
             width: 0%;
-            transition: width 1.5s cubic-bezier(0.1, 0.5, 0.1, 1);
+            transition: width 1.2s cubic-bezier(0.1, 0.5, 0.1, 1);
         }
 
         .section-title {
@@ -443,9 +481,16 @@
             box-shadow: 0 0 15px var(--primary-cyan);
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+        /* Sparkle Magic Particles on Flip */
+        .sparkle {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: var(--primary-cyan);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--primary-cyan);
+            pointer-events: none;
+            z-index: 20;
         }
 
         @media (max-width: 992px) {
@@ -481,146 +526,135 @@
             
             <!-- Tab Navigation Header -->
             <div class="tab-nav">
-                <button class="tab-btn active" onclick="switchTab('home')">🛡️ โปรไฟล์ (Profile)</button>
-                <button class="tab-btn" onclick="switchTab('about')">📜 เกี่ยวกับ (About)</button>
-                <button class="tab-btn" onclick="switchTab('contact')">📬 ติดต่อ (Contact)</button>
+                <button class="tab-btn active" onclick="switchTab('home', this)">🛡️ โปรไฟล์ (Profile)</button>
+                <button class="tab-btn" onclick="switchTab('about', this)">📜 เกี่ยวกับ (About)</button>
+                <button class="tab-btn" onclick="switchTab('contact', this)">📬 ติดต่อ (Contact)</button>
             </div>
 
-            <!-- TAB 1: HOME PROFILE -->
-            <div class="tab-content active" id="tab-home">
-                <div class="badge-container">
-                    <span class="class-badge">LVL 4 ARTIST & DESIGNER</span>
-                    <span class="class-badge">GAME & ANIMATION</span>
-                    <span class="class-badge">MINECRAFT MODDER</span>
+            <!-- PAGES WRAPPER (3D BOOK EFFECT) -->
+            <div class="pages-wrapper">
+                <div class="page-shadow" id="page-shadow"></div>
+
+                <!-- TAB 1: HOME PROFILE -->
+                <div class="tab-content active" id="tab-home">
+                    <div class="badge-container">
+                        <span class="class-badge">LVL 4 ARTIST & DESIGNER</span>
+                        <span class="class-badge">GAME & ANIMATION</span>
+                        <span class="class-badge">MINECRAFT MODDER</span>
+                    </div>
+
+                    <div class="brand-title">bossu29</div>
+                    <hr class="divider-line">
+
+                    <h1>นางสาว ศศิธร เซ้งรักษา</h1>
+                    <div class="subtitle">Sasithorn Sengraksa | 3D & Digital Artist Portfolio</div>
+
+                    <div class="info-grid">
+                        <div class="info-box">
+                            <h3>📜 การศึกษา (Education)</h3>
+                            <p><strong>มหาวิทยาลัยเทคโนโลยีราชมงคลรัตนโกสินทร์ ศาลายา</strong></p>
+                            <p>คณะสถาปัตยกรรมศาสตร์ และการออกแบบ</p>
+                            <p>สาขาเกมและอนิเมชั่น (ชั้นปีที่ 4)</p>
+                        </div>
+                        
+                        <div class="info-box">
+                            <h3>🎨 สไตล์งานวาด (Art Focus)</h3>
+                            <p>เชี่ยวชาญ<strong>การออกแบบตัวละคร (Character Design)</strong> วาดภาพประกอบ (Illustration) งานปั้น 3D และการทำ Mod Custom ใน Minecraft</p>
+                        </div>
+                    </div>
+
+                    <div class="section-title">📊 สเตตัสและความชำนาญ (Character Stats)</div>
+                    <div class="stats-section">
+                        <div class="stat-bar-container">
+                            <div class="stat-header"><span>Character Design & Concepts</span><span>98%</span></div>
+                            <div class="stat-bar-bg"><div class="stat-bar-fill" data-width="98%"></div></div>
+                        </div>
+                        <div class="stat-bar-container">
+                            <div class="stat-header"><span>Digital Illustration</span><span>92%</span></div>
+                            <div class="stat-bar-bg"><div class="stat-bar-fill" data-width="92%"></div></div>
+                        </div>
+                        <div class="stat-bar-container">
+                            <div class="stat-header"><span>3D Modeling & Assets (Blender / Unity)</span><span>88%</span></div>
+                            <div class="stat-bar-bg"><div class="stat-bar-fill" data-width="88%"></div></div>
+                        </div>
+                        <div class="stat-bar-container">
+                            <div class="stat-header"><span>Minecraft World Building & Figura Modding</span><span>95%</span></div>
+                            <div class="stat-bar-bg"><div class="stat-bar-fill" data-width="95%"></div></div>
+                        </div>
+                    </div>
+
+                    <div class="section-title">⚔️ สกิลความสามารถ (Abilities & Skills)</div>
+                    <div class="skills-container">
+                        <div class="skill-tag">🖌️ Digital Art</div>
+                        <div class="skill-tag">👤 Character Design</div>
+                        <div class="skill-tag">🖼️ Illustration</div>
+                        <div class="skill-tag">🏰 Minecraft World Building</div>
+                        <div class="skill-tag">🦊 Minecraft Figura Modding</div>
+                        <div class="skill-tag">🕹️ 3D & Game Art</div>
+                    </div>
                 </div>
 
-                <div class="brand-title">bossu29</div>
-                <hr class="divider-line">
-
-                <h1>นางสาว ศศิธร เซ้งรักษา</h1>
-                <div class="subtitle">Sasithorn Sengraksa | 3D & Digital Artist Portfolio</div>
-
-                <div class="info-grid">
-                    <div class="info-box">
-                        <h3>📜 การศึกษา (Education)</h3>
-                        <p><strong>มหาวิทยาลัยเทคโนโลยีราชมงคลรัตนโกสินทร์ ศาลายา</strong></p>
-                        <p>คณะสถาปัตยกรรมศาสตร์ และการออกแบบ</p>
-                        <p>สาขาเกมและอนิเมชั่น (ชั้นปีที่ 4)</p>
+                <!-- TAB 2: ABOUT -->
+                <div class="tab-content" id="tab-about">
+                    <div class="brand-title">ABOUT ME</div>
+                    <hr class="divider-line">
+                    <div class="info-box" style="margin-bottom: 1.2rem;">
+                        <h3>✨ เกี่ยวกับฉัน (Biography)</h3>
+                        <p>สวัสดีค่ะ! ดิฉัน <strong>นางสาว ศศิธร เซ้งรักษา (bossu29)</strong> เป็นนักศึกษาชั้นปีที่ 4 สาขาเกมและอนิเมชั่น ผู้มีความหลงใหลในงานดิจิทัลอาร์ต การออกแบบตัวละครแฟนตาซีไซไฟ การทำ 3D โมเดลลิ่ง และการปรับแต่งโมดูลเกม อย่างเช่น Minecraft Figura Modding</p>
                     </div>
+                    <div class="info-box" style="margin-bottom: 1.2rem;">
+                        <h3>🎯 เป้าหมายการทำงาน (Work Goal)</h3>
+                        <p>มุ่งมั่นที่จะสร้างสรรค์ผลงาน Character Design และ Game Asset ระดับคุณภาพ เพื่อเติมเต็มจินตนาการและสร้างประสบการณ์ที่น่าจดจำในอุตสาหกรรมสื่อสร้างสรรค์และเกม</p>
+                    </div>
+                    <div class="section-title">🛠️ เครื่องมือที่เชี่ยวชาญ (Software & Tools)</div>
+                    <div class="skills-container">
+                        <div class="skill-tag">Blender 3D</div>
+                        <div class="skill-tag">Unity Engine</div>
+                        <div class="skill-tag">Clip Studio Paint</div>
+                        <div class="skill-tag">Adobe Photoshop</div>
+                        <div class="skill-tag">Blockbench</div>
+                    </div>
+                </div>
+
+                <!-- TAB 3: CONTACT -->
+                <div class="tab-content" id="tab-contact">
+                    <div class="brand-title">GET IN TOUCH</div>
+                    <hr class="divider-line">
+                    <p style="color: var(--primary-purple); font-size: 0.95rem;">สนใจร่วมงาน สอบถามข้อมูล หรือดูผลงานเพิ่มเติม สามารถติดต่อดิฉันได้ผ่านช่องทางด้านล่างนี้เลยค่ะ:</p>
                     
-                    <div class="info-box">
-                        <h3>🎨 สไตล์งานวาด (Art Focus)</h3>
-                        <p>เชี่ยวชาญ<strong>การออกแบบตัวละคร (Character Design)</strong> วาดภาพประกอบ (Illustration) งานปั้น 3D และการทำ Mod Custom ใน Minecraft</p>
-                    </div>
-                </div>
+                    <div class="contact-list">
+                        <a href="mailto:sengraksa2005@gmail.com" class="contact-item">
+                            <div class="contact-icon">📧</div>
+                            <div class="contact-text">
+                                <h4>Email Address</h4>
+                                <p>sengraksa2005@gmail.com</p>
+                            </div>
+                        </a>
 
-                <div class="section-title">📊 สเตตัสและความชำนาญ (Character Stats)</div>
-                <div class="stats-section">
-                    <div class="stat-bar-container">
-                        <div class="stat-header"><span>Character Design & Concepts</span><span>98%</span></div>
-                        <div class="stat-bar-bg"><div class="stat-bar-fill" data-width="98%"></div></div>
-                    </div>
-                    <div class="stat-bar-container">
-                        <div class="stat-header"><span>Digital Illustration</span><span>92%</span></div>
-                        <div class="stat-bar-bg"><div class="stat-bar-fill" data-width="92%"></div></div>
-                    </div>
-                    <div class="stat-bar-container">
-                        <div class="stat-header"><span>3D Modeling & Assets (Blender / Unity)</span><span>88%</span></div>
-                        <div class="stat-bar-bg"><div class="stat-bar-fill" data-width="88%"></div></div>
-                    </div>
-                    <div class="stat-bar-container">
-                        <div class="stat-header"><span>Minecraft World Building & Figura Modding</span><span>95%</span></div>
-                        <div class="stat-bar-bg"><div class="stat-bar-fill" data-width="95%"></div></div>
-                    </div>
-                </div>
-
-                <div class="section-title">⚔️ สกิลความสามารถ (Abilities & Skills)</div>
-                <div class="skills-container">
-                    <div class="skill-tag">🖌️ Digital Art</div>
-                    <div class="skill-tag">👤 Character Design</div>
-                    <div class="skill-tag">🖼️ Illustration</div>
-                    <div class="skill-tag">🏰 Minecraft World Building</div>
-                    <div class="skill-tag">🦊 Minecraft Figura Modding</div>
-                    <div class="skill-tag">🕹️ 3D & Game Art</div>
-                </div>
-            </div>
-
-            <!-- TAB 2: ABOUT -->
-            <div class="tab-content" id="tab-about">
-                <div class="brand-title">ABOUT ME</div>
-                <hr class="divider-line">
-                <div class="info-box" style="margin-bottom: 1.2rem;">
-                    <h3>✨ เกี่ยวกับฉัน (Biography)</h3>
-                    <p>สวัสดีค่ะ! ดิฉัน <strong>นางสาว ศศิธร เซ้งรักษา (bossu29)</strong> เป็นนักศึกษาชั้นปีที่ 4 สาขาเกมและอนิเมชั่น ผู้มีความหลงใหลในงานดิจิทัลอาร์ต การออกแบบตัวละครแฟนตาซีไซไฟ การทำ 3D โมเดลลิ่ง และการปรับแต่งโมดูลเกม อย่างเช่น Minecraft Figura Modding</p>
-                </div>
-                <div class="info-box" style="margin-bottom: 1.2rem;">
-                    <h3>🎯 เป้าหมายการทำงาน (Work Goal)</h3>
-                    <p>มุ่งมั่นที่จะสร้างสรรค์ผลงาน Character Design และ Game Asset ระดับคุณภาพ เพื่อเติมเต็มจินตนาการและสร้างประสบการณ์ที่น่าจดจำในอุตสาหกรรมสื่อสร้างสรรค์และเกม</p>
-                </div>
-                <div class="section-title">🛠️ เครื่องมือที่เชี่ยวชาญ (Software & Tools)</div>
-                <div class="skills-container">
-                    <div class="skill-tag">Blender 3D</div>
-                    <div class="skill-tag">Unity Engine</div>
-                    <div class="skill-tag">Clip Studio Paint</div>
-                    <div class="skill-tag">Adobe Photoshop</div>
-                    <div class="skill-tag">Blockbench</div>
-                </div>
-            </div>
-
-            <!-- TAB 3: CONTACT -->
-            <div class="tab-content" id="tab-contact">
-                <div class="brand-title">GET IN TOUCH</div>
-                <hr class="divider-line">
-                <p style="color: var(--primary-purple); font-size: 0.95rem;">สนใจร่วมงาน สอบถามข้อมูล หรือดูผลงานเพิ่มเติม สามารถติดต่อดิฉันได้ผ่านช่องทางด้านล่างนี้เลยค่ะ:</p>
-                
-                <div class="contact-list">
-                    <a href="mailto:sengraksa2005@gmail.com" class="contact-item">
-                        <div class="contact-icon">📧</div>
-                        <div class="contact-text">
-                            <h4>Email Address</h4>
-                            <p>sengraksa2005@gmail.com</p>
+                        <div class="contact-item">
+                            <div class="contact-icon">💬</div>
+                            <div class="contact-text">
+                                <h4>Discord</h4>
+                                <p>bossu_u</p>
+                            </div>
                         </div>
-                    </a>
 
-                    <div class="contact-item">
-                        <div class="contact-icon">💬</div>
-                        <div class="contact-text">
-                            <h4>Discord</h4>
-                            <p>bossu_u</p>
-                        </div>
+                        <a href="#" class="contact-item">
+                            <div class="contact-icon">🌐</div>
+                            <div class="contact-text">
+                                <h4>Social Media (Twitter/X)</h4>
+                                <p>@bossu29_art</p>
+                            </div>
+                        </a>
                     </div>
-
-                    <a href="#" class="contact-item">
-                        <div class="contact-icon">🌐</div>
-                        <div class="contact-text">
-                            <h4>Social Media (Twitter/X)</h4>
-                            <p>@bossu29_art</p>
-                        </div>
-                    </a>
                 </div>
+
             </div>
 
         </div>
     </div>
 
     <script>
-        // --- TAB SWITCHING SYSTEM ---
-        function switchTab(tabName) {
-            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
-
-            event.currentTarget.classList.add('active');
-            document.getElementById(`tab-${tabName}`).classList.add('active');
-
-            // Re-trigger Stat Bar Animation when switching back to home
-            if(tabName === 'home') {
-                document.querySelectorAll('.stat-bar-fill').forEach(bar => {
-                    bar.style.width = '0%';
-                    setTimeout(() => bar.style.width = bar.getAttribute('data-width'), 50);
-                });
-            }
-        }
-
         // --- SYNTHESIZED SOUND EFFECTS ---
         let soundEnabled = true;
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -629,6 +663,37 @@
             soundEnabled = !soundEnabled;
             e.target.innerText = soundEnabled ? '🔊 SFX: ON' : '🔇 SFX: OFF';
         });
+
+        // Book Page Flip Sound Effect
+        function playPageFlipSound() {
+            if (!soundEnabled) return;
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            
+            const bufferSize = audioCtx.sampleRate * 0.15;
+            const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+            const data = buffer.getChannelData(0);
+            for (let i = 0; i < bufferSize; i++) {
+                data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (bufferSize * 0.3));
+            }
+
+            const noise = audioCtx.createBufferSource();
+            noise.buffer = buffer;
+
+            const filter = audioCtx.createBiquadFilter();
+            filter.type = 'lowpass';
+            filter.frequency.setValueAtTime(800, audioCtx.currentTime);
+            filter.frequency.exponentialRampToValueAtTime(150, audioCtx.currentTime + 0.15);
+
+            const gain = audioCtx.createGain();
+            gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.15);
+
+            noise.connect(filter);
+            filter.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            noise.start();
+        }
 
         function playRollSound() {
             if (!soundEnabled) return;
@@ -660,6 +725,111 @@
                 osc.start(now + i * 0.1);
                 osc.stop(now + i * 0.1 + 0.4);
             });
+        }
+
+        // --- SPARKLE PARTICLES FOR PAGE FLIP ---
+        function createPageSparkles() {
+            const card = document.getElementById('card');
+            const rect = card.getBoundingClientRect();
+            
+            for(let i = 0; i < 15; i++) {
+                const sparkle = document.createElement('div');
+                sparkle.className = 'sparkle';
+                
+                const startX = rect.left + Math.random() * 50;
+                const startY = rect.top + Math.random() * rect.height;
+                
+                sparkle.style.left = `${startX}px`;
+                sparkle.style.top = `${startY}px`;
+                document.body.appendChild(sparkle);
+
+                gsap.to(sparkle, {
+                    x: (Math.random() - 0.2) * 120,
+                    y: (Math.random() - 0.5) * 100,
+                    opacity: 0,
+                    scale: 0.2,
+                    duration: 0.6 + Math.random() * 0.4,
+                    ease: "power2.out",
+                    onComplete: () => sparkle.remove()
+                });
+            }
+        }
+
+        // --- GSAP 3D BOOK PAGE FLIP ANIMATION ---
+        let isAnimatingTab = false;
+
+        function switchTab(tabName, btnElement) {
+            if (isAnimatingTab) return;
+            const currentActive = document.querySelector('.tab-content.active');
+            const targetContent = document.getElementById(`tab-${tabName}`);
+
+            if (currentActive === targetContent) return;
+
+            isAnimatingTab = true;
+            playPageFlipSound();
+            createPageSparkles();
+
+            // Update Tab Active State
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            btnElement.classList.add('active');
+
+            const shadow = document.getElementById('page-shadow');
+
+            // Determine flip direction
+            const allTabs = Array.from(document.querySelectorAll('.tab-content'));
+            const currentIndex = allTabs.indexOf(currentActive);
+            const targetIndex = allTabs.indexOf(targetContent);
+            const isNext = targetIndex > currentIndex;
+
+            // Prepare GSAP Timeline for 3D Book Flip Effect
+            const tl = gsap.timeline({
+                onComplete: () => {
+                    currentActive.classList.remove('active');
+                    targetContent.classList.add('active');
+                    gsap.set([currentActive, targetContent], { clearProps: "all" });
+                    isAnimatingTab = false;
+
+                    // Trigger Stat Bars inside Home
+                    if(tabName === 'home') {
+                        document.querySelectorAll('.stat-bar-fill').forEach(bar => {
+                            bar.style.width = '0%';
+                            setTimeout(() => bar.style.width = bar.getAttribute('data-width'), 50);
+                        });
+                    }
+                }
+            });
+
+            // Shadow animation during flip
+            tl.to(shadow, { opacity: 0.8, duration: 0.2, ease: "power1.in" }, 0)
+              .to(shadow, { opacity: 0, duration: 0.25, ease: "power1.out" }, 0.25);
+
+            // Current Page Flip Out
+            tl.to(currentActive, {
+                rotateY: isNext ? -90 : 90,
+                scale: 0.96,
+                filter: "brightness(0.6)",
+                duration: 0.25,
+                ease: "power2.in"
+            }, 0);
+
+            // Target Page Flip In
+            gsap.set(targetContent, {
+                display: 'block',
+                visibility: 'visible',
+                opacity: 0,
+                rotateY: isNext ? 90 : -90,
+                scale: 0.96,
+                filter: "brightness(0.5)"
+            });
+
+            tl.to(targetContent, {
+                opacity: 1,
+                rotateY: 0,
+                scale: 1,
+                filter: "brightness(1)",
+                duration: 0.3,
+                ease: "power2.out"
+            }, 0.2);
         }
 
         // --- THREE.JS SCENE SETUP ---
